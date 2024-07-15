@@ -22,6 +22,10 @@ public class SecurityConfiguration {
     @Autowired
     private SecurityFilter securityFilter;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+
     @Bean
     public SecurityFilterChain changeSecurityMode(HttpSecurity httpSecurity) throws Exception {
 
@@ -42,11 +46,5 @@ public class SecurityConfiguration {
     public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception{
 
         return configuration.getAuthenticationManager();
-    }
-
-    @Bean
-    public PasswordEncoder passwordEncoder(){
-
-        return new BCryptPasswordEncoder();
     }
 }

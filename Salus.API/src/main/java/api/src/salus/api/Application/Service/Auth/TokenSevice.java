@@ -1,15 +1,18 @@
 package api.src.salus.api.Application.Service.Auth;
 
 import api.src.salus.api.Application.Utils.TimeTools;
-import api.src.salus.api.Domain.Entity.User;
+import api.src.salus.api.Domain.Entity.UserAccount;
 import api.src.salus.api.Domain.Interface.Application.Auth.ITokenGenerate;
 import api.src.salus.api.Domain.Interface.Application.Auth.ITokenRead;
+import api.src.salus.api.Repository.User.IUserRepositoryJPA;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 
 import java.time.*;
@@ -24,14 +27,25 @@ public class TokenSevice implements ITokenGenerate, ITokenRead {
     @Value("${api.security.token.expiration}")
     private String expirationTime;
 
+    @Value("${spring.application.name}")
+    private String applicationName;
+
+    private IUserRepositoryJPA repository;
+
+    @Autowired
+    public TokenSevice(IUserRepositoryJPA repository){
+        this.repository = repository;
+    }
+
     @Override
     public String GenerateToken(User user) throws JWTCreationException {
+        UserAccount userAccount = repository.findByLogin(user.getUsername());
         Algorithm algorithm = Algorithm.HMAC256(secretKey);
 
         return JWT.create()
-                .withIssuer("API Voll.med")
-                .withSubject(user.getLogin())
-                .withClaim("id", user.getID())
+                .withIssuer(applicationName)
+                .withSubject(userAccount.getLogin())
+                .withClaim("id", String.valueOf(userAccount.getId()))
                 .withExpiresAt(expirationDate())
                 .sign(algorithm);
     }
@@ -41,11 +55,10 @@ public class TokenSevice implements ITokenGenerate, ITokenRead {
         String token = GetToken(authHeader);
 
         if(token != null){
-            DecodedJWT decodedJWT;
             Algorithm algorithm = Algorithm.HMAC256(secretKey);
 
             return  JWT.require(algorithm)
-                    .withIssuer("API Voll.med")
+                    .withIssuer(applicationName)
                     .build()
                     .verify(token)
                     .getSubject();
@@ -60,15 +73,13 @@ public class TokenSevice implements ITokenGenerate, ITokenRead {
         String token = GetToken(authHeader);
 
         if(token != null){
-            DecodedJWT decodedJWT;
             Algorithm algorithm = Algorithm.HMAC256(secretKey);
-
-            return  JWT.require(algorithm)
-                    .withIssuer("API Voll.med")
+            DecodedJWT decodedJWT = JWT.require(algorithm)
+                    .withIssuer(applicationName)
                     .build()
-                    .verify(token)
-                    .getClaim(claimName)
-                    .asString();
+                    .verify(token);
+
+            return decodedJWT.getClaim(claimName).asString();
         }
 
         return null;

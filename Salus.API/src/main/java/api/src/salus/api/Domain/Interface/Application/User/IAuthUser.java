@@ -1,7 +1,7 @@
-package api.src.salus.api.Repository.User;
+package api.src.salus.api.Domain.Interface.Application.User;
 
 import org.springframework.security.core.userdetails.UserDetails;
 
-public interface IAuthUserRepository {
+public interface IAuthUser {
     UserDetails FindDetailsByLogin(String login);
 }

@@ -1,11 +1,11 @@
-CREATE TABLE Users
+CREATE TABLE user_account
 (
-    ID INT PRIMARY KEY IDENTITY(1,1),
-    AnswerableId INT NOT NULL,
+    Id INT PRIMARY KEY IDENTITY(1,1),
+    Answerable_Id INT,
     Login VARCHAR(50) NOT NULL,
     Password VARCHAR(200) NOT NULL,
-    IsPro BIT NOT NULL DEFAULT 0,
+    Is_Pro BIT NOT NULL DEFAULT 0,
     Active BIT NOT NULL DEFAULT 1,
 
-    constraint fk_AnswerableId foreign key (AnswerableId) references Users(id),
+    constraint fk_AnswerableId foreign key (Answerable_Id) references user_account(id),
 );

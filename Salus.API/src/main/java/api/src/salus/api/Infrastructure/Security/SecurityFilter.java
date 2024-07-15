@@ -1,7 +1,7 @@
 package api.src.salus.api.Infrastructure.Security;
 
 import api.src.salus.api.Domain.Interface.Application.Auth.ITokenRead;
-import api.src.salus.api.Repository.User.IAuthUserRepository;
+import api.src.salus.api.Domain.Interface.Application.User.IAuthUser;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -19,12 +19,12 @@ import java.io.IOException;
 public class SecurityFilter extends OncePerRequestFilter {
 
     private final ITokenRead tokenService;
-    private final IAuthUserRepository userRepository;
+    private final IAuthUser authUserService;
 
     @Autowired
-    public SecurityFilter(ITokenRead tokenService, IAuthUserRepository userRepository) {
+    public SecurityFilter(ITokenRead tokenService, IAuthUser authUserService) {
         this.tokenService = tokenService;
-        this.userRepository = userRepository;
+        this.authUserService = authUserService;
     }
 
     @Override
@@ -33,7 +33,7 @@ public class SecurityFilter extends OncePerRequestFilter {
         String subject = tokenService.GetSubject(authHeader);
 
         if (subject != null){
-            UserDetails user = userRepository.FindDetailsByLogin(subject);
+            UserDetails user = authUserService.FindDetailsByLogin(subject);
             UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
             SecurityContextHolder.getContext().setAuthentication(auth);
         }

@@ -1,6 +1,5 @@
 package api.src.salus.api.Controllers.Medicine;
 
-import jakarta.validation.Valid;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
@@ -8,16 +7,16 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/Own/Medicine")
-public class OwnMediceController {
+@RequestMapping("/Medicine")
+public class MediceController {
 
     @PostMapping("")
     public ResponseEntity Create(){
         return new ResponseEntity<>(null, HttpStatus.OK);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity ReadById(@PathVariable int id){
+    @GetMapping("/{medicineId}")
+    public ResponseEntity ReadById(@PathVariable int medicineId, @RequestParam(required = false) int userId){
         return new ResponseEntity<>(null, HttpStatus.OK);
     }
 
