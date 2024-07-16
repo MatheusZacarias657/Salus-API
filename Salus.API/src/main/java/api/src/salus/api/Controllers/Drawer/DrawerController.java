@@ -5,8 +5,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/Own/Drawer")
-public class OwnDrawerController {
+@RequestMapping("/Drawer")
+public class DrawerController {
 
     @GetMapping("/CheckDrawerIsAvailable")
     public ResponseEntity Read(@PathVariable int id){
@@ -22,4 +22,10 @@ public class OwnDrawerController {
     public ResponseEntity AddUserOnDrawer(){
         return new ResponseEntity<>(null, HttpStatus.OK);
     }
+
+    @GetMapping("/DashInfos")
+    public ResponseEntity DashInfos(@PathVariable int id){
+        return new ResponseEntity<>(null, HttpStatus.OK);
+    }
+
 }

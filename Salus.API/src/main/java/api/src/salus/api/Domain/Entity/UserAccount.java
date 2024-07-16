@@ -3,6 +3,7 @@ package api.src.salus.api.Domain.Entity;
 import api.src.salus.api.Domain.DTO.User.UserGenericDTO;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.SQLRestriction;
 
 @Table(name = "user_account")
 @Entity(name = "User")
@@ -10,12 +11,14 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(of = "Id")
+@SQLRestriction("Active = true")
 public class UserAccount {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int Id;
 
+    @Column(unique = true)
     private String Login;
     private String Password;
 

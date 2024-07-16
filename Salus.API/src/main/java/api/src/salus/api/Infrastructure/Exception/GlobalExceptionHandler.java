@@ -21,7 +21,6 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity handleValidationExceptions(MethodArgumentNotValidException ex) {
-
         List<ArgumentException> errors = new ArrayList<>();
 
         ex.getBindingResult().getFieldErrors().forEach(error -> {

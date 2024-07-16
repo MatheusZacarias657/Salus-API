@@ -1,9 +1,8 @@
 package api.src.salus.api.Application.Service.Auth;
 
 import api.src.salus.api.Domain.DTO.Auth.TokenResponse;
-import api.src.salus.api.Domain.DTO.User.UserForgetPassword;
+import api.src.salus.api.Domain.DTO.Auth.UserForgetPassword;
 import api.src.salus.api.Domain.DTO.User.UserGenericDTO;
-import api.src.salus.api.Domain.Entity.UserAccount;
 import api.src.salus.api.Domain.Interface.Application.Auth.IOAuthService;
 import api.src.salus.api.Domain.Interface.Application.Auth.ITokenGenerate;
 import org.springframework.beans.factory.annotation.Autowired;

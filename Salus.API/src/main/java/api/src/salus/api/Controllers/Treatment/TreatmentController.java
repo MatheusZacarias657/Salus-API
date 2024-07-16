@@ -7,8 +7,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/Own/Treatment")
-public class OwnTreatmentController {
+@RequestMapping("/Treatment")
+public class TreatmentController {
 
     @PostMapping("")
     public ResponseEntity Create(){

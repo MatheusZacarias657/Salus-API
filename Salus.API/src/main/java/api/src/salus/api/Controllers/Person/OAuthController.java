@@ -1,6 +1,6 @@
 package api.src.salus.api.Controllers.Person;
 
-import api.src.salus.api.Domain.DTO.User.UserForgetPassword;
+import api.src.salus.api.Domain.DTO.Auth.UserForgetPassword;
 import api.src.salus.api.Domain.DTO.User.UserGenericDTO;
 import api.src.salus.api.Domain.Interface.Application.Auth.IOAuthService;
 import jakarta.validation.Valid;
@@ -31,5 +31,10 @@ public class OAuthController {
     @PostMapping("/ForgotPassword")
     public ResponseEntity Login(@RequestBody @Valid UserForgetPassword user){
         return new ResponseEntity<>(authService.ForgetPassword(user), HttpStatus.OK);
+    }
+
+    @PostMapping("/ChangePassword")
+    public ResponseEntity ChangePassword(@RequestHeader("Authorization") String authHeader){
+        return new ResponseEntity<>(null, HttpStatus.OK);
     }
 }

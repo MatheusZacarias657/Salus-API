@@ -26,7 +26,7 @@ public class CheckVisibilite implements ICheckVisibilite {
         int answerableId = repository.getAnswerableIdById(targetId);
 
         if (answerableId != ownId){
-            throw new AccessDeniedException("Cannot Acces this user");
+            throw new AccessDeniedException("Cannot Access this user");
         }
     }
 

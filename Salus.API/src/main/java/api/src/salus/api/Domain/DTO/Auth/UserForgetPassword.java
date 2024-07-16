@@ -1,4 +1,4 @@
-package api.src.salus.api.Domain.DTO.User;
+package api.src.salus.api.Domain.DTO.Auth;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
