@@ -1,27 +1,42 @@
 package api.src.salus.api.Application.Service.Auth;
 
+import api.src.salus.api.Application.Utils.RandomGenerator;
 import api.src.salus.api.Domain.DTO.Auth.TokenResponse;
 import api.src.salus.api.Domain.DTO.Auth.UserForgetPassword;
 import api.src.salus.api.Domain.DTO.User.UserGenericDTO;
+import api.src.salus.api.Domain.Entity.User.UserAccount;
+import api.src.salus.api.Domain.Interface.Application.Adapter.IBrevoSendEmail;
 import api.src.salus.api.Domain.Interface.Application.Auth.IOAuthService;
 import api.src.salus.api.Domain.Interface.Application.Auth.ITokenGenerate;
+import api.src.salus.api.Domain.Interface.Application.User.IAuthUser;
+import api.src.salus.api.Repository.User.IUserRepositoryJPA;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.User;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @Service
 public class OAuthService implements IOAuthService {
 
     private final AuthenticationManager manager;
     private final ITokenGenerate tokenSevice;
+    private final IBrevoSendEmail brevoSendEmail;
+    private final IUserRepositoryJPA userRepository;
+    private PasswordEncoder passwordEncoder;
 
     @Autowired
-    public OAuthService(AuthenticationManager manager, ITokenGenerate tokenSevice){
+    public OAuthService(AuthenticationManager manager, ITokenGenerate tokenSevice, IBrevoSendEmail brevoSendEmail, IUserRepositoryJPA userRepository, PasswordEncoder passwordEncoder){
         this.manager = manager;
         this.tokenSevice = tokenSevice;
+        this.brevoSendEmail = brevoSendEmail;
+        this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -35,13 +50,18 @@ public class OAuthService implements IOAuthService {
     }
 
     @Override
-    public boolean Logout(int id){
+    public boolean ForgetPassword(UserForgetPassword user) throws Exception {
+        UserAccount entity = userRepository.findByLogin(user.getLogin());
+        String newPassword = RandomGenerator.Password();
 
-        return true;
-    }
+        entity.setPassword(passwordEncoder.encode(newPassword));
+        entity = userRepository.save(entity);
 
-    @Override
-    public boolean ForgetPassword(UserForgetPassword user){
+        Map<String, String> emailParameters = new HashMap<>() {{
+            put("password", newPassword);
+        }};
+
+        brevoSendEmail.SendEmail(entity.getLogin(), emailParameters, 1);
 
         return true;
     }

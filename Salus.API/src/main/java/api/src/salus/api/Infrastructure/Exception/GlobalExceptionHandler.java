@@ -3,6 +3,7 @@ package api.src.salus.api.Infrastructure.Exception;
 import api.src.salus.api.Domain.Exception.ArgumentException;
 import api.src.salus.api.Domain.Exception.ValidationException;
 import jakarta.persistence.EntityNotFoundException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -55,6 +56,14 @@ public class GlobalExceptionHandler {
 
         Map<String, Object> respose = new HashMap<>();
         respose.put("message", ex.getMessage());
+        return ResponseEntity.badRequest().body(respose);
+    }
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity illegalRestriction(DataIntegrityViolationException ex) {
+
+        Map<String, Object> respose = new HashMap<>();
+        respose.put("message", "The restriction you want to do is illegal");
         return ResponseEntity.badRequest().body(respose);
     }
 }

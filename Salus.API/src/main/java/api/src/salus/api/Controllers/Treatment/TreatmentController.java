@@ -10,28 +10,28 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/Treatment")
 public class TreatmentController {
 
-    @PostMapping("")
-    public ResponseEntity Create(){
-        return new ResponseEntity<>(null, HttpStatus.OK);
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity ReadById(@PathVariable int id){
-        return new ResponseEntity<>(null, HttpStatus.OK);
-    }
-
-    @GetMapping("/List")
-    public ResponseEntity ListTreatments(@PageableDefault(size = 10, sort = {"name"}) Pageable pageable){
-        return new ResponseEntity<>(null, HttpStatus.OK);
-    }
-
-    @PutMapping("/{id}")
-    public ResponseEntity Update(@PathVariable int id){
-        return new ResponseEntity<>(null, HttpStatus.OK);
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity Delete(@PathVariable int id){
-        return new ResponseEntity<>(null, HttpStatus.OK);
-    }
+//    @PostMapping("")
+//    public ResponseEntity Create(){
+//        return new ResponseEntity<>(null, HttpStatus.OK);
+//    }
+//
+//    @GetMapping("/{id}")
+//    public ResponseEntity ReadById(@PathVariable int id){
+//        return new ResponseEntity<>(null, HttpStatus.OK);
+//    }
+//
+//    @GetMapping("/List")
+//    public ResponseEntity ListTreatments(@PageableDefault(size = 10, sort = {"name"}) Pageable pageable){
+//        return new ResponseEntity<>(null, HttpStatus.OK);
+//    }
+//
+//    @PutMapping("/{id}")
+//    public ResponseEntity Update(@PathVariable int id){
+//        return new ResponseEntity<>(null, HttpStatus.OK);
+//    }
+//
+//    @DeleteMapping("/{id}")
+//    public ResponseEntity Delete(@PathVariable int id){
+//        return new ResponseEntity<>(null, HttpStatus.OK);
+//    }
 }

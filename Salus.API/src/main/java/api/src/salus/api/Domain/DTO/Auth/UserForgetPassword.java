@@ -8,5 +8,5 @@ import lombok.Data;
 public class UserForgetPassword {
 
     @NotBlank @Email
-    private String login;
+    private String Login;
 }

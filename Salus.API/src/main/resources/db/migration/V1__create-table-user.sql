@@ -7,5 +7,5 @@ CREATE TABLE user_account
     Is_Pro BIT NOT NULL DEFAULT 0,
     Active BIT NOT NULL DEFAULT 1,
 
-    constraint fk_AnswerableId foreign key (Answerable_Id) references user_account(id),
+    constraint fk_user_account_AnswerableId foreign key (Answerable_Id) references user_account(id),
 );

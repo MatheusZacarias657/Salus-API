@@ -7,7 +7,5 @@ import api.src.salus.api.Domain.DTO.User.UserGenericDTO;
 public interface IOAuthService {
     TokenResponse Login(UserGenericDTO login) throws Exception;
 
-    boolean Logout(int id);
-
-    boolean ForgetPassword(UserForgetPassword user);
+    boolean ForgetPassword(UserForgetPassword user) throws Exception;
 }

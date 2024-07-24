@@ -1,7 +1,7 @@
 package api.src.salus.api.Application.Service.Auth;
 
 import api.src.salus.api.Application.Utils.TimeTools;
-import api.src.salus.api.Domain.Entity.UserAccount;
+import api.src.salus.api.Domain.Entity.User.UserAccount;
 import api.src.salus.api.Domain.Interface.Application.Auth.ITokenGenerate;
 import api.src.salus.api.Domain.Interface.Application.Auth.ITokenRead;
 import api.src.salus.api.Repository.User.IUserRepositoryJPA;
@@ -24,9 +24,6 @@ public class TokenSevice implements ITokenGenerate, ITokenRead {
     @Value("${api.security.token.secret}")
     private String secretKey;
 
-    @Value("${api.security.token.expiration}")
-    private String expirationTime;
-
     @Value("${spring.application.name}")
     private String applicationName;
 
@@ -46,7 +43,6 @@ public class TokenSevice implements ITokenGenerate, ITokenRead {
                 .withIssuer(applicationName)
                 .withSubject(userAccount.getLogin())
                 .withClaim("id", String.valueOf(userAccount.getId()))
-                .withExpiresAt(expirationDate())
                 .sign(algorithm);
     }
 
@@ -91,12 +87,5 @@ public class TokenSevice implements ITokenGenerate, ITokenRead {
         }
 
         return null;
-    }
-
-    private Instant expirationDate() {
-
-        ZoneOffset zoneOffset = ZoneId.systemDefault().getRules().getOffset(java.time.Instant.now());
-        TemporalAmount expiration = TimeTools.convertStringToTemporalAmount(expirationTime);
-        return LocalDateTime.now().plus(expiration).toInstant(zoneOffset);
     }
 }

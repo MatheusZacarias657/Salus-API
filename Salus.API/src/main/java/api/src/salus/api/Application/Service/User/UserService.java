@@ -3,7 +3,7 @@ package api.src.salus.api.Application.Service.User;
 import api.src.salus.api.Domain.DTO.Auth.TokenResponse;
 import api.src.salus.api.Domain.DTO.User.UserGenericDTO;
 import api.src.salus.api.Domain.DTO.User.UserResponse;
-import api.src.salus.api.Domain.Entity.UserAccount;
+import api.src.salus.api.Domain.Entity.User.UserAccount;
 import api.src.salus.api.Domain.Interface.Application.Auth.ITokenGenerate;
 import api.src.salus.api.Domain.Interface.Application.User.IAuthUser;
 import api.src.salus.api.Domain.Interface.Application.User.IUserService;

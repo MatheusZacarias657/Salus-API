@@ -1,7 +1,7 @@
 package api.src.salus.api.Repository.User;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import api.src.salus.api.Domain.Entity.UserAccount;
+import api.src.salus.api.Domain.Entity.User.UserAccount;
 import org.springframework.data.jpa.repository.Query;
 
 public interface IUserRepositoryJPA extends JpaRepository<UserAccount, Integer> {

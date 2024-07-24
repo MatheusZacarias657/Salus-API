@@ -5,5 +5,5 @@ CREATE TABLE user_preferences
     Typography VARCHAR(50) NOT NULL,
     EnableStatistics BIT NOT NULL DEFAULT 0,
 
-    constraint fk_UserId foreign key (User_Id) references user_account(id),
+    constraint fk_user_preferences_UserId foreign key (User_Id) references user_account(id),
 );
