@@ -7,6 +7,7 @@ import api.src.salus.api.Domain.Interface.Application.Auth.ICheckVisibilite;
 import api.src.salus.api.Domain.Interface.Application.Auth.IOAuthService;
 import api.src.salus.api.Domain.Interface.Application.User.IUserPasswordService;
 import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,6 +23,7 @@ public class OAuthController {
     private final ICheckVisibilite checkVisibility;
     private final IUserPasswordService userPasswordService;
 
+    @Autowired
     public OAuthController(IOAuthService authService, ICheckVisibilite checkVisibility, IUserPasswordService userPasswordService) {
         this.authService = authService;
         this.checkVisibility = checkVisibility;

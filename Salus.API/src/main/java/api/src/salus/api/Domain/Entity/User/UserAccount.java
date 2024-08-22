@@ -34,7 +34,6 @@ public class UserAccount {
         this.Login = user.getLogin();
         this.IsPro = false;
         this.Active = true;
-        this.Id = 0;
     }
 
     @PostPersist

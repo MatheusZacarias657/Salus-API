@@ -1,0 +1,6 @@
+CREATE TABLE group_faq
+(
+    Id INT PRIMARY KEY IDENTITY(1,1),
+    Title VARCHAR(50) NOT NULL,
+    Sub_Title VARCHAR(50) NOT NULL
+);

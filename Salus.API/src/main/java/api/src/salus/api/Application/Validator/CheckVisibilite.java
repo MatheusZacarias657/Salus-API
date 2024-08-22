@@ -20,7 +20,7 @@ public class CheckVisibilite implements ICheckVisibilite {
     }
 
     @Override
-    public void CheckAccess(String authHeader, int targetId){
+    public int CheckAccess(String authHeader, int targetId){
 
         int ownId = ExtractIdFromToken(authHeader);
         int answerableId = repository.getAnswerableIdById(targetId);
@@ -28,6 +28,8 @@ public class CheckVisibilite implements ICheckVisibilite {
         if (answerableId != ownId){
             throw new AccessDeniedException("Cannot Access this user");
         }
+
+        return ownId;
     }
 
     @Override

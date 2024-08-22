@@ -1,4 +1,4 @@
-package api.src.salus.api.Domain.DTO.Patient.Disease;
+package api.src.salus.api.Domain.DTO.Patient.Allergy;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
@@ -8,8 +8,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class RegisterPatientDiseaseDTO {
+public class RegisterPatientAllergyDTO {
 
     @NotBlank
-    private String Disease;
+    private String Allergy;
 }
