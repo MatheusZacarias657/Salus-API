@@ -18,9 +18,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @Service
 public class UserService implements IUserService, IAuthUser {
 
-    private IUserRepositoryJPA userRepository;
-    private PasswordEncoder passwordEncoder;
-    private ITokenGenerate tokenGenerate;
+    private final IUserRepositoryJPA userRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final ITokenGenerate tokenGenerate;
 
     @Autowired
     public UserService(PasswordEncoder passwordEncoder, IUserRepositoryJPA userRepository, ITokenGenerate tokenGenerate){

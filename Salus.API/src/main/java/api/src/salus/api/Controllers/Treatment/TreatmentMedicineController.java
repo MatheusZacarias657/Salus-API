@@ -15,10 +15,4 @@ public class TreatmentMedicineController {
         //medicamento-tratamento
         return new ResponseEntity<>(null, HttpStatus.OK);
     }
-
-    @DeleteMapping("/Medicine/{medicineId}")
-    public ResponseEntity DeleteMedicine(@PathVariable int medicineId){
-        //medicamento-tratamento
-        return new ResponseEntity<>(null, HttpStatus.OK);
-    }
 }

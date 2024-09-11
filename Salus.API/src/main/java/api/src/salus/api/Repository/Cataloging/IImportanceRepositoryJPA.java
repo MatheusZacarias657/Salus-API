@@ -10,6 +10,7 @@ public interface IImportanceRepositoryJPA extends JpaRepository<Importance, Inte
             SELECT i
             FROM Importance i
             WHERE i.Name = :name
+            AND i.User.Id = :userId
             """)
-    Importance findImportanceByName(String name);
+    Importance findImportanceByName(String name, int userId);
 }

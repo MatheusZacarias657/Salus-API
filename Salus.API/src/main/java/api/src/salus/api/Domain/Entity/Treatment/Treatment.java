@@ -1,5 +1,6 @@
 package api.src.salus.api.Domain.Entity.Treatment;
 
+import api.src.salus.api.Domain.DTO.Treatment.RegisterTreatmentDTO;
 import api.src.salus.api.Domain.Entity.Cataloging.Importance;
 import api.src.salus.api.Domain.Entity.User.UserAccount;
 import jakarta.persistence.*;
@@ -30,5 +31,16 @@ public class Treatment {
     @JoinColumn(name = "Importance_Id")
     private Importance Importance;
 
-    private boolean Removed;
+    private boolean Finished;
+
+    public Treatment(String name, UserAccount user, Importance importance){
+        this.User = user;
+        this.Name = name;
+        this.Importance = importance;
+        this.Finished = false;
+    }
+
+    public void Finish(){
+        this.Finished = true;
+    }
 }

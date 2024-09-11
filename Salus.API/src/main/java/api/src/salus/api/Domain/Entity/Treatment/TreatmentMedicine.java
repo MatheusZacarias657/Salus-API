@@ -39,4 +39,8 @@ public class TreatmentMedicine {
 
     @Column(name = "Treatment_Init")
     private LocalDateTime TreatmentInit;
+
+    private boolean Finished;
+    
+    //oi matheuzito :D s2
 }

@@ -1,8 +1,11 @@
 package api.src.salus.api.Repository.Medicine;
 
 import api.src.salus.api.Domain.Entity.Medicine.Medicine;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
@@ -16,6 +19,13 @@ public interface IMedicineRepositoryJPA extends JpaRepository<Medicine, Integer>
             AND m.Removed = false
             """)
     Medicine findMedicineByName(String name, int userId);
+
+    @Query("""
+            SELECT m
+            FROM Medicine m
+            WHERE m.User.Id = :id
+            """)
+    Page<Medicine> findMedicineByUserIdPageble(@Param("id") int id, Pageable pageable);
 
     @Query("""
             SELECT m

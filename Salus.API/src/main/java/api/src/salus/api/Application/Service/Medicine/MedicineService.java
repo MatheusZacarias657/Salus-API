@@ -3,13 +3,11 @@ package api.src.salus.api.Application.Service.Medicine;
 import api.src.salus.api.Domain.DTO.Medicine.DetailingMedicineDTO;
 import api.src.salus.api.Domain.DTO.Medicine.RegisterMedicineDTO;
 import api.src.salus.api.Domain.DTO.Medicine.UpdateMedicineDTO;
-import api.src.salus.api.Domain.DTO.Patient.Allergy.DetailingPatientAllergyDTO;
 import api.src.salus.api.Domain.Entity.Cataloging.Importance;
 import api.src.salus.api.Domain.Entity.Medicine.Medicine;
 import api.src.salus.api.Domain.Entity.Medicine.MedicineType;
 import api.src.salus.api.Domain.Entity.Medicine.MedicineUnitType;
 import api.src.salus.api.Domain.Entity.User.UserAccount;
-import api.src.salus.api.Domain.Exception.ArgumentException;
 import api.src.salus.api.Domain.Exception.ValidationException;
 import api.src.salus.api.Domain.Interface.Application.Medicine.IMedicineService;
 import api.src.salus.api.Repository.Cataloging.IImportanceRepositoryJPA;
@@ -18,6 +16,8 @@ import api.src.salus.api.Repository.Medicine.IMedicineTypeRepositoryJPA;
 import api.src.salus.api.Repository.Medicine.IMedicineUnitTypeRepositoryJPA;
 import api.src.salus.api.Repository.User.IUserRepositoryJPA;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -52,13 +52,13 @@ public class MedicineService implements IMedicineService {
                 ? typeRepository.getReferenceById(Integer.parseInt(register.getType()))
                 : typeRepository.findTypeByName(register.getType());
 
-        MedicineUnitType unitType = (register.getType().matches("\\d+"))
+        MedicineUnitType unitType = (register.getUnitType().matches("\\d+"))
                 ? unitTypeRepository.getReferenceById(Integer.parseInt(register.getUnitType()))
                 : unitTypeRepository.findUnitTypeByName(register.getUnitType());
 
-        Importance importance = (register.getType().matches("\\d+"))
+        Importance importance = (register.getImportance().matches("\\d+"))
                 ? importanceRepository.getReferenceById(Integer.parseInt(register.getImportance()))
-                : importanceRepository.findImportanceByName(register.getImportance());
+                : importanceRepository.findImportanceByName(register.getImportance(), userId);
 
         Medicine entity = new Medicine(register, user, type, unitType, importance);
         repository.save(entity);
@@ -73,9 +73,8 @@ public class MedicineService implements IMedicineService {
     }
 
     @Override
-    public List<DetailingMedicineDTO> FindAll(int userId){
-        List<Medicine> entities = repository.findMedicineByUserId(userId);
-        return (List<DetailingMedicineDTO>) entities.stream().map(DetailingMedicineDTO::new);
+    public Page<DetailingMedicineDTO> FindAll(int userId, Pageable pageable){
+        return repository.findMedicineByUserIdPageble(userId, pageable).map(DetailingMedicineDTO::new);
     }
 
     @Override

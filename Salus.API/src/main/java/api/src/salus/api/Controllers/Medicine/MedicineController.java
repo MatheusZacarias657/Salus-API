@@ -45,7 +45,7 @@ public class MedicineController {
                                         @RequestParam(required = false) int userId,
                                         @PageableDefault(size = 10, sort = {"name"}) Pageable pageable){
         int id = (userId != 0) ? checkVisibilite.CheckAccess(authHeader, userId) : checkVisibilite.ExtractIdFromToken(authHeader);
-        return new ResponseEntity<>(medicineService.FindAll(id), HttpStatus.OK);
+        return new ResponseEntity<>(medicineService.FindAll(id, pageable), HttpStatus.OK);
     }
 
     @GetMapping("/ListNames")
