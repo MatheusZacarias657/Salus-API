@@ -1,0 +1,21 @@
+services:
+  salus-api:
+    image: salus-api
+    container_name: salus-api
+    build:
+      context: Salus.API
+    ports:
+      - 8080:7777   
+    # healthcheck:
+    #   test: ["CMD", "curl", "-f", "http://localhost:7045/Health/isalive"]
+    #   interval: 10s
+    #   timeout: 3s
+    #   retries: 3
+    #   start_period: 60s
+
+volumes:
+  mssql-data:
+
+networks:
+  mssql-network:
+    driver: bridge
