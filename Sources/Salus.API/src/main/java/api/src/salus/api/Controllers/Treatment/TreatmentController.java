@@ -1,6 +1,7 @@
 package api.src.salus.api.Controllers.Treatment;
 
 import api.src.salus.api.Domain.DTO.Medicine.RegisterMedicineDTO;
+import api.src.salus.api.Domain.DTO.Treatment.CompleteRegisterTreatment;
 import api.src.salus.api.Domain.DTO.Treatment.RegisterTreatmentDTO;
 import api.src.salus.api.Domain.Interface.Application.Auth.ICheckVisibilite;
 import api.src.salus.api.Domain.Interface.Application.Treatment.ITreatmentService;
@@ -27,7 +28,7 @@ public class TreatmentController {
     @PostMapping("")
     public ResponseEntity Create(@RequestHeader("Authorization") String authHeader,
                                  @RequestParam(required = false) int userId,
-                                 @RequestBody RegisterTreatmentDTO register){
+                                 @RequestBody CompleteRegisterTreatment register){
         int id = (userId != 0) ? checkVisibilite.CheckAccess(authHeader, userId) : checkVisibilite.ExtractIdFromToken(authHeader);
         return new ResponseEntity<>(treatmentService.Create(register, id), HttpStatus.OK);
     }
@@ -43,9 +44,10 @@ public class TreatmentController {
     @GetMapping("/{treatmentId}")
     public ResponseEntity ReadById(@PathVariable int treatmentId,
                                    @RequestHeader("Authorization") String authHeader,
-                                   @RequestParam(required = false) int userId){
+                                   @RequestParam(required = false) int userId,
+                                   @PageableDefault(size = 10, sort = {"name"}) Pageable pageable){
         int id = (userId != 0) ? checkVisibilite.CheckAccess(authHeader, userId) : checkVisibilite.ExtractIdFromToken(authHeader);
-        return new ResponseEntity<>(treatmentService.Find(treatmentId, id), HttpStatus.OK);
+        return new ResponseEntity<>(treatmentService.Find(treatmentId, id, pageable), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")

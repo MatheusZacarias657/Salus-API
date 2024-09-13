@@ -6,6 +6,8 @@ services:
       context: Salus.API
     ports:
       - 8080:7777   
+    environment:
+      - SQL_CONN=jdbc:sqlserver://db-mssql;databaseName=SalusDB;encrypt=true;trustServerCertificate=true;
     # healthcheck:
     #   test: ["CMD", "curl", "-f", "http://localhost:7045/Health/isalive"]
     #   interval: 10s

@@ -1,7 +1,7 @@
 services:
   db-mssql:
     image: mcr.microsoft.com/mssql/server:2019-latest
-    container_name: sql_db
+    container_name: db-mssql
     environment:
       SA_PASSWORD: "Ba705b8ta4428858eetadb8a"
       ACCEPT_EULA: "Y"

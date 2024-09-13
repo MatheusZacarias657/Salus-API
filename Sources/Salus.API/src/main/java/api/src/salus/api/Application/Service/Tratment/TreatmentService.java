@@ -1,11 +1,11 @@
 package api.src.salus.api.Application.Service.Tratment;
 
-import api.src.salus.api.Domain.DTO.Treatment.DetailingTreatmentDTO;
-import api.src.salus.api.Domain.DTO.Treatment.RegisterTreatmentDTO;
+import api.src.salus.api.Domain.DTO.Treatment.*;
 import api.src.salus.api.Domain.Entity.Cataloging.Importance;
 import api.src.salus.api.Domain.Entity.Treatment.Treatment;
 import api.src.salus.api.Domain.Entity.User.UserAccount;
 import api.src.salus.api.Domain.Exception.ValidationException;
+import api.src.salus.api.Domain.Interface.Application.Treatment.ITreatmentMedicineService;
 import api.src.salus.api.Domain.Interface.Application.Treatment.ITreatmentService;
 import api.src.salus.api.Repository.Cataloging.IImportanceRepositoryJPA;
 import api.src.salus.api.Repository.Treatment.ITreatmentRepositoryJPA;
@@ -15,37 +15,43 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Page;
 
+import java.util.List;
+
 @Service
 public class TreatmentService implements ITreatmentService {
 
     private final ITreatmentRepositoryJPA repository;
     private final IUserRepositoryJPA userRepository;
     private final IImportanceRepositoryJPA importanceRepository;
+    private final ITreatmentMedicineService treatmentMedicineService;
 
     @Autowired
-    public TreatmentService(ITreatmentRepositoryJPA repository, IUserRepositoryJPA userRepository, IImportanceRepositoryJPA importanceRepository) {
+    public TreatmentService(ITreatmentRepositoryJPA repository, IUserRepositoryJPA userRepository, IImportanceRepositoryJPA importanceRepository, ITreatmentMedicineService treatmentMedicineService) {
         this.repository = repository;
         this.userRepository = userRepository;
         this.importanceRepository = importanceRepository;
+        this.treatmentMedicineService = treatmentMedicineService;
     }
 
     @Override
-    public DetailingTreatmentDTO Create(RegisterTreatmentDTO register, int userId){
+    public CompleteDetailingTreatment Create(CompleteRegisterTreatment register, int userId){
 
-        if (repository.findTreatmentByName(register.getName(), userId) != null){
+        if (repository.findTreatmentByName(register.getTreatment().getName(), userId) != null){
             throw new ValidationException( "This treatment already exists");
         }
 
         UserAccount user = userRepository.getReferenceById(userId);
 
-        Importance importance = (register.getImportance().matches("\\d+"))
-                ? importanceRepository.getReferenceById(Integer.parseInt(register.getImportance()))
-                : importanceRepository.findImportanceByName(register.getImportance(), userId);
+        String importanceName = register.getTreatment().getImportance();
+        Importance importance = (importanceName.matches("\\d+"))
+                ? importanceRepository.getReferenceById(Integer.parseInt(importanceName))
+                : importanceRepository.findImportanceByName(importanceName, userId);
 
-        Treatment entity = new Treatment(register.getName(), user, importance);
+        Treatment entity = new Treatment(register.getTreatment().getName(), user, importance);
         repository.save(entity);
+        List<DetailingTreatmentMedicineDTO> medicines = treatmentMedicineService.Register(register.getMedicines(), entity);
 
-        return new DetailingTreatmentDTO(entity);
+        return new CompleteDetailingTreatment(new DetailingTreatmentDTO(entity), medicines);
     }
 
     @Override
@@ -54,10 +60,11 @@ public class TreatmentService implements ITreatmentService {
     }
 
     @Override
-    public DetailingTreatmentDTO Find(int treatmentId, int userId){
+    public CompleteDetailingTreatment Find(int treatmentId, int userId, Pageable pageable){
         Treatment entity = repository.findTreatmentByUserIdAndId(treatmentId, userId);
-        //TODO: retornar os medicamentos junto
-        return new DetailingTreatmentDTO(entity);
+        Page<DetailingTreatmentMedicineDTO> medicines = treatmentMedicineService.FindByTreatmentId(entity.getId(), pageable);
+
+        return new CompleteDetailingTreatment(new DetailingTreatmentDTO(entity), medicines.getContent());
     }
 
     @Override

@@ -21,7 +21,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class MedicineService implements IMedicineService {
@@ -78,11 +80,11 @@ public class MedicineService implements IMedicineService {
     }
 
     @Override
-    public List<String> FindNames(int userId){
-        List<String> names = new ArrayList<String>();
+    public Map<Integer, String> FindNames(int userId){
+        Map<Integer, String> names = new HashMap<Integer, String>();
 
         for(Medicine entity : repository.findMedicineByUserId(userId)){
-            names.add(entity.getName());
+            names.put(entity.getId(), entity.getName());
         }
 
         return  names;

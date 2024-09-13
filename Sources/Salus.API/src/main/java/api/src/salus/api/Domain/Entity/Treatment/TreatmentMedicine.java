@@ -1,5 +1,6 @@
 package api.src.salus.api.Domain.Entity.Treatment;
 
+import api.src.salus.api.Domain.DTO.Treatment.RegisterMedicineTreatmentDTO;
 import api.src.salus.api.Domain.Entity.Cataloging.Importance;
 import api.src.salus.api.Domain.Entity.Medicine.Medicine;
 import api.src.salus.api.Domain.Entity.User.UserAccount;
@@ -41,6 +42,16 @@ public class TreatmentMedicine {
     private LocalDateTime TreatmentInit;
 
     private boolean Finished;
+
+    public TreatmentMedicine(RegisterMedicineTreatmentDTO register, Medicine medicine, Treatment treatment){
+        this.Treatment = treatment;
+        this.Medicine = medicine;
+        this.Dosage = register.getDosage();
+        this.Frequency = register.getFrequency();
+        this.TreatmentEnd = register.getTreatmentEnd();
+        this.TreatmentInit = register.getTreatmentInit();
+        this.Finished = false;
+    }
     
     //oi matheuzito :D s2
 }

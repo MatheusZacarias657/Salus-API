@@ -27,4 +27,4 @@ COPY --from=build /app/target/salus.api-0.0.1-SNAPSHOT.jar /app/salus.api-0.0.1-
 EXPOSE 8080
 
 # Run the Spring Boot application
-ENTRYPOINT ["java", "-jar", "/app/salus.api-0.0.1-SNAPSHOT.jar"]
+ENTRYPOINT ["java", "-Djava.security.egd=file:/dev/./urandom", "-jar", "/app/salus.api-0.0.1-SNAPSHOT.jar"]
