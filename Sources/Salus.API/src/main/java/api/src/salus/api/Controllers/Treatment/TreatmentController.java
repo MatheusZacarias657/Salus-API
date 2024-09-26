@@ -27,7 +27,7 @@ public class TreatmentController {
 
     @PostMapping("")
     public ResponseEntity Create(@RequestHeader("Authorization") String authHeader,
-                                 @RequestParam(required = false) int userId,
+                                 @RequestParam(required = false, defaultValue = "0") Integer userId,
                                  @RequestBody CompleteRegisterTreatment register){
         int id = (userId != 0) ? checkVisibilite.CheckAccess(authHeader, userId) : checkVisibilite.ExtractIdFromToken(authHeader);
         return new ResponseEntity<>(treatmentService.Create(register, id), HttpStatus.OK);
@@ -35,7 +35,7 @@ public class TreatmentController {
 
     @GetMapping("/List")
     public ResponseEntity ListTreatments(@RequestHeader("Authorization") String authHeader,
-                                         @RequestParam(required = false) int userId,
+                                         @RequestParam(required = false, defaultValue = "0") Integer userId,
                                          @PageableDefault(size = 10, sort = {"name"}) Pageable pageable){
         int id = (userId != 0) ? checkVisibilite.CheckAccess(authHeader, userId) : checkVisibilite.ExtractIdFromToken(authHeader);
         return new ResponseEntity<>(treatmentService.FindAll(id, pageable), HttpStatus.OK);
@@ -44,7 +44,7 @@ public class TreatmentController {
     @GetMapping("/{treatmentId}")
     public ResponseEntity ReadById(@PathVariable int treatmentId,
                                    @RequestHeader("Authorization") String authHeader,
-                                   @RequestParam(required = false) int userId,
+                                   @RequestParam(required = false, defaultValue = "0") Integer userId,
                                    @PageableDefault(size = 10, sort = {"name"}) Pageable pageable){
         int id = (userId != 0) ? checkVisibilite.CheckAccess(authHeader, userId) : checkVisibilite.ExtractIdFromToken(authHeader);
         return new ResponseEntity<>(treatmentService.Find(treatmentId, id, pageable), HttpStatus.OK);
@@ -53,7 +53,7 @@ public class TreatmentController {
     @DeleteMapping("/{id}")
     public ResponseEntity Delete(@PathVariable int treatmentId,
                                  @RequestHeader("Authorization") String authHeader,
-                                 @RequestParam(required = false) int userId){
+                                 @RequestParam(required = false, defaultValue = "0") Integer userId){
         int id = (userId != 0) ? checkVisibilite.CheckAccess(authHeader, userId) : checkVisibilite.ExtractIdFromToken(authHeader);
         treatmentService.Delete(treatmentId, id);
         return new ResponseEntity<>(null, HttpStatus.OK);

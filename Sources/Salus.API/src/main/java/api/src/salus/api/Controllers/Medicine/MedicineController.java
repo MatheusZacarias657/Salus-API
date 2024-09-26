@@ -26,7 +26,7 @@ public class MedicineController {
 
     @PostMapping("")
     public ResponseEntity Create(@RequestHeader("Authorization") String authHeader,
-                                 @RequestParam(required = false) int userId,
+                                 @RequestParam(required = false, defaultValue = "0") Integer userId,
                                  @RequestBody RegisterMedicineDTO register){
         int id = (userId != 0) ? checkVisibilite.CheckAccess(authHeader, userId) : checkVisibilite.ExtractIdFromToken(authHeader);
         return new ResponseEntity<>(medicineService.Create(register, id), HttpStatus.OK);
@@ -35,22 +35,22 @@ public class MedicineController {
     @GetMapping("/{medicineId}")
     public ResponseEntity ReadById(@RequestHeader("Authorization") String authHeader,
                                    @PathVariable int medicineId,
-                                   @RequestParam(required = false) int userId){
+                                   @RequestParam(required = false, defaultValue = "0") Integer userId){
         int id = (userId != 0) ? checkVisibilite.CheckAccess(authHeader, userId) : checkVisibilite.ExtractIdFromToken(authHeader);
         return new ResponseEntity<>(medicineService.Find(medicineId, id), HttpStatus.OK);
     }
 
     @GetMapping("/List")
     public ResponseEntity ListMedicines(@RequestHeader("Authorization") String authHeader,
-                                        @RequestParam(required = false) int userId,
-                                        @PageableDefault(size = 10, sort = {"name"}) Pageable pageable){
+                                        @RequestParam(required = false, defaultValue = "0") Integer userId,
+                                        @PageableDefault(size = 10, sort = {"Name"}) Pageable pageable){
         int id = (userId != 0) ? checkVisibilite.CheckAccess(authHeader, userId) : checkVisibilite.ExtractIdFromToken(authHeader);
         return new ResponseEntity<>(medicineService.FindAll(id, pageable), HttpStatus.OK);
     }
 
     @GetMapping("/ListNames")
     public ResponseEntity ListNames(@RequestHeader("Authorization") String authHeader,
-                                    @RequestParam(required = false) int userId){
+                                    @RequestParam(required = false,defaultValue = "0") Integer userId){
 
         int id = (userId != 0) ? checkVisibilite.CheckAccess(authHeader, userId) : checkVisibilite.ExtractIdFromToken(authHeader);
         return new ResponseEntity<>(medicineService.FindNames(id), HttpStatus.OK);
@@ -60,7 +60,7 @@ public class MedicineController {
     public ResponseEntity Update(@RequestHeader("Authorization") String authHeader,
                                  @PathVariable int medicineId,
                                  @RequestBody UpdateMedicineDTO update,
-                                 @RequestParam(required = false) int userId){
+                                 @RequestParam(required = false, defaultValue = "0") Integer userId){
         int id = (userId != 0) ? checkVisibilite.CheckAccess(authHeader, userId) : checkVisibilite.ExtractIdFromToken(authHeader);
         return new ResponseEntity<>(medicineService.Update(medicineId, id, update), HttpStatus.NO_CONTENT);
     }
@@ -68,7 +68,7 @@ public class MedicineController {
     @DeleteMapping("/{medicineId}")
     public ResponseEntity Delete(@RequestHeader("Authorization") String authHeader,
                                  @PathVariable int medicineId,
-                                 @RequestParam(required = false) int userId){
+                                 @RequestParam(required = false,defaultValue = "0") Integer userId){
         int id = (userId != 0) ? checkVisibilite.CheckAccess(authHeader, userId) : checkVisibilite.ExtractIdFromToken(authHeader);
         medicineService.RemoveMedicine(medicineId, id);
         return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
