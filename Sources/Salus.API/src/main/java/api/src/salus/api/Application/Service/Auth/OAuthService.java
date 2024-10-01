@@ -4,11 +4,13 @@ import api.src.salus.api.Application.Utils.RandomGenerator;
 import api.src.salus.api.Domain.DTO.Auth.TokenResponse;
 import api.src.salus.api.Domain.DTO.Auth.UserForgetPassword;
 import api.src.salus.api.Domain.DTO.User.UserGenericDTO;
+import api.src.salus.api.Domain.Entity.Patient.Patient;
 import api.src.salus.api.Domain.Entity.User.UserAccount;
 import api.src.salus.api.Domain.Interface.Application.Adapter.IBrevoSendEmail;
 import api.src.salus.api.Domain.Interface.Application.Auth.IOAuthService;
 import api.src.salus.api.Domain.Interface.Application.Auth.ITokenGenerate;
 import api.src.salus.api.Domain.Interface.Application.User.IAuthUser;
+import api.src.salus.api.Repository.Patient.IPatientRepositoryJPA;
 import api.src.salus.api.Repository.User.IUserRepositoryJPA;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -28,15 +30,17 @@ public class OAuthService implements IOAuthService {
     private final ITokenGenerate tokenSevice;
     private final IBrevoSendEmail brevoSendEmail;
     private final IUserRepositoryJPA userRepository;
-    private PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
+    private final IPatientRepositoryJPA patientRepository;
 
     @Autowired
-    public OAuthService(AuthenticationManager manager, ITokenGenerate tokenSevice, IBrevoSendEmail brevoSendEmail, IUserRepositoryJPA userRepository, PasswordEncoder passwordEncoder){
+    public OAuthService(AuthenticationManager manager, ITokenGenerate tokenSevice, IBrevoSendEmail brevoSendEmail, IUserRepositoryJPA userRepository, PasswordEncoder passwordEncoder, IPatientRepositoryJPA patientRepositoryJPA){
         this.manager = manager;
         this.tokenSevice = tokenSevice;
         this.brevoSendEmail = brevoSendEmail;
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.patientRepository = patientRepositoryJPA;
     }
 
     @Override
@@ -45,8 +49,11 @@ public class OAuthService implements IOAuthService {
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(login.getLogin(), login.getPassword());
         Authentication auth = manager.authenticate(authenticationToken);
         String token = tokenSevice.GenerateToken((User) auth.getPrincipal());
+        UserAccount userAccount = userRepository.findByLogin(login.getLogin());
+        Patient patient = patientRepository.findPatientByUserId(userAccount.getId());
+        String name = (patient != null) ? patient.getName() : null;
 
-        return new TokenResponse(token);
+        return new TokenResponse(token, userAccount.getLogin(), name);
     }
 
     @Override

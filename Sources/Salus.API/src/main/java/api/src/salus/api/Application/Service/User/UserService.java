@@ -42,7 +42,7 @@ public class UserService implements IUserService, IAuthUser {
 
         String token = tokenGenerate.GenerateToken((User) ConvertToUserDetails(entity));
 
-        return new TokenResponse(token);
+        return new TokenResponse(token, entity.getLogin(), null);
     }
 
     public UserResponse ReadUser(int id){
