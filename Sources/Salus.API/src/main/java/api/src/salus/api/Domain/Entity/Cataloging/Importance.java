@@ -1,5 +1,6 @@
 package api.src.salus.api.Domain.Entity.Cataloging;
 
+import api.src.salus.api.Domain.DTO.Importance.RegisterImportanceDTO;
 import api.src.salus.api.Domain.Entity.User.UserAccount;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -24,4 +25,9 @@ public class Importance {
     private UserAccount User;
 
     private String Name;
+
+    public Importance(RegisterImportanceDTO register, UserAccount user){
+        this.User = user;
+        this.Name = register.getName();
+    }
 }

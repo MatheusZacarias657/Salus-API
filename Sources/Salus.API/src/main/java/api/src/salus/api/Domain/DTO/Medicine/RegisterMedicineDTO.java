@@ -1,6 +1,7 @@
 package api.src.salus.api.Domain.DTO.Medicine;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -27,5 +28,9 @@ public class RegisterMedicineDTO {
 
     @NotBlank
     private String Importance;
+
+    @NotNull
+    private float Price;
+
     private int DrawerNumber;
 }

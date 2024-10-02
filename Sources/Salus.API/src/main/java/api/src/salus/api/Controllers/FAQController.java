@@ -1,6 +1,7 @@
 package api.src.salus.api.Controllers;
 
 import api.src.salus.api.Domain.Interface.Application.FAQ.IFAQService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,6 +15,7 @@ public class FAQController {
 
     private final IFAQService service;
 
+    @Autowired
     public FAQController(IFAQService service) {
         this.service = service;
     }
