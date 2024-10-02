@@ -1,0 +1,12 @@
+package bkd.src.salus.api.Domain.DTO.Auth;
+
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import lombok.Data;
+
+@Data
+public class UserForgetPassword {
+
+    @NotBlank @Email
+    private String Login;
+}
