@@ -1,0 +1,31 @@
+services:  
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"  
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: "salus"
+      RABBITMQ_DEFAULT_PASS: "Ba705b8ta4428858eetadb8a"
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+  
+  mqtt:
+    image: eclipse-mosquitto
+    container_name: mqtt
+    ports:
+      - "1883:1883"
+      - "9001:9001"
+    volumes:
+      - ./MQTT/config:/mosquitto/config:rw
+      - ./MQTT/data:/mosquitto/data:rw
+      - ./MQTT/log:/mosquitto/log:rw
+    restart: unless-stopped
+
+volumes:
+  rabbitmq_data:
+
+networks:
+  salus-network:
+    driver: bridge

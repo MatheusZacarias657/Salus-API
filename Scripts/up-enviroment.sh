@@ -13,10 +13,17 @@ fi
 
 echo ""
 echo "Trying to up Infrastructure..."
-docker-compose --project-name salus -f $BASEDIR/docker-compose-infra.yml up -d --no-recreate
+
+echo ""
+echo "Up databases..."
+docker-compose --project-name salus -f $BASEDIR/docker-compose-database.yml up -d --no-recreate
+
+echo ""
+echo "Up external services..."
+docker-compose --project-name salus -f $BASEDIR/docker-compose-service.yml up -d --no-recreate
 
 echo ""
 echo "Trying to up the System..."
 docker-compose --project-name salus -f $BASEDIR/docker-compose-source.yml up -d
 
-echo "All Containers are up!"
+echo "All Containers was up!"
