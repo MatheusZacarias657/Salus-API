@@ -1,12 +1,9 @@
 package bkd.src.salus.api.Domain.DTO.Importance;
 
-import bkd.src.salus.api.Domain.Entity.Cataloging.Importance;
-import bkd.src.salus.api.Domain.Entity.Medicine.Medicine;
+import bkd.src.salus.api.Domain.Entity.SQL.Cataloging.Importance;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.time.LocalDateTime;
 
 @NoArgsConstructor
 @AllArgsConstructor

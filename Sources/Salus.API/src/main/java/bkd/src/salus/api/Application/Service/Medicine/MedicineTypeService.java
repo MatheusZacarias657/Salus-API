@@ -1,9 +1,8 @@
 package bkd.src.salus.api.Application.Service.Medicine;
 
-import bkd.src.salus.api.Domain.DTO.Medicine.RegisterMedicineDTO;
-import bkd.src.salus.api.Domain.Entity.Medicine.MedicineType;
+import bkd.src.salus.api.Domain.Entity.SQL.Medicine.MedicineType;
 import bkd.src.salus.api.Domain.Interface.Application.Medicine.IMedicineTypeService;
-import bkd.src.salus.api.Repository.Medicine.IMedicineTypeRepositoryJPA;
+import bkd.src.salus.api.Repository.SQL.Medicine.IMedicineTypeRepositoryJPA;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

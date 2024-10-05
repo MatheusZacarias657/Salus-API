@@ -1,0 +1,9 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Communicator" type="Application" factoryName="Application">
+    <option name="MAIN_CLASS_NAME" value="bkd.src.salus.communicator.CommunicatorApplication" />
+    <module name="communicator" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>

@@ -2,7 +2,7 @@ package bkd.src.salus.api.Application.Validator;
 
 import bkd.src.salus.api.Domain.Interface.Application.Auth.ICheckVisibilite;
 import bkd.src.salus.api.Domain.Interface.Application.Auth.ITokenRead;
-import bkd.src.salus.api.Repository.User.IUserRepositoryJPA;
+import bkd.src.salus.api.Repository.SQL.User.IUserRepositoryJPA;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;

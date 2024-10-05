@@ -1,12 +1,11 @@
 package bkd.src.salus.api.Application.Service.FAQ;
 
 import bkd.src.salus.api.Domain.DTO.FAQ.DetailingFaqDTO;
-import bkd.src.salus.api.Domain.DTO.Medicine.DetailingMedicineDTO;
-import bkd.src.salus.api.Domain.Entity.FAQ.FAQ;
-import bkd.src.salus.api.Domain.Entity.FAQ.GroupFAQ;
+import bkd.src.salus.api.Domain.Entity.SQL.FAQ.FAQ;
+import bkd.src.salus.api.Domain.Entity.SQL.FAQ.GroupFAQ;
 import bkd.src.salus.api.Domain.Interface.Application.FAQ.IFAQService;
-import bkd.src.salus.api.Repository.FAQ.IFAQRepositoryJPA;
-import bkd.src.salus.api.Repository.FAQ.IGroupFAQRepositoryJPA;
+import bkd.src.salus.api.Repository.SQL.FAQ.IFAQRepositoryJPA;
+import bkd.src.salus.api.Repository.SQL.FAQ.IGroupFAQRepositoryJPA;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

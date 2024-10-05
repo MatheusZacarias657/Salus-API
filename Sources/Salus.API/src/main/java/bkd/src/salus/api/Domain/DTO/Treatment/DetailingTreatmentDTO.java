@@ -1,6 +1,6 @@
 package bkd.src.salus.api.Domain.DTO.Treatment;
 
-import bkd.src.salus.api.Domain.Entity.Treatment.Treatment;
+import bkd.src.salus.api.Domain.Entity.SQL.Treatment.Treatment;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

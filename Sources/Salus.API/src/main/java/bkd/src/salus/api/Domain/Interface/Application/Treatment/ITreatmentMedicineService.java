@@ -2,7 +2,7 @@ package bkd.src.salus.api.Domain.Interface.Application.Treatment;
 
 import bkd.src.salus.api.Domain.DTO.Treatment.DetailingTreatmentMedicineDTO;
 import bkd.src.salus.api.Domain.DTO.Treatment.RegisterMedicineTreatmentDTO;
-import bkd.src.salus.api.Domain.Entity.Treatment.Treatment;
+import bkd.src.salus.api.Domain.Entity.SQL.Treatment.Treatment;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 

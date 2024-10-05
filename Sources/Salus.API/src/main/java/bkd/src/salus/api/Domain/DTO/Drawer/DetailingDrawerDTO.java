@@ -1,8 +1,7 @@
 package bkd.src.salus.api.Domain.DTO.Drawer;
 
-import bkd.src.salus.api.Domain.Entity.Cataloging.Importance;
-import bkd.src.salus.api.Domain.Entity.Drawer.Drawer;
-import bkd.src.salus.api.Domain.Entity.User.UserAccount;
+import bkd.src.salus.api.Domain.Entity.SQL.Drawer.Drawer;
+import bkd.src.salus.api.Domain.Entity.SQL.User.UserAccount;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

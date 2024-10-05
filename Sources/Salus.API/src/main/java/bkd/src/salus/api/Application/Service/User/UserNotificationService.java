@@ -1,10 +1,9 @@
 package bkd.src.salus.api.Application.Service.User;
 
 import bkd.src.salus.api.Domain.DTO.User.UserNotificationDTO;
-import bkd.src.salus.api.Domain.DTO.User.UserPreferenceResponseDetailing;
-import bkd.src.salus.api.Domain.Entity.User.UserNotification;
+import bkd.src.salus.api.Domain.Entity.SQL.User.UserNotification;
 import bkd.src.salus.api.Domain.Interface.Application.User.IUserNotificationService;
-import bkd.src.salus.api.Repository.User.IUserNotificationRepositoryJPA;
+import bkd.src.salus.api.Repository.SQL.User.IUserNotificationRepositoryJPA;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

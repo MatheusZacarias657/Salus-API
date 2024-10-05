@@ -1,6 +1,6 @@
 package bkd.src.salus.api.Domain.DTO.User;
 
-import bkd.src.salus.api.Domain.Entity.User.UserAccount;
+import bkd.src.salus.api.Domain.Entity.SQL.User.UserAccount;
 import lombok.Data;
 
 @Data

@@ -1,7 +1,7 @@
 package bkd.src.salus.api.Domain.DTO.FAQ;
 
-import bkd.src.salus.api.Domain.Entity.FAQ.FAQ;
-import bkd.src.salus.api.Domain.Entity.FAQ.GroupFAQ;
+import bkd.src.salus.api.Domain.Entity.SQL.FAQ.FAQ;
+import bkd.src.salus.api.Domain.Entity.SQL.FAQ.GroupFAQ;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

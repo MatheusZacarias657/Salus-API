@@ -1,10 +1,9 @@
 package bkd.src.salus.api.Application.Service.Auth;
 
-import bkd.src.salus.api.Application.Utils.TimeTools;
-import bkd.src.salus.api.Domain.Entity.User.UserAccount;
+import bkd.src.salus.api.Domain.Entity.SQL.User.UserAccount;
 import bkd.src.salus.api.Domain.Interface.Application.Auth.ITokenGenerate;
 import bkd.src.salus.api.Domain.Interface.Application.Auth.ITokenRead;
-import bkd.src.salus.api.Repository.User.IUserRepositoryJPA;
+import bkd.src.salus.api.Repository.SQL.User.IUserRepositoryJPA;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
@@ -14,9 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
-
-import java.time.*;
-import java.time.temporal.TemporalAmount;
 
 @Service
 public class TokenSevice implements ITokenGenerate, ITokenRead {

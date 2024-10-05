@@ -1,7 +1,6 @@
 package bkd.src.salus.api.Domain.DTO.Patient.Allergy;
 
-import bkd.src.salus.api.Domain.Entity.Patient.PatientAllergy;
-import bkd.src.salus.api.Domain.Entity.Patient.PatientDisease;
+import bkd.src.salus.api.Domain.Entity.SQL.Patient.PatientAllergy;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

@@ -1,7 +1,6 @@
 package bkd.src.salus.api.Domain.DTO.Treatment;
 
-import bkd.src.salus.api.Domain.Entity.Treatment.TreatmentMedicine;
-import jakarta.persistence.Column;
+import bkd.src.salus.api.Domain.Entity.SQL.Treatment.TreatmentMedicine;
 import lombok.Data;
 
 import java.time.LocalDateTime;

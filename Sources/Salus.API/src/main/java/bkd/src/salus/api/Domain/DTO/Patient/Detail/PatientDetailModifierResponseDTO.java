@@ -1,7 +1,6 @@
 package bkd.src.salus.api.Domain.DTO.Patient.Detail;
 
-import bkd.src.salus.api.Domain.Entity.Patient.PatientDetail;
-import jakarta.validation.constraints.NotNull;
+import bkd.src.salus.api.Domain.Entity.SQL.Patient.PatientDetail;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

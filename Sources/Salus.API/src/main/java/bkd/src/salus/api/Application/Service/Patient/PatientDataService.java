@@ -3,11 +3,11 @@ package bkd.src.salus.api.Application.Service.Patient;
 import bkd.src.salus.api.Domain.DTO.Patient.Data.PatientModifierResponseDTO;
 import bkd.src.salus.api.Domain.DTO.Patient.Data.RegisterPatientDataDTO;
 import bkd.src.salus.api.Domain.DTO.Patient.Data.UpdatePatientDataDTO;
-import bkd.src.salus.api.Domain.Entity.Patient.Patient;
-import bkd.src.salus.api.Domain.Entity.User.UserAccount;
+import bkd.src.salus.api.Domain.Entity.SQL.Patient.Patient;
+import bkd.src.salus.api.Domain.Entity.SQL.User.UserAccount;
 import bkd.src.salus.api.Domain.Interface.Application.Patient.IPatientCrudService;
-import bkd.src.salus.api.Repository.Patient.IPatientRepositoryJPA;
-import bkd.src.salus.api.Repository.User.IUserRepositoryJPA;
+import bkd.src.salus.api.Repository.SQL.Patient.IPatientRepositoryJPA;
+import bkd.src.salus.api.Repository.SQL.User.IUserRepositoryJPA;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

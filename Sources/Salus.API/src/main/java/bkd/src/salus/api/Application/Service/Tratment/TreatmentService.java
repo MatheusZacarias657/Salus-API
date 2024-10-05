@@ -1,15 +1,15 @@
 package bkd.src.salus.api.Application.Service.Tratment;
 
 import bkd.src.salus.api.Domain.DTO.Treatment.*;
-import bkd.src.salus.api.Domain.Entity.Cataloging.Importance;
-import bkd.src.salus.api.Domain.Entity.Treatment.Treatment;
-import bkd.src.salus.api.Domain.Entity.User.UserAccount;
+import bkd.src.salus.api.Domain.Entity.SQL.Cataloging.Importance;
+import bkd.src.salus.api.Domain.Entity.SQL.Treatment.Treatment;
+import bkd.src.salus.api.Domain.Entity.SQL.User.UserAccount;
 import bkd.src.salus.api.Domain.Exception.ValidationException;
 import bkd.src.salus.api.Domain.Interface.Application.Treatment.ITreatmentMedicineService;
 import bkd.src.salus.api.Domain.Interface.Application.Treatment.ITreatmentService;
-import bkd.src.salus.api.Repository.Cataloging.IImportanceRepositoryJPA;
-import bkd.src.salus.api.Repository.Treatment.ITreatmentRepositoryJPA;
-import bkd.src.salus.api.Repository.User.IUserRepositoryJPA;
+import bkd.src.salus.api.Repository.SQL.Cataloging.IImportanceRepositoryJPA;
+import bkd.src.salus.api.Repository.SQL.Treatment.ITreatmentRepositoryJPA;
+import bkd.src.salus.api.Repository.SQL.User.IUserRepositoryJPA;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;

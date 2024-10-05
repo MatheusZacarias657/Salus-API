@@ -2,12 +2,12 @@ package bkd.src.salus.api.Application.Service.Importance;
 
 import bkd.src.salus.api.Domain.DTO.Importance.DetailingImportanceDTO;
 import bkd.src.salus.api.Domain.DTO.Importance.RegisterImportanceDTO;
-import bkd.src.salus.api.Domain.Entity.Cataloging.Importance;
-import bkd.src.salus.api.Domain.Entity.User.UserAccount;
+import bkd.src.salus.api.Domain.Entity.SQL.Cataloging.Importance;
+import bkd.src.salus.api.Domain.Entity.SQL.User.UserAccount;
 import bkd.src.salus.api.Domain.Exception.ValidationException;
 import bkd.src.salus.api.Domain.Interface.Application.IImportanceService;
-import bkd.src.salus.api.Repository.Cataloging.IImportanceRepositoryJPA;
-import bkd.src.salus.api.Repository.User.IUserRepositoryJPA;
+import bkd.src.salus.api.Repository.SQL.Cataloging.IImportanceRepositoryJPA;
+import bkd.src.salus.api.Repository.SQL.User.IUserRepositoryJPA;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

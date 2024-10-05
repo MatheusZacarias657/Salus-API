@@ -1,8 +1,6 @@
 package bkd.src.salus.api.Domain.DTO.Medicine;
 
-import bkd.src.salus.api.Domain.Entity.Medicine.Medicine;
-import bkd.src.salus.api.Domain.Entity.Patient.PatientAllergy;
-import jakarta.validation.constraints.NotBlank;
+import bkd.src.salus.api.Domain.Entity.SQL.Medicine.Medicine;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

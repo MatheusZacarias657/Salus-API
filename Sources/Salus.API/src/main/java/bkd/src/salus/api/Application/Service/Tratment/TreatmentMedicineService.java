@@ -1,16 +1,13 @@
 package bkd.src.salus.api.Application.Service.Tratment;
 
-import bkd.src.salus.api.Domain.DTO.Treatment.DetailingTreatmentDTO;
 import bkd.src.salus.api.Domain.DTO.Treatment.DetailingTreatmentMedicineDTO;
 import bkd.src.salus.api.Domain.DTO.Treatment.RegisterMedicineTreatmentDTO;
-import bkd.src.salus.api.Domain.DTO.Treatment.RegisterTreatmentDTO;
-import bkd.src.salus.api.Domain.Entity.Medicine.Medicine;
-import bkd.src.salus.api.Domain.Entity.Treatment.Treatment;
-import bkd.src.salus.api.Domain.Entity.Treatment.TreatmentMedicine;
+import bkd.src.salus.api.Domain.Entity.SQL.Medicine.Medicine;
+import bkd.src.salus.api.Domain.Entity.SQL.Treatment.Treatment;
+import bkd.src.salus.api.Domain.Entity.SQL.Treatment.TreatmentMedicine;
 import bkd.src.salus.api.Domain.Interface.Application.Treatment.ITreatmentMedicineService;
-import bkd.src.salus.api.Repository.Medicine.IMedicineRepositoryJPA;
-import bkd.src.salus.api.Repository.Treatment.ITreatmentMedicineRepositoryJPA;
-import bkd.src.salus.api.Repository.Treatment.ITreatmentRepositoryJPA;
+import bkd.src.salus.api.Repository.SQL.Medicine.IMedicineRepositoryJPA;
+import bkd.src.salus.api.Repository.SQL.Treatment.ITreatmentMedicineRepositoryJPA;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
