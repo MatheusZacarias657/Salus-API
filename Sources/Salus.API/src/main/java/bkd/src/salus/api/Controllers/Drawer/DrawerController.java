@@ -42,7 +42,9 @@ public class DrawerController {
     }
 
     @GetMapping("/List")
-    public ResponseEntity FindAll(){
-        return new ResponseEntity<>(null, HttpStatus.OK);
+    public ResponseEntity FindAll(@RequestHeader("Authorization") String authHeader,
+                                  @RequestParam(required = false, defaultValue = "0") Integer userId){
+        int id = (userId != 0) ? checkVisibilite.CheckAccess(authHeader, userId) : checkVisibilite.ExtractIdFromToken(authHeader);
+        return new ResponseEntity<>(drawerService.FindByUserId(id), HttpStatus.OK);
     }
 }

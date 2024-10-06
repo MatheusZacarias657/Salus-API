@@ -15,7 +15,7 @@ public class RegisterDrawerDTO {
     private String Name;
 
     @NotBlank
-    private String EspId;
+    private String HardwareId;
 
     @NotNull
     private int NumberOfDrawers;

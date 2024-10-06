@@ -3,10 +3,12 @@ package bkd.src.salus.api.Application.Service.User;
 import bkd.src.salus.api.Domain.DTO.Auth.TokenResponse;
 import bkd.src.salus.api.Domain.DTO.User.UserGenericDTO;
 import bkd.src.salus.api.Domain.DTO.User.UserResponse;
+import bkd.src.salus.api.Domain.Entity.NoSQL.Topic.MqttTopic;
 import bkd.src.salus.api.Domain.Entity.SQL.User.UserAccount;
 import bkd.src.salus.api.Domain.Interface.Application.Auth.ITokenGenerate;
 import bkd.src.salus.api.Domain.Interface.Application.User.IAuthUser;
 import bkd.src.salus.api.Domain.Interface.Application.User.IUserService;
+import bkd.src.salus.api.Repository.NoSQL.Topic.ITopicRepositoryMR;
 import bkd.src.salus.api.Repository.SQL.User.IUserRepositoryJPA;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.User;
@@ -15,18 +17,22 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.util.List;
+
 @Service
 public class UserService implements IUserService, IAuthUser {
 
     private final IUserRepositoryJPA userRepository;
     private final PasswordEncoder passwordEncoder;
     private final ITokenGenerate tokenGenerate;
+    private final ITopicRepositoryMR topicRepository;
 
     @Autowired
-    public UserService(PasswordEncoder passwordEncoder, IUserRepositoryJPA userRepository, ITokenGenerate tokenGenerate){
+    public UserService(PasswordEncoder passwordEncoder, IUserRepositoryJPA userRepository, ITokenGenerate tokenGenerate, ITopicRepositoryMR topicRepository){
         this.passwordEncoder = passwordEncoder;
         this.userRepository = userRepository;
         this.tokenGenerate = tokenGenerate;
+        this.topicRepository = topicRepository;
     }
 
     @Transactional
@@ -41,6 +47,8 @@ public class UserService implements IUserService, IAuthUser {
         }
 
         String token = tokenGenerate.GenerateToken((User) ConvertToUserDetails(entity));
+        MqttTopic topic = new MqttTopic(entity.getId(), String.format("/notification/user/%d", entity.getId()));
+        topicRepository.save(topic);
 
         return new TokenResponse(token, entity.getLogin(), null);
     }

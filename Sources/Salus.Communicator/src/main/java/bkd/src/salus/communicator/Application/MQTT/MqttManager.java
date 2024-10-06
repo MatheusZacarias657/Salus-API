@@ -1,42 +1,57 @@
 package bkd.src.salus.communicator.Application.MQTT;
 
+import bkd.src.salus.communicator.Domain.DTO.Notification.NextNotification;
 import bkd.src.salus.communicator.Domain.Interface.Application.MQTT.IMqttManager;
+import bkd.src.salus.communicator.Domain.Interface.Application.Notification.IResponseNotificationHandler;
+import bkd.src.salus.communicator.Domain.Interface.Repository.IRedisStackManager;
 import bkd.src.salus.communicator.Domain.Interface.Repository.ITopicRepository;
 import org.eclipse.paho.client.mqttv3.*;
+import org.eclipse.paho.client.mqttv3.persist.MqttDefaultFilePersistence;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.UUID;
 
 @Service
+@EnableScheduling
 public class MqttManager implements IMqttManager {
 
     @Value("${comm.mqtt.broker}")
     private String mqttBroker;
 
-    private static MqttClient mqttClient;
+    private static MqttAsyncClient mqttClient;
     private final ITopicRepository topicRepositoryMR;
+    private final IRedisStackManager redisStackManager;
+    private final IResponseNotificationHandler notificationHandler;
 
     @Autowired
-    public MqttManager(ITopicRepository topicRepositoryMR) throws MqttException {
+    public MqttManager(ITopicRepository topicRepositoryMR, IRedisStackManager redisStackManager, IResponseNotificationHandler notificationHandler) throws MqttException {
         this.topicRepositoryMR = topicRepositoryMR;
+        this.redisStackManager = redisStackManager;
+        this.notificationHandler = notificationHandler;
         mqttBroker = "tcp://localhost:1883";
+        redisStackManager.DeleteList("current_topics");
         InitializeMQTT();
-        Run();
     }
 
     private void Connect() throws MqttException {
         UUID uuid = UUID.randomUUID();
-        mqttClient = new MqttClient(mqttBroker, uuid.toString());
+        String tempDir = System.getProperty("java.io.tmpdir");
+        MqttDefaultFilePersistence persistence = new MqttDefaultFilePersistence(tempDir);
+        mqttClient = new MqttAsyncClient(mqttBroker, uuid.toString(), persistence);
         MqttConnectOptions mqttOptions = new MqttConnectOptions();
-        mqttClient.connect(mqttOptions);
+        mqttOptions.setCleanSession(true);
+        mqttClient.connect(mqttOptions).waitForCompletion();
     }
 
     public void AddSubscribers(List<String> subscribers) throws MqttException {
         for(String subscriber : subscribers){
             mqttClient.subscribe(subscriber, 1);
+            redisStackManager.AddObjectToList("current_topics", subscriber);
         }
     }
 
@@ -52,12 +67,18 @@ public class MqttManager implements IMqttManager {
         mqttClient.publish(topic, mqttMsg);
     }
 
-    private void ManageMessages() throws MqttException {
+    @Scheduled(fixedDelay = 10)
+    public void ManageMessages() throws MqttException {
         if (mqttClient.isConnected()) {
             mqttClient.setCallback(new MqttCallback() {
                 @Override
                 public void messageArrived(String topic, MqttMessage message) throws Exception {
-                    System.out.println(String.format("Received message: %s on %s", new String(message.getPayload()), topic));
+                    System.out.printf("Received message: %s on %s%n", new String(message.getPayload()), topic);
+                    List<NextNotification> nextMessages = notificationHandler.MessageProcess(new String(message.getPayload()), topic);
+
+                    for(NextNotification nextMessage : nextMessages){
+                        SendMessage(nextMessage.getMessage(), nextMessage.getTopic());
+                    }
                 }
                 @Override
                 public void connectionLost(Throwable cause) {
@@ -70,18 +91,9 @@ public class MqttManager implements IMqttManager {
             });
         }
         else {
+            redisStackManager.DeleteList("current_topics");
             InitializeMQTT();
-        }
-    }
-
-    private void Run() {
-        try {
-            while (true) {
-                ManageMessages();
-                Thread.sleep(1000);
-            }
-        } catch (InterruptedException | MqttException e) {
-            e.printStackTrace();
+            System.out.println("Reconected on MQTT");
         }
     }
 }

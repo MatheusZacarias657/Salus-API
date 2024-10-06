@@ -10,15 +10,15 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Data
 public class DetailingDrawerDTO {
-    private int Id;
-    private String EspId;
+    private String HardwareId;
     private String Name;
     private String User;
+    private String Topic;
 
-    public DetailingDrawerDTO(Drawer drawer, UserAccount user){
+    public DetailingDrawerDTO(Drawer drawer, UserAccount user, String topic){
         this.Name = drawer.getName();
-        this.Id = drawer.getId();
-        this.EspId = drawer.getEspId();
+        this.HardwareId = drawer.getHardwareId();
         this.User = user.getLogin();
+        this.Topic = topic;
     }
 }

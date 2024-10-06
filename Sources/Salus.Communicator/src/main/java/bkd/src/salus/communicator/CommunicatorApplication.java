@@ -1,12 +1,12 @@
 package bkd.src.salus.communicator;
 
-import bkd.src.salus.communicator.Application.MQTT.MqttManager;
-import org.eclipse.paho.client.mqttv3.MqttException;
+import org.springframework.amqp.rabbit.annotation.EnableRabbit;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import java.util.Locale;
 
+@EnableRabbit
 @SpringBootApplication
 public class CommunicatorApplication {
 

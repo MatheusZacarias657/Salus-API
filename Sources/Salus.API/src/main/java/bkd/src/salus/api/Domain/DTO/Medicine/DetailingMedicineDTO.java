@@ -19,6 +19,7 @@ public class DetailingMedicineDTO {
     private String Importance;
     private int DrawerNumber;
     private float Price;
+    private String HardwareId;
 
     public DetailingMedicineDTO(Medicine medicine){
         this.Name = medicine.getName();
@@ -29,6 +30,7 @@ public class DetailingMedicineDTO {
         this.Importance = medicine.getImportance().getName();
         this.DrawerNumber = medicine.getDrawerNumber();
         this.Id = medicine.getId();
+        this.HardwareId = medicine.getHardwareId();
     }
 
 }

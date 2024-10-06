@@ -8,7 +8,8 @@ CREATE TABLE medicine
     Expiration_Date DATETIME NOT NULL,
     Importance_Id INT NOT NULL,
     Removed BIT NOT NULL DEFAULT 0,
-    Drawer_Number INT NOT NULL,
+    Drawer_Number INT,
+    Hardware_Id VARCHAR(50),
     Price FLOAT,
 
     constraint fk_medicine_UserId foreign key (User_Id) references user_account(id),

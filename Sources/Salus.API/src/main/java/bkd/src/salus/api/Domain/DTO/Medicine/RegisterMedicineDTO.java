@@ -29,8 +29,7 @@ public class RegisterMedicineDTO {
     @NotBlank
     private String Importance;
 
-    @NotNull
     private float Price;
-
     private int DrawerNumber;
+    private String HardwareId;
 }

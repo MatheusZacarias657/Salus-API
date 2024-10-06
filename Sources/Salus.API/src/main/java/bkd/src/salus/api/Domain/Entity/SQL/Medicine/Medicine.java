@@ -41,12 +41,15 @@ public class Medicine {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "Importance_Id")
-    private bkd.src.salus.api.Domain.Entity.SQL.Cataloging.Importance Importance; //TODO: controller
+    private Importance Importance;
 
     private boolean Removed;
 
     @Column(name = "Drawer_Number")
     private int DrawerNumber;
+
+    @Column(name = "Hardware_Id")
+    private String HardwareId;
 
     private float Price;
 
@@ -56,12 +59,15 @@ public class Medicine {
         this.Name = register.getName();
         this.StorageQuantity = register.getStorageQuantity();
         this.ExpirationDate = register.getExpirationDate();
-        this.DrawerNumber = register.getDrawerNumber();
 
         this.User = user;
         this.Type = type;
-        this.Price = register.getPrice();
         this.Importance = importance;
+
+        this.Price = register.getPrice();
+        this.DrawerNumber = register.getDrawerNumber();
+        this.HardwareId = register.getHardwareId();
+
         this.Removed = false;
     }
 

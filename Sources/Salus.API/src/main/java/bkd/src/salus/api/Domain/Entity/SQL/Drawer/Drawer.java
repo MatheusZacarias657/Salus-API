@@ -19,8 +19,8 @@ public class Drawer {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int Id;
 
-    @Column(name = "Esp_Id")
-    private String EspId;
+    @Column(name = "Hardware_Id")
+    private String HardwareId;
 
     private String Name;
 
@@ -28,7 +28,7 @@ public class Drawer {
     private int NumberOfDrawers;
 
     public Drawer(RegisterDrawerDTO register){
-        this.EspId = register.getEspId();
+        this.HardwareId = register.getHardwareId();
         this.Name = register.getName();
         this.NumberOfDrawers = register.getNumberOfDrawers();
     }

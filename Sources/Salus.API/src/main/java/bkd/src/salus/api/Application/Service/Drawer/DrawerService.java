@@ -15,6 +15,7 @@ import bkd.src.salus.api.Repository.SQL.User.IUserRepositoryJPA;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -36,7 +37,7 @@ public class DrawerService implements IDrawerService {
 
     @Override
     public DetailingDrawerDTO Register(RegisterDrawerDTO register, int userId){
-        if (drawerRepository.findByEspId(register.getEspId()) != null){
+        if (drawerRepository.findByEspId(register.getHardwareId()) != null){
             throw new ValidationException( "This drawer already exists");
         }
 
@@ -48,12 +49,21 @@ public class DrawerService implements IDrawerService {
         drawerGroup.AddUser(user);
         drawerGroupRepository.save(drawerGroup);
 
-        List<String> topics = List.of(
-                String.format("/notification/%s", register.getEspId())
-        );
-        MqttTopic topic = new MqttTopic(register.getEspId(), topics);
+        MqttTopic topic = new MqttTopic(userId, String.format("/notification/drawer/%s", register.getHardwareId()), register.getHardwareId());
         topicRepository.save(topic);
 
-        return  new DetailingDrawerDTO(drawerEntity, user);
+        return  new DetailingDrawerDTO(drawerEntity, user, topic.getTopic());
+    }
+
+    public List<DetailingDrawerDTO> FindByUserId(int userId){
+        List<Drawer> drawers = drawerRepository.findByUserId(userId);
+        UserAccount user = userRepository.getReferenceById(userId);
+        List<DetailingDrawerDTO> responseDrawers = new ArrayList<>();
+
+        for(Drawer drawer : drawers) {
+            responseDrawers.add(new DetailingDrawerDTO(drawer, user,  String.format("/notification/drawer/%s", drawer.getHardwareId())));
+        }
+
+        return responseDrawers;
     }
 }
