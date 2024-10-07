@@ -24,6 +24,6 @@ public class RabbitQueue {
     private UUID RoutingKey;
 
     private String Queue;
-
     private String Exchange;
+    private boolean Delayed;
 }

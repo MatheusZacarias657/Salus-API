@@ -7,6 +7,7 @@ echo "Build Applications.."
 
 if [ -z "$1" ]; then
     docker build -t salus-api -f $BASEDIR/Sources/Dockerfile-API .
+    docker build -t rabbitmq-custom -f $BASEDIR/Dockerfile-RabbitMQ .
 elif [ "$1" = "no-build" ]; then
     echo "No Build Requested"
 fi
