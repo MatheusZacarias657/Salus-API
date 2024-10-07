@@ -8,4 +8,11 @@ import java.util.List;
 import java.util.UUID;
 
 public interface IRabbitQueueRepositoryJPA extends JpaRepository<RabbitQueue, UUID> {
+
+    @Query("""
+            SELECT r
+            FROM RabbitQueue r
+            WHERE r.Exchange = :exchange
+            """)
+    RabbitQueue findByExchange(String exchange);
 }

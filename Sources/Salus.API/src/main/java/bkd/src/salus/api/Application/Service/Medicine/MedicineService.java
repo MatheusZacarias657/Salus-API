@@ -7,7 +7,7 @@ import bkd.src.salus.api.Domain.Entity.SQL.Medicine.Medicine;
 import bkd.src.salus.api.Domain.Entity.SQL.Medicine.MedicineType;
 import bkd.src.salus.api.Domain.Entity.SQL.User.UserAccount;
 import bkd.src.salus.api.Domain.Exception.ValidationException;
-import bkd.src.salus.api.Domain.Interface.Application.Medicine.IMedicineService;
+import bkd.src.salus.api.Domain.Interface.Application.Medicine.*;
 import bkd.src.salus.api.Repository.SQL.Cataloging.IImportanceRepositoryJPA;
 import bkd.src.salus.api.Repository.SQL.Medicine.IMedicineRepositoryJPA;
 import bkd.src.salus.api.Repository.SQL.Medicine.IMedicineTypeRepositoryJPA;
@@ -21,7 +21,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Service
-public class MedicineService implements IMedicineService {
+public class MedicineService implements IMedicineService, IMedicineOperator {
 
     private final IMedicineRepositoryJPA repository;
     private final IMedicineTypeRepositoryJPA typeRepository;
@@ -70,19 +70,26 @@ public class MedicineService implements IMedicineService {
 
     @Override
     public Map<Integer, String> FindNames(int userId){
-        Map<Integer, String> names = new HashMap<Integer, String>();
+        Map<Integer, String> names = new HashMap<>();
 
         for(Medicine entity : repository.findMedicineByUserId(userId)){
             names.put(entity.getId(), entity.getName());
         }
 
-        return  names;
+        return names;
     }
 
     @Override
     public void RemoveMedicine(int medicineId, int userId){
         Medicine entity = repository.findMedicineByUserIdAndId(medicineId, userId);
         entity.Remove();
+        repository.save(entity);
+    }
+
+    @Override
+    public void DecrementMedicine(int medicineId, int userId, int quantity){
+        Medicine entity = repository.findMedicineByUserIdAndId(medicineId, userId);
+        entity.Decrement(quantity);
         repository.save(entity);
     }
 }

@@ -8,6 +8,7 @@ import bkd.src.salus.api.Domain.Entity.SQL.Drawer.DrawerGroup;
 import bkd.src.salus.api.Domain.Entity.SQL.User.UserAccount;
 import bkd.src.salus.api.Domain.Exception.ValidationException;
 import bkd.src.salus.api.Domain.Interface.Application.Drawer.IDrawerService;
+import bkd.src.salus.api.Domain.Interface.Application.RabbitMQ.IRabbitCommunicator;
 import bkd.src.salus.api.Repository.NoSQL.Topic.ITopicRepositoryMR;
 import bkd.src.salus.api.Repository.SQL.Drawer.IDrawerGroupRepositoryJPA;
 import bkd.src.salus.api.Repository.SQL.Drawer.IDrawerRepositoryJPA;
@@ -26,13 +27,15 @@ public class DrawerService implements IDrawerService {
     private final IDrawerGroupRepositoryJPA drawerGroupRepository;
     private final IUserRepositoryJPA userRepository;
     private final ITopicRepositoryMR topicRepository;
+    private final IRabbitCommunicator rabbitCommunicator;
 
     @Autowired
-    public DrawerService(IDrawerRepositoryJPA drawerRepository, IDrawerGroupRepositoryJPA drawerGroupRepository, IUserRepositoryJPA userRepository, ITopicRepositoryMR topicRepository) {
+    public DrawerService(IDrawerRepositoryJPA drawerRepository, IDrawerGroupRepositoryJPA drawerGroupRepository, IUserRepositoryJPA userRepository, ITopicRepositoryMR topicRepository, IRabbitCommunicator rabbitCommunicator) {
         this.drawerRepository = drawerRepository;
         this.drawerGroupRepository = drawerGroupRepository;
         this.userRepository = userRepository;
         this.topicRepository = topicRepository;
+        this.rabbitCommunicator = rabbitCommunicator;
     }
 
     @Override
@@ -51,6 +54,7 @@ public class DrawerService implements IDrawerService {
 
         MqttTopic topic = new MqttTopic(userId, String.format("/notification/drawer/%s", register.getHardwareId()), register.getHardwareId());
         topicRepository.save(topic);
+        rabbitCommunicator.AddSubscriber(List.of(topic.getTopic()));
 
         return  new DetailingDrawerDTO(drawerEntity, user, topic.getTopic());
     }

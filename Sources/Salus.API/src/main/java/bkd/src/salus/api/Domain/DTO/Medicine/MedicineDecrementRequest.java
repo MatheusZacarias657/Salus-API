@@ -1,4 +1,4 @@
-package bkd.src.salus.communicator.Domain.DTO.Medicine;
+package bkd.src.salus.api.Domain.DTO.Medicine;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -7,11 +7,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class MedicineNotificationRequest {
-    private String HardwareId;
+public class MedicineDecrementRequest {
     private int UserId;
-    private int DrawerNumber;
-    private String UserName;
     private int MedicineId;
     private int Quantity;
 }

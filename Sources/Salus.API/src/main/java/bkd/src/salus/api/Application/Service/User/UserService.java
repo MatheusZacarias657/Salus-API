@@ -6,6 +6,7 @@ import bkd.src.salus.api.Domain.DTO.User.UserResponse;
 import bkd.src.salus.api.Domain.Entity.NoSQL.Topic.MqttTopic;
 import bkd.src.salus.api.Domain.Entity.SQL.User.UserAccount;
 import bkd.src.salus.api.Domain.Interface.Application.Auth.ITokenGenerate;
+import bkd.src.salus.api.Domain.Interface.Application.RabbitMQ.IRabbitCommunicator;
 import bkd.src.salus.api.Domain.Interface.Application.User.IAuthUser;
 import bkd.src.salus.api.Domain.Interface.Application.User.IUserService;
 import bkd.src.salus.api.Repository.NoSQL.Topic.ITopicRepositoryMR;
@@ -26,13 +27,15 @@ public class UserService implements IUserService, IAuthUser {
     private final PasswordEncoder passwordEncoder;
     private final ITokenGenerate tokenGenerate;
     private final ITopicRepositoryMR topicRepository;
+    private final IRabbitCommunicator rabbitCommunicator;
 
     @Autowired
-    public UserService(PasswordEncoder passwordEncoder, IUserRepositoryJPA userRepository, ITokenGenerate tokenGenerate, ITopicRepositoryMR topicRepository){
+    public UserService(PasswordEncoder passwordEncoder, IUserRepositoryJPA userRepository, ITokenGenerate tokenGenerate, ITopicRepositoryMR topicRepository, IRabbitCommunicator rabbitCommunicator){
         this.passwordEncoder = passwordEncoder;
         this.userRepository = userRepository;
         this.tokenGenerate = tokenGenerate;
         this.topicRepository = topicRepository;
+        this.rabbitCommunicator = rabbitCommunicator;
     }
 
     @Transactional
@@ -49,6 +52,7 @@ public class UserService implements IUserService, IAuthUser {
         String token = tokenGenerate.GenerateToken((User) ConvertToUserDetails(entity));
         MqttTopic topic = new MqttTopic(entity.getId(), String.format("/notification/user/%d", entity.getId()));
         topicRepository.save(topic);
+        rabbitCommunicator.AddSubscriber(List.of(topic.getTopic()));
 
         return new TokenResponse(token, entity.getLogin(), null);
     }

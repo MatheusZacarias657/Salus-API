@@ -71,6 +71,10 @@ public class Medicine {
         this.Removed = false;
     }
 
+    public void Decrement(int quantity){
+        this.StorageQuantity -=quantity;
+    }
+
     public void Remove(){
         this.Removed = true;
     }

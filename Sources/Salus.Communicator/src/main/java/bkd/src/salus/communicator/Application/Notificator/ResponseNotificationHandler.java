@@ -1,5 +1,6 @@
 package bkd.src.salus.communicator.Application.Notificator;
 
+import bkd.src.salus.communicator.Domain.DTO.Medicine.MedicineDecrementRequest;
 import bkd.src.salus.communicator.Domain.DTO.Medicine.MedicineNotificationRequest;
 import bkd.src.salus.communicator.Domain.DTO.Medicine.MedicineNotificationResponse;
 import bkd.src.salus.communicator.Domain.DTO.Notification.BaseNotification;
@@ -8,10 +9,10 @@ import bkd.src.salus.communicator.Domain.DTO.Notification.ConsumeMedicineNotific
 import bkd.src.salus.communicator.Domain.DTO.Notification.NextNotification;
 import bkd.src.salus.communicator.Domain.Interface.Application.MQTT.IMqttManager;
 import bkd.src.salus.communicator.Domain.Interface.Application.Notification.IResponseNotificationHandler;
+import bkd.src.salus.communicator.Domain.Interface.Application.RabbitMQ.IMessageSender;
 import bkd.src.salus.communicator.Domain.Interface.Repository.IRedisStackManager;
 import bkd.src.salus.communicator.Domain.Interface.Repository.ITopicRepository;
 import com.google.gson.Gson;
-import org.eclipse.paho.client.mqttv3.MqttException;
 import org.graalvm.collections.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,11 +25,13 @@ public class ResponseNotificationHandler implements IResponseNotificationHandler
     private final IRedisStackManager redisStackManager;
     private final ITopicRepository topicRepository;
     private final Gson objectMap;
+    private final IMessageSender messageSender;
 
     @Autowired
-    public ResponseNotificationHandler(IRedisStackManager redisStackManager, ITopicRepository topicRepository) {
+    public ResponseNotificationHandler(IRedisStackManager redisStackManager, ITopicRepository topicRepository, IMessageSender messageSender) {
         this.redisStackManager = redisStackManager;
         this.topicRepository = topicRepository;
+        this.messageSender = messageSender;
         this.objectMap = new Gson();
     }
 
@@ -91,10 +94,10 @@ public class ResponseNotificationHandler implements IResponseNotificationHandler
             for(String topic : topics){
                 nextNotifications.add(new NextNotification(objectMap.toJson(repeaterConfirmation), topic));
             }
-        }
 
-        int j = 0;
-        //TODO: notificar o monolito qual medicamento deve ser tirado na medida
+            MedicineDecrementRequest medicineDecrement = new MedicineDecrementRequest(removed.getUserId(), removed.getMedicineId(), removed.getQuantity());
+            messageSender.SendMessageOnExchange(objectMap.toJson(medicineDecrement), "mqtt-notification-response-exchange");
+        }
 
         return nextNotifications;
     }
