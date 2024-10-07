@@ -44,6 +44,6 @@ public class MessageReceiver {
             mqttManager.AddSubscribers(subscribers);
         } catch (MqttException ignored) { }
     }
-    
+
     //TODO: Água
 }
