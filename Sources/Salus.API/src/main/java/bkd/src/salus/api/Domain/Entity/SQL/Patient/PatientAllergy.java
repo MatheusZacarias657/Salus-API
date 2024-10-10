@@ -20,7 +20,7 @@ public class PatientAllergy {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int Id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "Patient_Id")
     private Patient Patient;
 

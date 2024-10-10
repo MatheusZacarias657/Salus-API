@@ -26,7 +26,7 @@ public class UserAccount {
     private boolean IsPro;
     private boolean Active;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "Answerable_Id")
     private UserAccount Answerable;
 

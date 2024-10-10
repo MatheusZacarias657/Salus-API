@@ -18,7 +18,7 @@ public class AnswerableOtp {
 
     private String Otp;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "User_Id")
     private UserAccount User;
 }

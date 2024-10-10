@@ -23,13 +23,13 @@ public class Medicine {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int Id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "User_Id")
     private UserAccount User;
 
     private String Name;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "Type_Id")
     private MedicineType Type;
 
@@ -39,7 +39,7 @@ public class Medicine {
     @Column(name = "Expiration_Date")
     private LocalDateTime ExpirationDate;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "Importance_Id")
     private Importance Importance;
 
