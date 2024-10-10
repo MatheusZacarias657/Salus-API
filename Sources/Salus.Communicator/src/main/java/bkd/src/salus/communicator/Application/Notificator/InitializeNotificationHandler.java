@@ -15,7 +15,7 @@ import java.util.Collections;
 import java.util.List;
 
 @Service
-public class InitializeInitializeNotificationHandler implements IInitializeNotificationHandler {
+public class InitializeNotificationHandler implements IInitializeNotificationHandler {
 
     private final IRedisStackManager redisStackManager;
     private final IMqttManager mqttManager;
@@ -23,7 +23,7 @@ public class InitializeInitializeNotificationHandler implements IInitializeNotif
     private final Gson objectMap;
 
     @Autowired
-    public InitializeInitializeNotificationHandler(IRedisStackManager redisStackManager, IMqttManager mqttManager, ITopicRepository topicRepository) {
+    public InitializeNotificationHandler(IRedisStackManager redisStackManager, IMqttManager mqttManager, ITopicRepository topicRepository) {
         this.redisStackManager = redisStackManager;
         this.mqttManager = mqttManager;
         this.topicRepository = topicRepository;

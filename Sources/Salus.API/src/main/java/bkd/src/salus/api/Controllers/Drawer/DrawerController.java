@@ -1,7 +1,6 @@
 package bkd.src.salus.api.Controllers.Drawer;
 
 import bkd.src.salus.api.Domain.DTO.Drawer.RegisterDrawerDTO;
-import bkd.src.salus.api.Domain.DTO.Medicine.RegisterMedicineDTO;
 import bkd.src.salus.api.Domain.Interface.Application.Auth.ICheckVisibilite;
 import bkd.src.salus.api.Domain.Interface.Application.Drawer.IDrawerService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,4 +46,6 @@ public class DrawerController {
         int id = (userId != 0) ? checkVisibilite.CheckAccess(authHeader, userId) : checkVisibilite.ExtractIdFromToken(authHeader);
         return new ResponseEntity<>(drawerService.FindByUserId(id), HttpStatus.OK);
     }
+
+    //TODO: status do gaveteiro
 }

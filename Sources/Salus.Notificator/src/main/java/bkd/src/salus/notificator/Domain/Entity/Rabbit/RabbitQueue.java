@@ -1,4 +1,4 @@
-package bkd.src.salus.communicator.Domain.Entity.RabbitMQ;
+package bkd.src.salus.notificator.Domain.Entity.Rabbit;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

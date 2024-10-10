@@ -10,5 +10,5 @@ import lombok.NoArgsConstructor;
 public class MedicineDecrementRequest {
     private int UserId;
     private int MedicineId;
-    private int Quantity;
+    private float Quantity;
 }

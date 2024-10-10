@@ -36,7 +36,7 @@ public class TreatmentController {
     @GetMapping("/List")
     public ResponseEntity ListTreatments(@RequestHeader("Authorization") String authHeader,
                                          @RequestParam(required = false, defaultValue = "0") Integer userId,
-                                         @PageableDefault(size = 10, sort = {"name"}) Pageable pageable){
+                                         @PageableDefault(size = 10, sort = {"Name"}) Pageable pageable){
         int id = (userId != 0) ? checkVisibilite.CheckAccess(authHeader, userId) : checkVisibilite.ExtractIdFromToken(authHeader);
         return new ResponseEntity<>(treatmentService.FindAll(id, pageable), HttpStatus.OK);
     }
@@ -45,7 +45,7 @@ public class TreatmentController {
     public ResponseEntity ReadById(@PathVariable int treatmentId,
                                    @RequestHeader("Authorization") String authHeader,
                                    @RequestParam(required = false, defaultValue = "0") Integer userId,
-                                   @PageableDefault(size = 10, sort = {"name"}) Pageable pageable){
+                                   @PageableDefault(size = 10) Pageable pageable){
         int id = (userId != 0) ? checkVisibilite.CheckAccess(authHeader, userId) : checkVisibilite.ExtractIdFromToken(authHeader);
         return new ResponseEntity<>(treatmentService.Find(treatmentId, id, pageable), HttpStatus.OK);
     }

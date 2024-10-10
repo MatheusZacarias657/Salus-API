@@ -1,4 +1,4 @@
-package bkd.src.salus.communicator.Domain.DTO.Medicine;
+package bkd.src.salus.notificator.Domain.DTO.Notification;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

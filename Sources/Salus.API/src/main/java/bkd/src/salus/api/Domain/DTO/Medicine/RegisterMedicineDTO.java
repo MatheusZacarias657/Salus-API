@@ -18,9 +18,6 @@ public class RegisterMedicineDTO {
     private String Type;
 
     @NotBlank
-    private String UnitType;
-
-    @NotBlank
     private int StorageQuantity;
 
     @NotBlank
