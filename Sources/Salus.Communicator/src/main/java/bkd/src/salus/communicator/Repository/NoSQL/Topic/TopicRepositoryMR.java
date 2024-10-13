@@ -1,22 +1,15 @@
 package bkd.src.salus.communicator.Repository.NoSQL.Topic;
 
-import bkd.src.salus.communicator.Domain.Entity.Topic.MqttTopic;
+import bkd.src.salus.communicator.Domain.Entity.NoSQL.Topic.MqttTopic;
 import bkd.src.salus.communicator.Domain.Interface.Repository.ITopicRepository;
-import lombok.Getter;
-import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.aggregation.Aggregation;
-import org.springframework.data.mongodb.core.aggregation.AggregationResults;
-import org.springframework.data.mongodb.core.aggregation.UnwindOperation;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.stream.Collectors;
-
-import static org.springframework.data.mongodb.core.aggregation.Aggregation.*;
 
 @Repository
 public class TopicRepositoryMR implements ITopicRepository {

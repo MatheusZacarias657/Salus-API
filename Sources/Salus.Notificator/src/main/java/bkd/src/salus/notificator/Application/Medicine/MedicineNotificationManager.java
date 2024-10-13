@@ -1,13 +1,13 @@
 package bkd.src.salus.notificator.Application.Medicine;
 
 import bkd.src.salus.notificator.Application.Utils.Converter;
-import bkd.src.salus.notificator.Application.Utils.LocalDateTimeAdapter;
 import bkd.src.salus.notificator.Domain.DTO.Medicine.MedicineRequestNotification;
 import bkd.src.salus.notificator.Domain.DTO.Notification.MedicineNotificationRequest;
-import bkd.src.salus.notificator.Domain.Entity.Medicine.Medicine;
-import bkd.src.salus.notificator.Domain.Entity.Patient.Patient;
-import bkd.src.salus.notificator.Domain.Entity.Treatment.Treatment;
-import bkd.src.salus.notificator.Domain.Entity.Treatment.TreatmentMedicine;
+import bkd.src.salus.notificator.Domain.Entity.SQL.Medicine.Medicine;
+import bkd.src.salus.notificator.Domain.Entity.SQL.Patient.Patient;
+import bkd.src.salus.notificator.Domain.Entity.SQL.Treatment.Treatment;
+import bkd.src.salus.notificator.Domain.Entity.SQL.Treatment.TreatmentMedicine;
+import bkd.src.salus.notificator.Domain.Interface.Application.ILogMedicine;
 import bkd.src.salus.notificator.Domain.Interface.Application.IMedicineNotificationManager;
 import bkd.src.salus.notificator.Domain.Interface.Application.IObjectJsonConverter;
 import bkd.src.salus.notificator.Domain.Interface.Application.IRabbitMessageSender;
@@ -15,7 +15,6 @@ import bkd.src.salus.notificator.Repository.SQL.Patient.IPatientRepositoryJPA;
 import bkd.src.salus.notificator.Repository.SQL.Treatment.ITreatmentMedicineRepositoryJPA;
 import bkd.src.salus.notificator.Repository.SQL.Treatment.ITreatmentRepositoryJPA;
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -31,14 +30,16 @@ public class MedicineNotificationManager implements IMedicineNotificationManager
     private final IRabbitMessageSender rabbitMessageSender;
     private final IPatientRepositoryJPA patientRepositoryJPA;
     private final Gson objectMap;
+    private final ILogMedicine logMedicine;
 
     @Autowired
-    public MedicineNotificationManager(ITreatmentMedicineRepositoryJPA treatmentMedicineRepository, ITreatmentRepositoryJPA treatmentRepositoryJPA, IRabbitMessageSender rabbitMessageSender, IPatientRepositoryJPA patientRepositoryJPA, IObjectJsonConverter objectJsonConverter) {
+    public MedicineNotificationManager(ITreatmentMedicineRepositoryJPA treatmentMedicineRepository, ITreatmentRepositoryJPA treatmentRepositoryJPA, IRabbitMessageSender rabbitMessageSender, IPatientRepositoryJPA patientRepositoryJPA, IObjectJsonConverter objectJsonConverter, ILogMedicine logMedicine) {
         this.treatmentMedicineRepository = treatmentMedicineRepository;
         this.treatmentRepositoryJPA = treatmentRepositoryJPA;
         this.rabbitMessageSender = rabbitMessageSender;
         this.patientRepositoryJPA = patientRepositoryJPA;
         objectMap = objectJsonConverter.GetConverter();
+        this.logMedicine = logMedicine;
     }
 
     @Override
@@ -107,6 +108,7 @@ public class MedicineNotificationManager implements IMedicineNotificationManager
 
         //TODO: supostamente está 0kk
         System.out.printf("The medicine %d is Ok to send\n", medicine.getId());
+        logMedicine.LogConsume(medicine.getUser().getId(), medicine.getId(), "Agendado");
 
         return true;
     }

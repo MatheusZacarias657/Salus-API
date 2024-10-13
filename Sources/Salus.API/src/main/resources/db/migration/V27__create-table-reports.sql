@@ -1,0 +1,7 @@
+CREATE TABLE reports
+(
+    Id INT PRIMARY KEY IDENTITY(1,1),
+    Name VARCHAR(50) NOT NULL,
+    Path VARCHAR(100) NOT NULL,
+    DBConnection INT NOT NULL,
+);

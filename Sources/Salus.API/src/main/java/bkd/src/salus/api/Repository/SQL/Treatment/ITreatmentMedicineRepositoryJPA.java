@@ -14,4 +14,11 @@ public interface ITreatmentMedicineRepositoryJPA extends JpaRepository<Treatment
             WHERE t.Treatment.Id = :treatmentId
             """)
     Page<TreatmentMedicine> findMedicineTreatmentsByTreamentId(int treatmentId, Pageable pageable);
+
+    @Query("""
+            SELECT t
+            FROM TreatmentMedicine t
+            WHERE t.Medicine.Id = :medicineId
+            """)
+    TreatmentMedicine findMedicineTreatmentsByMedicineId(int medicineId);
 }

@@ -1,6 +1,6 @@
 package bkd.src.salus.notificator.Repository.SQL.Treatment;
 
-import bkd.src.salus.notificator.Domain.Entity.Treatment.Treatment;
+import bkd.src.salus.notificator.Domain.Entity.SQL.Treatment.Treatment;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

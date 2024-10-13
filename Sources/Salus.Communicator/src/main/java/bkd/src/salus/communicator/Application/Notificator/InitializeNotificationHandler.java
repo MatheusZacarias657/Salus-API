@@ -2,6 +2,7 @@ package bkd.src.salus.communicator.Application.Notificator;
 
 import bkd.src.salus.communicator.Domain.DTO.Medicine.MedicineNotificationRequest;
 import bkd.src.salus.communicator.Domain.DTO.Notification.ConsumeMedicineNotification;
+import bkd.src.salus.communicator.Domain.Interface.Application.ILogMedicine;
 import bkd.src.salus.communicator.Domain.Interface.Application.MQTT.IMqttManager;
 import bkd.src.salus.communicator.Domain.Interface.Application.Notification.IInitializeNotificationHandler;
 import bkd.src.salus.communicator.Domain.Interface.Repository.IRedisStackManager;
@@ -21,19 +22,21 @@ public class InitializeNotificationHandler implements IInitializeNotificationHan
     private final IMqttManager mqttManager;
     private final ITopicRepository topicRepository;
     private final Gson objectMap;
+    private final ILogMedicine logMedicine;
 
     @Autowired
-    public InitializeNotificationHandler(IRedisStackManager redisStackManager, IMqttManager mqttManager, ITopicRepository topicRepository) {
+    public InitializeNotificationHandler(IRedisStackManager redisStackManager, IMqttManager mqttManager, ITopicRepository topicRepository, ILogMedicine logMedicine) {
         this.redisStackManager = redisStackManager;
         this.mqttManager = mqttManager;
         this.topicRepository = topicRepository;
+        this.logMedicine = logMedicine;
         this.objectMap = new Gson();
     }
 
     @Override
     public void MessageProcess(MedicineNotificationRequest notificationRequest) {
-
         List<String> topics = topicRepository.findTopicsByUserIdAndHardwareId(notificationRequest.getUserId(), notificationRequest.getHardwareId());
+        logMedicine.LogConsume(notificationRequest.getUserId(), notificationRequest.getMedicineId(), "Solicitado");
 
         for (String topic : topics){
             if(!redisStackManager.DoesValueExistInList("current_topics", topic)){
@@ -43,21 +46,28 @@ public class InitializeNotificationHandler implements IInitializeNotificationHan
                 catch (MqttException ignored){ }
             }
 
-            String key = topic.contains("drawer") ? notificationRequest.getHardwareId() : String.valueOf(notificationRequest.getUserId());
-            TrySend(key, topic, notificationRequest);
+            if(topic.contains("drawer")){
+                TrySend(notificationRequest.getHardwareId(), topic, notificationRequest);
+            }
+            else{
+                SendNotification(topic, notificationRequest);
+            }
         }
     }
 
     private void TrySend(String key, String topic, MedicineNotificationRequest notificationRequest){
-
         if(!redisStackManager.KeyExists(key)){
-            try{
-                ConsumeMedicineNotification notification = new ConsumeMedicineNotification("RequestConsume", notificationRequest);
-                mqttManager.SendMessage(objectMap.toJson(notification), topic);
-            }
-            catch (MqttException ignored){ }
+            SendNotification(topic, notificationRequest);
         }
 
         redisStackManager.AddObjectToList(key, notificationRequest);
+    }
+
+    private void SendNotification(String topic, MedicineNotificationRequest notificationRequest){
+        try{
+            ConsumeMedicineNotification notification = new ConsumeMedicineNotification("RequestConsume", notificationRequest);
+            mqttManager.SendMessage(objectMap.toJson(notification), topic);
+        }
+        catch (MqttException ignored){ }
     }
 }

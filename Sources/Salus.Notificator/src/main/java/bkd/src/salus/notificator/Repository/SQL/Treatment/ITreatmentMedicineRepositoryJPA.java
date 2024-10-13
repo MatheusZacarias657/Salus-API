@@ -1,6 +1,6 @@
 package bkd.src.salus.notificator.Repository.SQL.Treatment;
 
-import bkd.src.salus.notificator.Domain.Entity.Treatment.TreatmentMedicine;
+import bkd.src.salus.notificator.Domain.Entity.SQL.Treatment.TreatmentMedicine;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -14,4 +14,11 @@ public interface ITreatmentMedicineRepositoryJPA extends JpaRepository<Treatment
             WHERE t.Treatment.Id = :treatmentId
             """)
     List<TreatmentMedicine> findMedicineTreatmentsByTreamentId(int treatmentId);
+
+    @Query("""
+            SELECT t
+            FROM TreatmentMedicine t
+            WHERE t.Medicine.Id = :medicineId
+            """)
+    TreatmentMedicine findMedicineTreatmentsByMedicineId(int medicineId);
 }

@@ -1,6 +1,6 @@
 package bkd.src.salus.notificator.Repository.SQL.Rabbit;
 
-import bkd.src.salus.notificator.Domain.Entity.Rabbit.RabbitQueue;
+import bkd.src.salus.notificator.Domain.Entity.SQL.Rabbit.RabbitQueue;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 

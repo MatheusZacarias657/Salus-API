@@ -1,6 +1,6 @@
 package bkd.src.salus.communicator.Application.RabbitMQ;
 
-import bkd.src.salus.communicator.Domain.Entity.RabbitMQ.RabbitQueue;
+import bkd.src.salus.communicator.Domain.Entity.SQL.RabbitMQ.RabbitQueue;
 import bkd.src.salus.communicator.Domain.Interface.Application.RabbitMQ.IMessageSender;
 import bkd.src.salus.communicator.Repository.SQL.RabbitMQ.IRabbitQueueRepositoryJPA;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;

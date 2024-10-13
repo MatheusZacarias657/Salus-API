@@ -3,6 +3,7 @@ package bkd.src.salus.notificator.Application.RabbitMQ;
 import bkd.src.salus.notificator.Domain.DTO.Medicine.MedicineRequestNotification;
 import bkd.src.salus.notificator.Domain.DTO.Notification.MedicineNotificationRequest;
 import bkd.src.salus.notificator.Domain.DTO.Treatment.RequestTreatmentScheduler;
+import bkd.src.salus.notificator.Domain.Interface.Application.ILogMedicine;
 import bkd.src.salus.notificator.Domain.Interface.Application.IMedicineNotificationManager;
 import bkd.src.salus.notificator.Domain.Interface.Application.IObjectJsonConverter;
 import bkd.src.salus.notificator.Domain.Interface.Application.IRabbitMessageSender;
@@ -23,8 +24,9 @@ public class RabbitMessageReceiver {
     private final IRabbitMessageSender rabbitMessageSender;
     private final IMedicineNotificationManager medicineNotificationManager;
 
+
     @Autowired
-    public RabbitMessageReceiver(IRabbitMessageSender rabbitMessageSender, IMedicineNotificationManager medicineNotificationManager, IObjectJsonConverter objectJsonConverter) {
+    public RabbitMessageReceiver(IRabbitMessageSender rabbitMessageSender, IMedicineNotificationManager medicineNotificationManager, IObjectJsonConverter objectJsonConverter, ILogMedicine logMedicine) {
         this.rabbitMessageSender = rabbitMessageSender;
         this.medicineNotificationManager = medicineNotificationManager;
         objectMap = objectJsonConverter.GetConverter();

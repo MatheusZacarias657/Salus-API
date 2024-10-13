@@ -7,6 +7,7 @@ import bkd.src.salus.api.Domain.Entity.SQL.Medicine.Medicine;
 import bkd.src.salus.api.Domain.Entity.SQL.Medicine.MedicineType;
 import bkd.src.salus.api.Domain.Entity.SQL.User.UserAccount;
 import bkd.src.salus.api.Domain.Exception.ValidationException;
+import bkd.src.salus.api.Domain.Interface.Application.Logger.ILogMedicine;
 import bkd.src.salus.api.Domain.Interface.Application.Medicine.*;
 import bkd.src.salus.api.Repository.SQL.Cataloging.IImportanceRepositoryJPA;
 import bkd.src.salus.api.Repository.SQL.Medicine.IMedicineRepositoryJPA;
@@ -27,13 +28,15 @@ public class MedicineService implements IMedicineService, IMedicineOperator {
     private final IMedicineTypeRepositoryJPA typeRepository;
     private final IImportanceRepositoryJPA importanceRepository;
     private final IUserRepositoryJPA userRepository;
+    private final ILogMedicine logMedicine;
 
     @Autowired
-    public MedicineService(IMedicineRepositoryJPA repository, IMedicineTypeRepositoryJPA typeRepository, IImportanceRepositoryJPA importanceRepository, IUserRepositoryJPA userRepository){
+    public MedicineService(IMedicineRepositoryJPA repository, IMedicineTypeRepositoryJPA typeRepository, IImportanceRepositoryJPA importanceRepository, IUserRepositoryJPA userRepository, ILogMedicine logMedicine){
         this.repository = repository;
         this.typeRepository = typeRepository;
         this.importanceRepository = importanceRepository;
         this.userRepository = userRepository;
+        this.logMedicine = logMedicine;
     }
 
     @Override
@@ -91,5 +94,6 @@ public class MedicineService implements IMedicineService, IMedicineOperator {
         Medicine entity = repository.findMedicineByUserIdAndId(medicineId, userId);
         entity.Decrement(quantity);
         repository.save(entity);
+        logMedicine.LogConsume(userId, medicineId);
     }
 }

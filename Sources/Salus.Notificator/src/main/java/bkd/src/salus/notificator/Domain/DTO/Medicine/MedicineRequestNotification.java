@@ -1,7 +1,7 @@
 package bkd.src.salus.notificator.Domain.DTO.Medicine;
 
-import bkd.src.salus.notificator.Domain.Entity.Treatment.Treatment;
-import bkd.src.salus.notificator.Domain.Entity.Treatment.TreatmentMedicine;
+import bkd.src.salus.notificator.Domain.Entity.SQL.Treatment.Treatment;
+import bkd.src.salus.notificator.Domain.Entity.SQL.Treatment.TreatmentMedicine;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
