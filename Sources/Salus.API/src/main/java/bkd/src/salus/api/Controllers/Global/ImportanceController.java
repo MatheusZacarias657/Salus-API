@@ -1,4 +1,4 @@
-package bkd.src.salus.api.Controllers;
+package bkd.src.salus.api.Controllers.Global;
 
 import bkd.src.salus.api.Domain.DTO.Importance.RegisterImportanceDTO;
 import bkd.src.salus.api.Domain.Interface.Application.Auth.ICheckVisibilite;

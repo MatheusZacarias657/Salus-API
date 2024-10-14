@@ -33,7 +33,7 @@ public class UserComplementController {
         return new ResponseEntity<>(preferenceService.UpdatePreferences(preferenceDTO, id), HttpStatus.OK);
     }
 
-    @PostMapping("/Notification")
+    @PostMapping("/Channel")
     public ResponseEntity RegisterNotification(@RequestHeader("Authorization") String authHeader,@RequestBody UserNotificationRequestDTO userNotificationRequest){
         UserNotificationDTO notification = new UserNotificationDTO(checkVisibility.ExtractIdFromToken(authHeader), userNotificationRequest.getChannelId());
         notificationService.RegisterNotification(notification);
@@ -41,11 +41,13 @@ public class UserComplementController {
         return new ResponseEntity<>(null, HttpStatus.CREATED);
     }
 
-    @DeleteMapping("/Notification")
+    @DeleteMapping("/Channel")
     public ResponseEntity DeleteNotification(@RequestHeader("Authorization") String authHeader,@RequestBody UserNotificationRequestDTO userNotificationRequest){
         UserNotificationDTO notification = new UserNotificationDTO(checkVisibility.ExtractIdFromToken(authHeader), userNotificationRequest.getChannelId());
         notificationService.DeleteNotification(notification);
 
         return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
     }
+
+    //TODO: lista de notificações
 }

@@ -1,4 +1,4 @@
-package bkd.src.salus.api.Controllers;
+package bkd.src.salus.api.Controllers.FAQ;
 
 import bkd.src.salus.api.Domain.Interface.Application.FAQ.IFAQService;
 import org.springframework.beans.factory.annotation.Autowired;
