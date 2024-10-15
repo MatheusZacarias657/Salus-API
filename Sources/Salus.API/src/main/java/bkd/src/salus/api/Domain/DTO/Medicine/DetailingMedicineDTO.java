@@ -20,6 +20,7 @@ public class DetailingMedicineDTO {
     private int DrawerNumber;
     private float Price;
     private String HardwareId;
+    private boolean Removed;
 
     public DetailingMedicineDTO(Medicine medicine){
         this.Name = medicine.getName();
@@ -31,6 +32,6 @@ public class DetailingMedicineDTO {
         this.DrawerNumber = medicine.getDrawerNumber();
         this.Id = medicine.getId();
         this.HardwareId = medicine.getHardwareId();
+        this.Removed = medicine.isRemoved();
     }
-
 }

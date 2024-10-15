@@ -1,5 +1,6 @@
 package bkd.src.salus.api.Controllers.User;
 
+import bkd.src.salus.api.Domain.DTO.Answerable.AnswarebleUserDTO;
 import bkd.src.salus.api.Domain.DTO.Answerable.OtpDTO;
 import bkd.src.salus.api.Domain.Interface.Application.Answerable.IAnswerableService;
 import bkd.src.salus.api.Domain.Interface.Application.Auth.ICheckVisibilite;
@@ -10,6 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.UriComponentsBuilder;
+
+import java.net.URI;
 
 @RestController
 @RequestMapping("/Answerable")
@@ -32,8 +36,12 @@ public class AnswerableController {
     }
 
     @GetMapping("/Valid")
-    public ResponseEntity ValidateBeforeInsert(@RequestParam String otp){
-        return new ResponseEntity<>(answerableService.checkBeforeRegister(otp), HttpStatus.OK);
+    public ResponseEntity ValidateBeforeInsert(@RequestParam String otp, UriComponentsBuilder uriBuilder){
+        AnswarebleUserDTO response = answerableService.checkBeforeRegister(otp);
+        URI uri = uriBuilder.path("/File/{fileName}").buildAndExpand(response.getPictureName()).toUri();
+        response.setProfilePicture(uri.toString());
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @PostMapping

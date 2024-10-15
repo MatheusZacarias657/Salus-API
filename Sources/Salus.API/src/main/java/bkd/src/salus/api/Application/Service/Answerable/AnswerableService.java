@@ -4,9 +4,12 @@ import bkd.src.salus.api.Application.Utils.RandomGenerator;
 import bkd.src.salus.api.Domain.DTO.Answerable.AnswarebleUserDTO;
 import bkd.src.salus.api.Domain.DTO.Answerable.OtpDTO;
 import bkd.src.salus.api.Domain.Entity.SQL.Answerable.AnswerableOtp;
+import bkd.src.salus.api.Domain.Entity.SQL.Patient.Patient;
 import bkd.src.salus.api.Domain.Entity.SQL.User.UserAccount;
 import bkd.src.salus.api.Domain.Interface.Application.Answerable.IAnswerableService;
+import bkd.src.salus.api.Domain.Interface.Application.FileManager.IFindProfilePicture;
 import bkd.src.salus.api.Repository.SQL.Answerable.IAnswerableOtpRepositoryJPA;
+import bkd.src.salus.api.Repository.SQL.Patient.IPatientRepositoryJPA;
 import bkd.src.salus.api.Repository.SQL.User.IUserRepositoryJPA;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,13 +17,17 @@ import org.springframework.stereotype.Service;
 @Service
 public class AnswerableService implements IAnswerableService {
 
-    private IAnswerableOtpRepositoryJPA otpRepository;
-    private IUserRepositoryJPA userRepository;
+    private final IAnswerableOtpRepositoryJPA otpRepository;
+    private final IUserRepositoryJPA userRepository;
+    private final IPatientRepositoryJPA patientRepositoryJPA;
+    private final IFindProfilePicture findProfilePicture;
 
     @Autowired
-    public AnswerableService(IAnswerableOtpRepositoryJPA otpRepository, IUserRepositoryJPA userRepository){
+    public AnswerableService(IAnswerableOtpRepositoryJPA otpRepository, IUserRepositoryJPA userRepository, IPatientRepositoryJPA patientRepositoryJPA, IFindProfilePicture findProfilePicture){
         this.otpRepository = otpRepository;
         this.userRepository = userRepository;
+        this.patientRepositoryJPA = patientRepositoryJPA;
+        this.findProfilePicture = findProfilePicture;
     }
 
     @Override
@@ -36,8 +43,10 @@ public class AnswerableService implements IAnswerableService {
     @Override
     public AnswarebleUserDTO checkBeforeRegister(String otp){
         UserAccount entity = otpRepository.findUserIdByOtp(otp);
+        Patient patient = patientRepositoryJPA.findPatientByUserId(entity.getId());
+        String profilePicture = findProfilePicture.FindProfilePictureName(entity.getId());
 
-        return new AnswarebleUserDTO(entity.getLogin());
+        return (patient == null) ? new AnswarebleUserDTO(entity, profilePicture) : new AnswarebleUserDTO(patient, profilePicture);
     }
 
     @Override
