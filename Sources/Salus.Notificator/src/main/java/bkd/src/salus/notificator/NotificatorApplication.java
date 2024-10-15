@@ -10,7 +10,6 @@ public class NotificatorApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(NotificatorApplication.class, args);
-		System.out.println("AAAAAA oia o log");
 	}
 
 }

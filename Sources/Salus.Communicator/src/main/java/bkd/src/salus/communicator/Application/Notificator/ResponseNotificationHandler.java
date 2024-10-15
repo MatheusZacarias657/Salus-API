@@ -55,47 +55,36 @@ public class ResponseNotificationHandler implements IResponseNotificationHandler
 
     private List<NextNotification> ProcessConsume(ConsumeMedicineConfirmation confirmation, String topicResponse){
         List<NextNotification> nextNotifications = new ArrayList<>();
-        List<MedicineNotificationRequest> removeds = new ArrayList<>();
+        List<MedicineNotificationRequest> removed = new ArrayList<>();
         MedicineNotificationResponse notificationResponse = confirmation.getParams();
         List<String> topics = topicRepository.findTopicsByUserIdAndHardwareId(notificationResponse.getUserId(),notificationResponse.getHardwareId());
 
         for (String topic : topics){
 
             String key = topic.contains("drawer") ? notificationResponse.getHardwareId() : String.valueOf(notificationResponse.getUserId());
+            Pair<Integer,MedicineNotificationRequest> itemOnQueue =  FindReference(key, notificationResponse);
 
-            if(!topic.contains("drawer")){
-                removeds.add(objectMap.fromJson(redisStackManager.PopFirst(key), MedicineNotificationRequest.class));
+            if (itemOnQueue != null){
+                removed.add(itemOnQueue.getRight());
 
-                if(redisStackManager.KeyExists(key)){
+                if(itemOnQueue.getLeft() == 0 && redisStackManager.KeyExists(key) && topic.contains("drawer")){
                     nextNotifications.add(new NextNotification(redisStackManager.CatchFirst(key), topic));
                 }
             }
-            else {
-                Pair<Integer,MedicineNotificationRequest> itemOnQueue =  FindReference(key, notificationResponse);
-
-                if (itemOnQueue != null){
-                    removeds.add(itemOnQueue.getRight());
-
-                    if(itemOnQueue.getLeft() == 0 && redisStackManager.KeyExists(key)){
-                        nextNotifications.add(new NextNotification(redisStackManager.CatchFirst(key), topic));
-                    }
-                }
-            }
-
         }
 
-        Set<MedicineNotificationRequest> uniqueRemoveds = new HashSet<>(removeds);
+        Set<MedicineNotificationRequest> uniqueRemoved = new HashSet<>(removed);
         topics.remove(topicResponse);
 
-        for(MedicineNotificationRequest removed : uniqueRemoveds){
-            MedicineNotificationResponse repeaterResponse = new MedicineNotificationResponse(removed.getHardwareId(), removed.getUserId(), removed.getMedicineId());
+        for(MedicineNotificationRequest removedNotification : uniqueRemoved){
+            MedicineNotificationResponse repeaterResponse = new MedicineNotificationResponse(removedNotification.getHardwareId(), removedNotification.getUserId(), removedNotification.getMedicineId());
             ConsumeMedicineConfirmation repeaterConfirmation = new ConsumeMedicineConfirmation("Repeater", repeaterResponse);
 
             for(String topic : topics){
                 nextNotifications.add(new NextNotification(objectMap.toJson(repeaterConfirmation), topic));
             }
 
-            MedicineDecrementRequest medicineDecrement = new MedicineDecrementRequest(removed.getUserId(), removed.getMedicineId(), removed.getQuantity());
+            MedicineDecrementRequest medicineDecrement = new MedicineDecrementRequest(removedNotification.getUserId(), removedNotification.getMedicineId(), removedNotification.getQuantity());
             messageSender.SendMessageOnExchange(objectMap.toJson(medicineDecrement), "mqtt-notification-response-exchange");
         }
 
@@ -104,18 +93,18 @@ public class ResponseNotificationHandler implements IResponseNotificationHandler
 
     private Pair<Integer, MedicineNotificationRequest> FindReference(String key, MedicineNotificationResponse notificationResponse){
 
-        List<String> hardwareQueue = redisStackManager.GetAllValues(key);
+        List<String> targetQueue = redisStackManager.GetAllValues(key);
 
-        for (int i=0; i< hardwareQueue.size(); i++){
-            String jsonItem = hardwareQueue.get(i);
+        for (int i=0; i< targetQueue.size(); i++){
+            String jsonItem = targetQueue.get(i);
             MedicineNotificationRequest request = objectMap.fromJson(jsonItem, MedicineNotificationRequest.class);
 
             if(request.getUserId() == notificationResponse.getUserId()
                && request.getMedicineId() == notificationResponse.getMedicineId()){
-                hardwareQueue.remove(i);
+                targetQueue.remove(i);
 
-                if(!hardwareQueue.isEmpty()){
-                    redisStackManager.PushAllValues(key, hardwareQueue);
+                if(!targetQueue.isEmpty()){
+                    redisStackManager.PushAllValues(key, targetQueue);
                 }
                 else {
                     redisStackManager.DeleteList(key);

@@ -20,7 +20,7 @@ public class RandomGenerator {
             password[i] = Numbers.charAt(random.nextInt(Numbers.length()));
         }
 
-        return Arrays.toString(password);
+        return new String(password);
     }
 
     public static String Password()

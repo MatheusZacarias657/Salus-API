@@ -47,20 +47,26 @@ public class InitializeNotificationHandler implements IInitializeNotificationHan
             }
 
             if(topic.contains("drawer")){
-                TrySend(notificationRequest.getHardwareId(), topic, notificationRequest);
+                TrySendToDrawer(notificationRequest.getHardwareId(), topic, notificationRequest);
             }
             else{
-                SendNotification(topic, notificationRequest);
+                SendToUser(String.valueOf(notificationRequest.getUserId()), topic, notificationRequest);
             }
         }
     }
 
-    private void TrySend(String key, String topic, MedicineNotificationRequest notificationRequest){
+    private void TrySendToDrawer(String key, String topic, MedicineNotificationRequest notificationRequest){
         if(!redisStackManager.KeyExists(key)){
             SendNotification(topic, notificationRequest);
         }
 
         redisStackManager.AddObjectToList(key, notificationRequest);
+    }
+
+    private void SendToUser(String key, String topic, MedicineNotificationRequest notificationRequest){
+        SendNotification(topic, notificationRequest);
+        redisStackManager.AddObjectToList(key, notificationRequest);
+        //TODO: Inicia a contagem pra comunicar o supervisor
     }
 
     private void SendNotification(String topic, MedicineNotificationRequest notificationRequest){

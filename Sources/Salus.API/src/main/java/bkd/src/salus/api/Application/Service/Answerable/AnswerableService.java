@@ -34,7 +34,7 @@ public class AnswerableService implements IAnswerableService {
     public OtpDTO CreateOtp(int id){
         String otp = RandomGenerator.Otp();
         UserAccount user = userRepository.getReferenceById(id);
-        AnswerableOtp answerableOtp = new AnswerableOtp(0, otp, user);
+        AnswerableOtp answerableOtp = new AnswerableOtp(user, otp);
         otpRepository.save(answerableOtp);
 
         return new OtpDTO(answerableOtp.getOtp());
@@ -55,5 +55,7 @@ public class AnswerableService implements IAnswerableService {
         UserAccount entity = otpRepository.findUserIdByOtp(otp);
         entity.setAnswerable(answerableEntity);
         userRepository.save(entity);
+        AnswerableOtp answerableOtp = otpRepository.findOtpByText(otp);
+        otpRepository.delete(answerableOtp);
     }
 }

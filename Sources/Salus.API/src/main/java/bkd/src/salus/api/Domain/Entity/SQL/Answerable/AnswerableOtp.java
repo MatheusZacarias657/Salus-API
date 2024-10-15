@@ -21,4 +21,9 @@ public class AnswerableOtp {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "User_Id")
     private UserAccount User;
+
+    public AnswerableOtp(UserAccount user, String otp){
+        this.User = user;
+        this.Otp = otp;
+    }
 }

@@ -13,4 +13,11 @@ public interface IAnswerableOtpRepositoryJPA extends JpaRepository<AnswerableOtp
             WHERE a.Otp = :otp
             """)
     UserAccount findUserIdByOtp(String otp);
+
+    @Query("""
+            SELECT a
+            FROM AnswerableOtp a
+            WHERE a.Otp = :otp
+            """)
+    AnswerableOtp findOtpByText(String otp);
 }
