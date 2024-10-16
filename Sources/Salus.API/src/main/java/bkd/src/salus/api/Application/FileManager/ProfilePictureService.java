@@ -30,7 +30,6 @@ public class ProfilePictureService implements IProfilePictureService, IFindProfi
 
         String fileName = checkFile.ConvertFileName(file.getOriginalFilename());
         ProfilePicture picture = profilePictureRepositoryJPA.findByUserId(userId).orElse(null);
-
         if(picture != null){
             RemovePicture(picture.getId());
         }

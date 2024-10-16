@@ -6,6 +6,7 @@ import bkd.src.salus.Report.Domain.DTO.ExecutionReportDTO;
 import bkd.src.salus.Report.Domain.DTO.RequestReportDTO;
 import bkd.src.salus.Report.Domain.Entity.SQL.Report.Report;
 import bkd.src.salus.Report.Domain.Interface.IExecuteReport;
+import bkd.src.salus.Report.Domain.Interface.IFileManager;
 import bkd.src.salus.Report.Domain.Interface.IMessageSender;
 import bkd.src.salus.Report.Domain.Interface.IProcessReport;
 import bkd.src.salus.Report.Repository.SQL.IReportRepositoryJPA;
@@ -22,13 +23,15 @@ public class ProcessReport implements IProcessReport {
     private final DbConnectionData dbConnectionData;
     private final IExecuteReport executeReport;
     private final IMessageSender messageSender;
+    private final IFileManager fileManager;
 
     @Autowired
-    public ProcessReport(IReportRepositoryJPA reportRepositoryJPA, DbConnectionData dbConnectionData, IExecuteReport executeReport, IMessageSender messageSender) {
+    public ProcessReport(IReportRepositoryJPA reportRepositoryJPA, DbConnectionData dbConnectionData, IExecuteReport executeReport, IMessageSender messageSender, IFileManager fileManager) {
         this.reportRepositoryJPA = reportRepositoryJPA;
         this.dbConnectionData = dbConnectionData;
         this.executeReport = executeReport;
         this.messageSender = messageSender;
+        this.fileManager = fileManager;
     }
 
     @Override
@@ -38,6 +41,7 @@ public class ProcessReport implements IProcessReport {
         ExecutionReportDTO executionReportDTO = new ExecutionReportDTO(reportEntity.getPath(), dbConnection, reportEntity.getDBConnection(), requestReportDTO.getParams());
         JasperPrint reportView = executeReport.Generate(executionReportDTO);
         File reportExport = executeReport.ExportFile(reportView, requestReportDTO.getExportFormat());
+        fileManager.SaveFile(reportExport);
         //TODO: comunica na fila pra enviar por email
         messageSender.SendMessageOnExchange("aaa", "report-response-exchange");
     }

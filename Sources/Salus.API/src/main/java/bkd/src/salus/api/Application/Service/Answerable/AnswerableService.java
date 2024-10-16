@@ -17,6 +17,9 @@ import org.springframework.stereotype.Service;
 @Service
 public class AnswerableService implements IAnswerableService {
 
+    //TODO: futuro responsavel gera o código
+    //TODO: futuro paciente digita o códgio para validar
+    //TODO: futuro paciente registra o responsavél
     private final IAnswerableOtpRepositoryJPA otpRepository;
     private final IUserRepositoryJPA userRepository;
     private final IPatientRepositoryJPA patientRepositoryJPA;

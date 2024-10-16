@@ -60,8 +60,7 @@ public class UserController {
 
     @PostMapping("/ProfilePicture")
     public ResponseEntity uploadFile(@RequestParam("file") MultipartFile file,
-                                     @RequestHeader("Authorization") String authHeader,
-                                     UriComponentsBuilder uriBuilder) throws Exception {
+                                     @RequestHeader("Authorization") String authHeader) throws Exception {
         int id = checkVisibility.ExtractIdFromToken(authHeader);
         String fileName = profilePictureService.SaveImage(file, id);
         URI uri = UriComponentsBuilder.fromPath("/File/{fileName}").buildAndExpand(fileName).toUri();

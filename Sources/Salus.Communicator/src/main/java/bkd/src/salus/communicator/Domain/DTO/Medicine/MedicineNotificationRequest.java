@@ -14,4 +14,5 @@ public class MedicineNotificationRequest {
     private String UserName;
     private int MedicineId;
     private float Quantity;
+    private int Type; //Comprido 1 Gotas 0
 }

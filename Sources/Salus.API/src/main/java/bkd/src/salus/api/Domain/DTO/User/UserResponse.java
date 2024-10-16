@@ -7,6 +7,7 @@ import lombok.Data;
 public class UserResponse {
     private String Login;
     private boolean IsPro;
+    //TODO: retornar o link da foto
 
     public UserResponse(UserAccount userAccount){
         this.Login = userAccount.getLogin();

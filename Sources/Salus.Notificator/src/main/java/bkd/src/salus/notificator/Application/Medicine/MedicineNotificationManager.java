@@ -117,13 +117,16 @@ public class MedicineNotificationManager implements IMedicineNotificationManager
     public MedicineNotificationRequest CreateMqttPayload(Treatment treatment, TreatmentMedicine treatmentMedicine){
         Patient patient = patientRepositoryJPA.findPatientByUserId(treatment.getUser().getId());
         String name = (patient == null || patient.getName().isEmpty()) ? treatment.getUser().getLogin() : patient.getName();
+        int type = (treatmentMedicine.getMedicine().getType().getId() == 3) ? 0 : 1; //TODO: cagado
+
         return new MedicineNotificationRequest(
                 treatmentMedicine.getMedicine().getHardwareId(),
                 treatment.getUser().getId(),
                 treatmentMedicine.getMedicine().getDrawerNumber(),
                 name,
                 treatmentMedicine.getMedicine().getId(),
-                treatmentMedicine.getDosage()
+                treatmentMedicine.getDosage(),
+                type
         );
     }
 
