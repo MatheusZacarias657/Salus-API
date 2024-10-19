@@ -12,8 +12,7 @@ import org.eclipse.paho.client.mqttv3.MqttException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class InitializeNotificationHandler implements IInitializeNotificationHandler {
@@ -35,8 +34,10 @@ public class InitializeNotificationHandler implements IInitializeNotificationHan
 
     @Override
     public void MessageProcess(MedicineNotificationRequest notificationRequest) {
-        List<String> topics = topicRepository.findTopicsByUserIdAndHardwareId(notificationRequest.getUserId(), notificationRequest.getHardwareId());
-        logMedicine.LogConsume(notificationRequest.getUserId(), notificationRequest.getMedicineId(), "Solicitado");
+        List<String> mongoTopics = topicRepository.findTopicsByUserIdAndHardwareId(notificationRequest.getUserId(), notificationRequest.getHardwareId());
+        Set<String> uniqueSet = new HashSet<>(mongoTopics);
+        List<String> topics = new ArrayList<>(uniqueSet);
+        //logMedicine.LogConsume(notificationRequest.getUserId(), notificationRequest.getMedicineId(), "Solicitado");
 
         for (String topic : topics){
             if(!redisStackManager.DoesValueExistInList("current_topics", topic)){
@@ -46,7 +47,11 @@ public class InitializeNotificationHandler implements IInitializeNotificationHan
                 catch (MqttException ignored){ }
             }
 
-            if(topic.contains("drawer")){
+            if(topic.contains("response")){
+                continue;
+            }
+
+            if(topic.contains("drawer") && topic.contains("request")){
                 TrySendToDrawer(notificationRequest.getHardwareId(), topic, notificationRequest);
             }
             else{

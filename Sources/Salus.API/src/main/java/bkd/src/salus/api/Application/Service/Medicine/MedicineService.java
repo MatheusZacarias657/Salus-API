@@ -14,11 +14,10 @@ import bkd.src.salus.api.Repository.SQL.Medicine.IMedicineRepositoryJPA;
 import bkd.src.salus.api.Repository.SQL.Medicine.IMedicineTypeRepositoryJPA;
 import bkd.src.salus.api.Repository.SQL.User.IUserRepositoryJPA;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -67,8 +66,8 @@ public class MedicineService implements IMedicineService, IMedicineOperator {
     }
 
     @Override
-    public Page<DetailingMedicineDTO> FindAll(int userId, Pageable pageable){
-        return repository.findMedicineByUserIdPageble(userId, pageable).map(DetailingMedicineDTO::new);
+    public List<DetailingMedicineDTO> FindAll(int userId){
+        return repository.findMedicineByUserId(userId).stream().map(DetailingMedicineDTO::new).toList();
     }
 
     @Override

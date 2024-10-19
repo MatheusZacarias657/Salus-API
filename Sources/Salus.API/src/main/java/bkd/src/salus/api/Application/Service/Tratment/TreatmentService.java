@@ -1,5 +1,6 @@
 package bkd.src.salus.api.Application.Service.Tratment;
 
+import bkd.src.salus.api.Domain.DTO.Medicine.DetailingMedicineDTO;
 import bkd.src.salus.api.Domain.DTO.Treatment.*;
 import bkd.src.salus.api.Domain.Entity.SQL.Cataloging.Importance;
 import bkd.src.salus.api.Domain.Entity.SQL.Treatment.Treatment;
@@ -11,9 +12,7 @@ import bkd.src.salus.api.Repository.SQL.Cataloging.IImportanceRepositoryJPA;
 import bkd.src.salus.api.Repository.SQL.Treatment.ITreatmentRepositoryJPA;
 import bkd.src.salus.api.Repository.SQL.User.IUserRepositoryJPA;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.data.domain.Page;
 
 import java.util.List;
 
@@ -55,16 +54,16 @@ public class TreatmentService implements ITreatmentService {
     }
 
     @Override
-    public Page<DetailingTreatmentDTO> FindAll(int userId, Pageable pageable){
-        return repository.findTreatmentByUserIdPageble(userId, pageable).map(DetailingTreatmentDTO::new);
+    public List<DetailingTreatmentDTO> FindAll(int userId){
+        return repository.findTreatmentByUserId(userId).stream().map(DetailingTreatmentDTO::new).toList();
     }
 
     @Override
-    public CompleteDetailingTreatment Find(int treatmentId, int userId, Pageable pageable){
+    public CompleteDetailingTreatment Find(int treatmentId, int userId){
         Treatment entity = repository.findTreatmentByUserIdAndId(treatmentId, userId);
-        Page<DetailingTreatmentMedicineDTO> medicines = treatmentMedicineService.FindByTreatmentId(entity.getId(), pageable);
+        List<DetailingTreatmentMedicineDTO> medicines = treatmentMedicineService.FindByTreatmentId(entity.getId());
 
-        return new CompleteDetailingTreatment(new DetailingTreatmentDTO(entity), medicines.getContent());
+        return new CompleteDetailingTreatment(new DetailingTreatmentDTO(entity), medicines);
     }
 
     @Override

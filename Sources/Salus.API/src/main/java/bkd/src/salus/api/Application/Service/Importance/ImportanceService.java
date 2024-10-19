@@ -9,9 +9,9 @@ import bkd.src.salus.api.Domain.Interface.Application.IImportanceService;
 import bkd.src.salus.api.Repository.SQL.Cataloging.IImportanceRepositoryJPA;
 import bkd.src.salus.api.Repository.SQL.User.IUserRepositoryJPA;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class ImportanceService implements IImportanceService {
@@ -39,8 +39,8 @@ public class ImportanceService implements IImportanceService {
     }
 
     @Override
-    public Page<DetailingImportanceDTO> FindAll(int userId, Pageable pageable){
-        return importanceRepository.importanceRepository(userId, pageable).map(DetailingImportanceDTO::new);
+    public List<DetailingImportanceDTO> FindAll(int userId){
+        return importanceRepository.importanceRepository(userId).stream().map(DetailingImportanceDTO::new).toList();
     }
 
     @Override

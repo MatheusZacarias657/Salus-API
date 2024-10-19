@@ -1,10 +1,10 @@
 package bkd.src.salus.api.Repository.SQL.Cataloging;
 
 import bkd.src.salus.api.Domain.Entity.SQL.Cataloging.Importance;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+
+import java.util.List;
 
 public interface IImportanceRepositoryJPA extends JpaRepository<Importance, Integer> {
 
@@ -29,5 +29,5 @@ public interface IImportanceRepositoryJPA extends JpaRepository<Importance, Inte
             FROM Importance i
             WHERE i.User.Id = :userId
             """)
-    Page<Importance> importanceRepository(int userId, Pageable pageable);
+    List<Importance> importanceRepository(int userId);
 }

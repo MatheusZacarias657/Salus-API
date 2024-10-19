@@ -1,12 +1,7 @@
 package bkd.src.salus.api.Controllers.Medicine;
 
-import bkd.src.salus.api.Domain.DTO.Medicine.RegisterMedicineDTO;
-import bkd.src.salus.api.Domain.Interface.Application.Auth.ICheckVisibilite;
-import bkd.src.salus.api.Domain.Interface.Application.Medicine.IMedicineService;
 import bkd.src.salus.api.Domain.Interface.Application.Medicine.IMedicineTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

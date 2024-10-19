@@ -52,11 +52,14 @@ public class DrawerService implements IDrawerService {
         drawerGroup.AddUser(user);
         drawerGroupRepository.save(drawerGroup);
 
-        MqttTopic topic = new MqttTopic(userId, String.format("/notification/drawer/%s", register.getHardwareId()), register.getHardwareId());
-        topicRepository.save(topic);
-        rabbitCommunicator.AddSubscriber(List.of(topic.getTopic()));
-
-        return  new DetailingDrawerDTO(drawerEntity, user, topic.getTopic());
+        List<MqttTopic> entities = List.of(
+                new MqttTopic(userId, String.format("/notification/drawer/%s/request", register.getHardwareId()), register.getHardwareId()),
+                new MqttTopic(userId, String.format("/notification/drawer/%s/response", register.getHardwareId()), register.getHardwareId())
+        );
+        topicRepository.saveAll(entities);
+        List<String> topics = entities.stream().map(MqttTopic::getTopic).toList();
+        rabbitCommunicator.AddSubscriber(topics);
+        return  new DetailingDrawerDTO(drawerEntity, user, topics);
     }
 
     public List<DetailingDrawerDTO> FindByUserId(int userId){
@@ -65,7 +68,12 @@ public class DrawerService implements IDrawerService {
         List<DetailingDrawerDTO> responseDrawers = new ArrayList<>();
 
         for(Drawer drawer : drawers) {
-            responseDrawers.add(new DetailingDrawerDTO(drawer, user,  String.format("/notification/drawer/%s", drawer.getHardwareId())));
+            List <String> topics = List.of(
+                    String.format("/notification/drawer/%s/request", drawer.getHardwareId()),
+                    String.format("/notification/drawer/%s/response", drawer.getHardwareId())
+            );
+
+            responseDrawers.add(new DetailingDrawerDTO(drawer, user, topics));
         }
 
         return responseDrawers;

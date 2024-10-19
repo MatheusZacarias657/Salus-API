@@ -57,4 +57,7 @@ public class RabbitMessageReceiver {
         medicineNotificationManager.ScheduleTreatment(treatmentScheduler.getTreatmentId());
         System.out.println("finish on treatment queue");
     }
+
+    //TODO: Action: GenericAction
+    //TODO: param -> acao -> 1 (água)
 }

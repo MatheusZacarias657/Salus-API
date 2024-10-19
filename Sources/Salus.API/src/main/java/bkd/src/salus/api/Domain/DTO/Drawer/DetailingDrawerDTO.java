@@ -6,6 +6,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
@@ -13,12 +16,12 @@ public class DetailingDrawerDTO {
     private String HardwareId;
     private String Name;
     private String User;
-    private String Topic;
+    private List<String> Topics;
 
-    public DetailingDrawerDTO(Drawer drawer, UserAccount user, String topic){
+    public DetailingDrawerDTO(Drawer drawer, UserAccount user, List<String> topics){
         this.Name = drawer.getName();
         this.HardwareId = drawer.getHardwareId();
         this.User = user.getLogin();
-        this.Topic = topic;
+        this.Topics = new ArrayList<>(topics);
     }
 }

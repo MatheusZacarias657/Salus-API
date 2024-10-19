@@ -8,8 +8,6 @@ import bkd.src.salus.api.Domain.Entity.SQL.Treatment.TreatmentMedicine;
 import bkd.src.salus.api.Domain.Interface.Application.Treatment.ITreatmentMedicineService;
 import bkd.src.salus.api.Repository.SQL.Medicine.IMedicineRepositoryJPA;
 import bkd.src.salus.api.Repository.SQL.Treatment.ITreatmentMedicineRepositoryJPA;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -41,7 +39,7 @@ public class TreatmentMedicineService implements ITreatmentMedicineService {
     }
 
     @Override
-    public Page<DetailingTreatmentMedicineDTO> FindByTreatmentId(int treatmentId, Pageable pageable){
-        return repository.findMedicineTreatmentsByTreamentId(treatmentId, pageable).map(DetailingTreatmentMedicineDTO::new);
+    public List<DetailingTreatmentMedicineDTO> FindByTreatmentId(int treatmentId){
+        return repository.findMedicineTreatmentsByTreamentId(treatmentId).stream().map(DetailingTreatmentMedicineDTO::new).toList();
     }
 }

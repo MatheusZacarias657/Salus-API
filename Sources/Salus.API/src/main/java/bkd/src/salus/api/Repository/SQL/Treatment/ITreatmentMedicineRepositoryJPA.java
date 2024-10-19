@@ -1,10 +1,10 @@
 package bkd.src.salus.api.Repository.SQL.Treatment;
 
 import bkd.src.salus.api.Domain.Entity.SQL.Treatment.TreatmentMedicine;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+
+import java.util.List;
 
 public interface ITreatmentMedicineRepositoryJPA extends JpaRepository<TreatmentMedicine, Integer> {
 
@@ -13,7 +13,7 @@ public interface ITreatmentMedicineRepositoryJPA extends JpaRepository<Treatment
             FROM TreatmentMedicine t
             WHERE t.Treatment.Id = :treatmentId
             """)
-    Page<TreatmentMedicine> findMedicineTreatmentsByTreamentId(int treatmentId, Pageable pageable);
+    List<TreatmentMedicine> findMedicineTreatmentsByTreamentId(int treatmentId);
 
     @Query("""
             SELECT t

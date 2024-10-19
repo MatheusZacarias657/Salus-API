@@ -73,7 +73,7 @@ public class MqttManager implements IMqttManager {
             mqttClient.setCallback(new MqttCallback() {
                 @Override
                 public void messageArrived(String topic, MqttMessage message) throws Exception {
-                    System.out.printf("Received message: %s on %s%n", new String(message.getPayload()), topic);
+                    System.out.printf("Received on %s this message: %s%n", topic, new String(message.getPayload()));
                     List<NextNotification> nextMessages = notificationHandler.MessageProcess(new String(message.getPayload()), topic);
 
                     for(NextNotification nextMessage : nextMessages){

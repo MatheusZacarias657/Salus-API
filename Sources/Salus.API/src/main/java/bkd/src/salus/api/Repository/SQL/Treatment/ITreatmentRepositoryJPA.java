@@ -1,11 +1,11 @@
 package bkd.src.salus.api.Repository.SQL.Treatment;
 
 import bkd.src.salus.api.Domain.Entity.SQL.Treatment.Treatment;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+
+import java.util.List;
 
 public interface ITreatmentRepositoryJPA extends JpaRepository<Treatment, Integer> {
 
@@ -23,7 +23,7 @@ public interface ITreatmentRepositoryJPA extends JpaRepository<Treatment, Intege
             FROM Treatment t
             WHERE t.User.Id = :id
             """)
-    Page<Treatment> findTreatmentByUserIdPageble(@Param("id") int id, Pageable pageable);
+    List<Treatment> findTreatmentByUserId(@Param("id") int id);
 
     @Query("""
             SELECT t

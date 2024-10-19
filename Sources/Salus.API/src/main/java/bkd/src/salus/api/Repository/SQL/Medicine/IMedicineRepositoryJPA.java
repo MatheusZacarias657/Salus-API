@@ -1,8 +1,6 @@
 package bkd.src.salus.api.Repository.SQL.Medicine;
 
 import bkd.src.salus.api.Domain.Entity.SQL.Medicine.Medicine;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -25,15 +23,7 @@ public interface IMedicineRepositoryJPA extends JpaRepository<Medicine, Integer>
             FROM Medicine m
             WHERE m.User.Id = :id
             """)
-    Page<Medicine> findMedicineByUserIdPageble(@Param("id") int id, Pageable pageable);
-
-    @Query("""
-            SELECT m
-            FROM Medicine m
-            WHERE m.User.Id = :id
-            AND m.Removed = false
-            """)
-    List<Medicine> findMedicineByUserId(int id);
+    List<Medicine> findMedicineByUserId(@Param("id") int id);
 
     @Query("""
             SELECT m
