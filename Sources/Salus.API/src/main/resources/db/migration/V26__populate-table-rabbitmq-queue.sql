@@ -6,3 +6,4 @@ INSERT INTO rabbitmq_queue (Queue, Exchange) VALUES ('request-report-queue', 're
 INSERT INTO rabbitmq_queue (Queue, Exchange) VALUES ('report-response-queue', 'report-response-exchange');
 INSERT INTO rabbitmq_queue (Queue, Exchange) VALUES ('mqtt-listener-register-queue', 'mqtt-listener-register-exchange');
 INSERT INTO rabbitmq_queue (Queue, Exchange) VALUES ('mqtt-generic-notification-queue', 'mqtt-generic-notification-exchange');
+INSERT INTO rabbitmq_queue (Queue, Exchange) VALUES ('whatsapp-notification-queue', 'whatsapp-notification-exchange');

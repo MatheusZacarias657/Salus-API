@@ -1,0 +1,10 @@
+
+/SophieAdapter/bin
+/SophieAdapter/obj
+/Whatsapp.VonageAPI/bin
+/Whatsapp.VonageAPI/obj
+/Whatsapp.VonageAPI/.vs
+/Whatsapp.VonageAPI/.idea
+/.vs
+*.user
+*.bak
