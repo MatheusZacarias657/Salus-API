@@ -14,6 +14,7 @@ public class DetailingTreatmentMedicineDTO {
     private float Frequency;
     private LocalDateTime TreatmentEnd;
     private LocalDateTime TreatmentInit;
+    private float Price;
 
     public DetailingTreatmentMedicineDTO (TreatmentMedicine entity){
         this.Id = entity.getMedicine().getId();
@@ -22,5 +23,6 @@ public class DetailingTreatmentMedicineDTO {
         this.Frequency = entity.getFrequency();
         this.TreatmentEnd = entity.getTreatmentEnd();
         this.TreatmentInit = entity.getTreatmentInit();
+        this.Price = entity.getMedicine().getPrice();
     }
 }

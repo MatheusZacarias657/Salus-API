@@ -14,7 +14,9 @@ import bkd.src.salus.api.Repository.SQL.User.IUserRepositoryJPA;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.time.LocalDateTime;
+import java.util.*;
+import java.util.stream.Collector;
 
 @Service
 public class TreatmentService implements ITreatmentService {
@@ -50,12 +52,20 @@ public class TreatmentService implements ITreatmentService {
         repository.save(entity);
         List<DetailingTreatmentMedicineDTO> medicines = treatmentMedicineService.Register(register.getMedicines(), entity);
 
-        return new CompleteDetailingTreatment(new DetailingTreatmentDTO(entity), medicines);
+        return new CompleteDetailingTreatment(new DetailingTreatmentDTO(entity, GenerateResume(medicines)), medicines);
     }
 
     @Override
     public List<DetailingTreatmentDTO> FindAll(int userId){
-        return repository.findTreatmentByUserId(userId).stream().map(DetailingTreatmentDTO::new).toList();
+        List<Treatment> treatmentsEntity = repository.findTreatmentByUserId(userId);
+        List<DetailingTreatmentDTO> responses = new ArrayList<>();
+
+        for(Treatment entity : treatmentsEntity){
+            List<DetailingTreatmentMedicineDTO> medicines = treatmentMedicineService.FindByTreatmentId(entity.getId());
+            responses.add(new DetailingTreatmentDTO(entity, GenerateResume(medicines)));
+        }
+
+        return responses;
     }
 
     @Override
@@ -63,7 +73,7 @@ public class TreatmentService implements ITreatmentService {
         Treatment entity = repository.findTreatmentByUserIdAndId(treatmentId, userId);
         List<DetailingTreatmentMedicineDTO> medicines = treatmentMedicineService.FindByTreatmentId(entity.getId());
 
-        return new CompleteDetailingTreatment(new DetailingTreatmentDTO(entity), medicines);
+        return new CompleteDetailingTreatment(new DetailingTreatmentDTO(entity, GenerateResume(medicines)), medicines);
     }
 
     @Override
@@ -71,5 +81,24 @@ public class TreatmentService implements ITreatmentService {
         Treatment entity = repository.findTreatmentByUserIdAndId(treatmentId, userId);
         entity.Finish();
         repository.save(entity);
+    }
+
+    private ResumeDetailingTreatment GenerateResume(List<DetailingTreatmentMedicineDTO> medicines){
+        ResumeDetailingTreatment resume = new ResumeDetailingTreatment();
+
+        List<String> medicinesNames = medicines.stream().map(DetailingTreatmentMedicineDTO::getMedicine).toList();
+        Set<String> uniqueNames = new HashSet<>(medicinesNames);
+        resume.setMedicineQuantity(uniqueNames.size());
+
+        List<LocalDateTime> medicinesEnds = medicines.stream().map(DetailingTreatmentMedicineDTO::getTreatmentEnd).toList();
+        resume.setLastEndDate(Collections.max(medicinesEnds));
+
+        List<LocalDateTime> medicinesInits = medicines.stream().map(DetailingTreatmentMedicineDTO::getTreatmentInit).toList();
+        resume.setFirstInitDate(Collections.min(medicinesInits));
+
+        float totalPrice = medicines.stream().map(DetailingTreatmentMedicineDTO::getPrice).reduce(0f, Float::sum);
+        resume.setTotalPrice(totalPrice);
+
+        return resume;
     }
 }

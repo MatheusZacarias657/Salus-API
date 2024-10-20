@@ -11,7 +11,4 @@ import java.util.List;
 public class CompleteDetailingTreatment {
     private DetailingTreatmentDTO Treatment;
     private List<DetailingTreatmentMedicineDTO> Medicines;
-
-
-
 }

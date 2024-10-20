@@ -13,11 +13,14 @@ public class DetailingTreatmentDTO {
     private String User;
     private String Name;
     private String Importance;
+    private ResumeDetailingTreatment Resume;
 
-    public DetailingTreatmentDTO(Treatment treatment){
+    public DetailingTreatmentDTO(Treatment treatment, ResumeDetailingTreatment resume){
         this.Id = treatment.getId();
         this.User = treatment.getUser().getLogin();
         this.Name = treatment.getName();
         this.Importance = treatment.getImportance().getName();
+
+        this.Resume = resume;
     }
 }
