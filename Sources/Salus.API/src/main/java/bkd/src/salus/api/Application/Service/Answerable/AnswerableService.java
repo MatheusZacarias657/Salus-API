@@ -17,9 +17,6 @@ import org.springframework.stereotype.Service;
 @Service
 public class AnswerableService implements IAnswerableService {
 
-    //TODO: futuro responsavel gera o código
-    //TODO: futuro paciente digita o códgio para validar
-    //TODO: futuro paciente registra o responsavél
     private final IAnswerableOtpRepositoryJPA otpRepository;
     private final IUserRepositoryJPA userRepository;
     private final IPatientRepositoryJPA patientRepositoryJPA;
@@ -54,10 +51,12 @@ public class AnswerableService implements IAnswerableService {
 
     @Override
     public void RegisterAnswerable(String otp, int id){
-        UserAccount answerableEntity = userRepository.getReferenceById(id);
-        UserAccount entity = otpRepository.findUserIdByOtp(otp);
-        entity.setAnswerable(answerableEntity);
-        userRepository.save(entity);
+        UserAccount patientEntity = userRepository.getReferenceById(id);
+        UserAccount answerableEntity = otpRepository.findUserIdByOtp(otp);
+
+        patientEntity.setAnswerable(answerableEntity);
+        userRepository.save(patientEntity);
+
         AnswerableOtp answerableOtp = otpRepository.findOtpByText(otp);
         otpRepository.delete(answerableOtp);
     }

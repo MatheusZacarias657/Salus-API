@@ -48,6 +48,4 @@ public class UserComplementController {
 
         return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
     }
-
-    //TODO: lista de notificações
 }

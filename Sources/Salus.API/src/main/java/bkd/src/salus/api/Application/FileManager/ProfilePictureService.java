@@ -10,6 +10,9 @@ import bkd.src.salus.api.Repository.SQL.User.IUserRepositoryJPA;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.util.UriComponentsBuilder;
+
+import java.net.URI;
 
 @Service
 public class ProfilePictureService implements IProfilePictureService, IFindProfilePicture {
@@ -46,6 +49,19 @@ public class ProfilePictureService implements IProfilePictureService, IFindProfi
         ProfilePicture picture = profilePictureRepositoryJPA.findByUserId(userId).orElse(null);
 
         return (picture != null) ? picture.getFileName() : "";
+    }
+
+    @Override
+    public String FindProfilePicture(int userId){
+        ProfilePicture picture = profilePictureRepositoryJPA.findByUserId(userId).orElse(null);
+
+        if(picture != null){
+            return "";
+        }
+
+        URI uri = UriComponentsBuilder.fromPath("/File/{fileName}").buildAndExpand(picture.getFileName()).toUri();
+
+        return uri.toString();
     }
 
     private void RemovePicture(int id) {

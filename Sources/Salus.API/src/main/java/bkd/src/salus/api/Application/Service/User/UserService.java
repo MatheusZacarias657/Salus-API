@@ -6,6 +6,7 @@ import bkd.src.salus.api.Domain.DTO.User.UserResponse;
 import bkd.src.salus.api.Domain.Entity.NoSQL.Topic.MqttTopic;
 import bkd.src.salus.api.Domain.Entity.SQL.User.UserAccount;
 import bkd.src.salus.api.Domain.Interface.Application.Auth.ITokenGenerate;
+import bkd.src.salus.api.Domain.Interface.Application.FileManager.IFindProfilePicture;
 import bkd.src.salus.api.Domain.Interface.Application.RabbitMQ.IRabbitCommunicator;
 import bkd.src.salus.api.Domain.Interface.Application.User.IAuthUser;
 import bkd.src.salus.api.Domain.Interface.Application.User.IUserService;
@@ -28,14 +29,16 @@ public class UserService implements IUserService, IAuthUser {
     private final ITokenGenerate tokenGenerate;
     private final ITopicRepositoryMR topicRepository;
     private final IRabbitCommunicator rabbitCommunicator;
+    private final IFindProfilePicture findProfilePicture;
 
     @Autowired
-    public UserService(PasswordEncoder passwordEncoder, IUserRepositoryJPA userRepository, ITokenGenerate tokenGenerate, ITopicRepositoryMR topicRepository, IRabbitCommunicator rabbitCommunicator){
+    public UserService(PasswordEncoder passwordEncoder, IUserRepositoryJPA userRepository, ITokenGenerate tokenGenerate, ITopicRepositoryMR topicRepository, IRabbitCommunicator rabbitCommunicator, IFindProfilePicture findProfilePicture){
         this.passwordEncoder = passwordEncoder;
         this.userRepository = userRepository;
         this.tokenGenerate = tokenGenerate;
         this.topicRepository = topicRepository;
         this.rabbitCommunicator = rabbitCommunicator;
+        this.findProfilePicture = findProfilePicture;
     }
 
     @Transactional
@@ -59,8 +62,12 @@ public class UserService implements IUserService, IAuthUser {
 
     public UserResponse ReadUser(int id){
         UserAccount entity = userRepository.getReferenceById(id);
+        String profilePicture = findProfilePicture.FindProfilePicture(id);
 
-        return new UserResponse(entity);
+        UserResponse response = new UserResponse(entity);
+        response.setProfilePicture(profilePicture);
+
+        return response;
     }
 
     @Transactional
