@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -22,6 +24,23 @@ public class DetailingMedicineDTO {
     private String HardwareId;
     private boolean Removed;
 
+    private List<String> UrlImages;
+
+    public DetailingMedicineDTO(Medicine medicine, List<String> urlImages){
+        this.Name = medicine.getName();
+        this.Type = medicine.getType().getName();
+        this.Price = medicine.getPrice();
+        this.StorageQuantity = medicine.getStorageQuantity();
+        this.ExpirationDate = medicine.getExpirationDate();
+        this.Importance = medicine.getImportance().getName();
+        this.DrawerNumber = medicine.getDrawerNumber();
+        this.Id = medicine.getId();
+        this.HardwareId = medicine.getHardwareId();
+        this.Removed = medicine.isRemoved();
+
+        this.UrlImages = new ArrayList<>(urlImages);
+    }
+
     public DetailingMedicineDTO(Medicine medicine){
         this.Name = medicine.getName();
         this.Type = medicine.getType().getName();
@@ -33,5 +52,9 @@ public class DetailingMedicineDTO {
         this.Id = medicine.getId();
         this.HardwareId = medicine.getHardwareId();
         this.Removed = medicine.isRemoved();
+    }
+
+    public void AddLinks(List<String> urlImages){
+        this.UrlImages = new ArrayList<>(urlImages);
     }
 }

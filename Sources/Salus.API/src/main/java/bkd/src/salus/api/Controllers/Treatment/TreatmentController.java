@@ -1,6 +1,5 @@
 package bkd.src.salus.api.Controllers.Treatment;
 
-import bkd.src.salus.api.Domain.DTO.Medicine.DetailingMedicineDTO;
 import bkd.src.salus.api.Domain.DTO.Treatment.CompleteDetailingTreatment;
 import bkd.src.salus.api.Domain.DTO.Treatment.CompleteRegisterTreatment;
 import bkd.src.salus.api.Domain.DTO.Treatment.DetailingTreatmentDTO;
@@ -65,7 +64,7 @@ public class TreatmentController {
         return new ResponseEntity<>(new CompleteDetailingTreatment(detailingTreatment.getTreatment(), filteringMedicines), HttpStatus.OK);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{treatmentId}")
     public ResponseEntity Delete(@PathVariable int treatmentId,
                                  @RequestHeader("Authorization") String authHeader,
                                  @RequestParam(required = false, defaultValue = "0") Integer userId){

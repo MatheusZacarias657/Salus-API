@@ -1,5 +1,6 @@
 package bkd.src.salus.api.Application.Service.Medicine;
 
+import bkd.src.salus.api.Domain.DTO.File.FileDetailingDTO;
 import bkd.src.salus.api.Domain.DTO.Medicine.DetailingMedicineDTO;
 import bkd.src.salus.api.Domain.DTO.Medicine.RegisterMedicineDTO;
 import bkd.src.salus.api.Domain.Entity.SQL.Cataloging.Importance;
@@ -7,6 +8,7 @@ import bkd.src.salus.api.Domain.Entity.SQL.Medicine.Medicine;
 import bkd.src.salus.api.Domain.Entity.SQL.Medicine.MedicineType;
 import bkd.src.salus.api.Domain.Entity.SQL.User.UserAccount;
 import bkd.src.salus.api.Domain.Exception.ValidationException;
+import bkd.src.salus.api.Domain.Interface.Application.FileManager.IMedicinePictureService;
 import bkd.src.salus.api.Domain.Interface.Application.Logger.ILogMedicine;
 import bkd.src.salus.api.Domain.Interface.Application.Medicine.*;
 import bkd.src.salus.api.Repository.SQL.Cataloging.IImportanceRepositoryJPA;
@@ -28,14 +30,16 @@ public class MedicineService implements IMedicineService, IMedicineOperator {
     private final IImportanceRepositoryJPA importanceRepository;
     private final IUserRepositoryJPA userRepository;
     private final ILogMedicine logMedicine;
+    private final IMedicinePictureService pictureService;
 
     @Autowired
-    public MedicineService(IMedicineRepositoryJPA repository, IMedicineTypeRepositoryJPA typeRepository, IImportanceRepositoryJPA importanceRepository, IUserRepositoryJPA userRepository, ILogMedicine logMedicine){
+    public MedicineService(IMedicineRepositoryJPA repository, IMedicineTypeRepositoryJPA typeRepository, IImportanceRepositoryJPA importanceRepository, IUserRepositoryJPA userRepository, ILogMedicine logMedicine, IMedicinePictureService pictureService){
         this.repository = repository;
         this.typeRepository = typeRepository;
         this.importanceRepository = importanceRepository;
         this.userRepository = userRepository;
         this.logMedicine = logMedicine;
+        this.pictureService = pictureService;
     }
 
     @Override
@@ -62,12 +66,20 @@ public class MedicineService implements IMedicineService, IMedicineOperator {
     @Override
     public DetailingMedicineDTO Find(int medicineId, int userId){
         Medicine entity = repository.findMedicineByUserIdAndId(medicineId, userId);
-        return new DetailingMedicineDTO(entity);
+        List<String> urls = pictureService.FindByMedicineId(medicineId, userId).stream().map(FileDetailingDTO::getAvailableOn).toList();
+        return new DetailingMedicineDTO(entity, urls);
     }
 
     @Override
     public List<DetailingMedicineDTO> FindAll(int userId){
-        return repository.findMedicineByUserId(userId).stream().map(DetailingMedicineDTO::new).toList();
+        List<DetailingMedicineDTO> responses = repository.findMedicineByUserId(userId).stream().map(DetailingMedicineDTO::new).toList();
+
+        for(DetailingMedicineDTO response : responses){
+            List<String> urls = pictureService.FindByMedicineId(response.getId(), userId).stream().map(FileDetailingDTO::getAvailableOn).toList();
+            response.AddLinks(urls);
+        }
+
+        return responses;
     }
 
     @Override
