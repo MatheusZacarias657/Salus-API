@@ -37,7 +37,7 @@ public class InitializeNotificationHandler implements IInitializeNotificationHan
         List<String> mongoTopics = topicRepository.findTopicsByUserIdAndHardwareId(notificationRequest.getUserId(), notificationRequest.getHardwareId());
         Set<String> uniqueSet = new HashSet<>(mongoTopics);
         List<String> topics = new ArrayList<>(uniqueSet);
-        //logMedicine.LogConsume(notificationRequest.getUserId(), notificationRequest.getMedicineId(), "Solicitado");
+        logMedicine.LogConsume(notificationRequest.getUserId(), notificationRequest.getMedicineId(), "Solicitado");
 
         for (String topic : topics){
             if(!redisStackManager.DoesValueExistInList("current_topics", topic)){

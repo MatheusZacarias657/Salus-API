@@ -39,7 +39,6 @@ public class MedicineConsumeLog {
         this.Action = action;
     }
 
-
     @Data
     @AllArgsConstructor
     @NoArgsConstructor

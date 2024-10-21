@@ -24,7 +24,6 @@ public class RabbitMessageReceiver {
     private final IRabbitMessageSender rabbitMessageSender;
     private final IMedicineNotificationManager medicineNotificationManager;
 
-
     @Autowired
     public RabbitMessageReceiver(IRabbitMessageSender rabbitMessageSender, IMedicineNotificationManager medicineNotificationManager, IObjectJsonConverter objectJsonConverter, ILogMedicine logMedicine) {
         this.rabbitMessageSender = rabbitMessageSender;

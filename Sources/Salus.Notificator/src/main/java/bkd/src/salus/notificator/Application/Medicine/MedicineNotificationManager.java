@@ -106,7 +106,6 @@ public class MedicineNotificationManager implements IMedicineNotificationManager
             //TODO: comunicar
         }
 
-        //TODO: supostamente está 0kk
         System.out.printf("The medicine %d is Ok to send\n", medicine.getId());
         logMedicine.LogConsume(medicine.getUser().getId(), medicine.getId(), "Agendado");
 

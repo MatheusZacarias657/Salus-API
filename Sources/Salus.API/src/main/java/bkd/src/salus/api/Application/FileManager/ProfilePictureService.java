@@ -55,7 +55,7 @@ public class ProfilePictureService implements IProfilePictureService, IFindProfi
     public String FindProfilePicture(int userId){
         ProfilePicture picture = profilePictureRepositoryJPA.findByUserId(userId).orElse(null);
 
-        if(picture != null){
+        if(picture == null){
             return "";
         }
 
