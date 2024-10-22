@@ -5,11 +5,10 @@ import bkd.src.salus.communicator.Domain.DTO.Medicine.MedicineNotificationReques
 import bkd.src.salus.communicator.Domain.DTO.Medicine.MedicineNotificationResponse;
 import bkd.src.salus.communicator.Domain.DTO.Notification.BaseNotification;
 import bkd.src.salus.communicator.Domain.DTO.Notification.ConsumeMedicineConfirmation;
-import bkd.src.salus.communicator.Domain.DTO.Notification.ConsumeMedicineNotification;
 import bkd.src.salus.communicator.Domain.DTO.Notification.NextNotification;
-import bkd.src.salus.communicator.Domain.Interface.Application.MQTT.IMqttManager;
+import bkd.src.salus.communicator.Domain.Interface.Application.ILogMedicine;
 import bkd.src.salus.communicator.Domain.Interface.Application.Notification.IResponseNotificationHandler;
-import bkd.src.salus.communicator.Domain.Interface.Application.RabbitMQ.IMessageSender;
+import bkd.src.salus.communicator.Domain.Interface.Application.RabbitMQ.IRabbitMessageSender;
 import bkd.src.salus.communicator.Domain.Interface.Repository.IRedisStackManager;
 import bkd.src.salus.communicator.Domain.Interface.Repository.ITopicRepository;
 import com.google.gson.Gson;
@@ -25,13 +24,15 @@ public class ResponseNotificationHandler implements IResponseNotificationHandler
     private final IRedisStackManager redisStackManager;
     private final ITopicRepository topicRepository;
     private final Gson objectMap;
-    private final IMessageSender messageSender;
+    private final IRabbitMessageSender messageSender;
+    private final ILogMedicine logMedicine;
 
     @Autowired
-    public ResponseNotificationHandler(IRedisStackManager redisStackManager, ITopicRepository topicRepository, IMessageSender messageSender) {
+    public ResponseNotificationHandler(IRedisStackManager redisStackManager, ITopicRepository topicRepository, IRabbitMessageSender messageSender, ILogMedicine logMedicine) {
         this.redisStackManager = redisStackManager;
         this.topicRepository = topicRepository;
         this.messageSender = messageSender;
+        this.logMedicine = logMedicine;
         this.objectMap = new Gson();
     }
 
@@ -58,6 +59,7 @@ public class ResponseNotificationHandler implements IResponseNotificationHandler
         List<MedicineNotificationRequest> removed = new ArrayList<>();
         MedicineNotificationResponse notificationResponse = confirmation.getParams();
         List<String> topics = topicRepository.findTopicsByUserIdAndHardwareId(notificationResponse.getUserId(),notificationResponse.getHardwareId());
+        logMedicine.LogConsume(confirmation.getParams().getUserId(), confirmation.getParams().getMedicineId(), "Consumido");
 
         for (String topic : topics){
 

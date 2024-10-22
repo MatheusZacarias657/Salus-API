@@ -1,12 +1,10 @@
 package bkd.src.salus.notificator.Application.RabbitMQ;
 
 import bkd.src.salus.notificator.Domain.DTO.Medicine.MedicineRequestNotification;
+import bkd.src.salus.notificator.Domain.DTO.Notification.AnswerableNotification;
 import bkd.src.salus.notificator.Domain.DTO.Notification.MedicineNotificationRequest;
 import bkd.src.salus.notificator.Domain.DTO.Treatment.RequestTreatmentScheduler;
-import bkd.src.salus.notificator.Domain.Interface.Application.ILogMedicine;
-import bkd.src.salus.notificator.Domain.Interface.Application.IMedicineNotificationManager;
-import bkd.src.salus.notificator.Domain.Interface.Application.IObjectJsonConverter;
-import bkd.src.salus.notificator.Domain.Interface.Application.IRabbitMessageSender;
+import bkd.src.salus.notificator.Domain.Interface.Application.*;
 import com.google.gson.Gson;
 import com.rabbitmq.client.Channel;
 import org.springframework.amqp.core.Message;
@@ -23,12 +21,14 @@ public class RabbitMessageReceiver {
     private final Gson objectMap;
     private final IRabbitMessageSender rabbitMessageSender;
     private final IMedicineNotificationManager medicineNotificationManager;
+    private final IAnswerableNotificationHandler answerableNotificationHandler;
 
     @Autowired
-    public RabbitMessageReceiver(IRabbitMessageSender rabbitMessageSender, IMedicineNotificationManager medicineNotificationManager, IObjectJsonConverter objectJsonConverter, ILogMedicine logMedicine) {
+    public RabbitMessageReceiver(IRabbitMessageSender rabbitMessageSender, IMedicineNotificationManager medicineNotificationManager, IObjectJsonConverter objectJsonConverter, ILogMedicine logMedicine, IAnswerableNotificationHandler answerableNotificationHandler) {
         this.rabbitMessageSender = rabbitMessageSender;
         this.medicineNotificationManager = medicineNotificationManager;
         objectMap = objectJsonConverter.GetConverter();
+        this.answerableNotificationHandler = answerableNotificationHandler;
     }
 
     @RabbitListener(queues = { "request-medicine-notification-queue" })
@@ -55,6 +55,14 @@ public class RabbitMessageReceiver {
         RequestTreatmentScheduler treatmentScheduler = objectMap.fromJson(obj, RequestTreatmentScheduler.class);
         medicineNotificationManager.ScheduleTreatment(treatmentScheduler.getTreatmentId());
         System.out.println("finish on treatment queue");
+    }
+
+    @RabbitListener(queues = { "notification-medicine-answerable-queue" })
+    public void receiveAnswerableNotification(@Payload Message message, Channel channel) throws IOException {
+        System.out.println("receive on treatment queue");
+        String obj = new String(message.getBody());
+        AnswerableNotification answerableNotification = objectMap.fromJson(obj, AnswerableNotification.class);
+        answerableNotificationHandler.CheckAndSend(answerableNotification);
     }
 
     //TODO: Action: GenericAction

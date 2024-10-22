@@ -1,0 +1,6 @@
+CREATE TABLE whatsapp_text
+(
+    Id INT PRIMARY KEY IDENTITY(1,1),
+    Subject VARCHAR(50) NOT NULL,
+    Text NVARCHAR(1000) NOT NULL
+);

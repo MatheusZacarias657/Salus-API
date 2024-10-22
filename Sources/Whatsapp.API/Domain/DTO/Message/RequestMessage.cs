@@ -9,7 +9,6 @@ namespace Domain.DTO.Message
     public class RequestMessage
     {
         public bool IsNotification { get; set; }
-
         public string UserNumber { get; set; }
         public string Message { get; set; }
     }

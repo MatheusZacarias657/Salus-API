@@ -1,0 +1,1 @@
+INSERT INTO whatsapp_text (Subject, Text) VALUES ('NotificationAnswerable', 'Olá, %s, temos algo urgente para te comunicar.<br><strong>%s</strong> que deveria ter consumido o medicamento <strong>%s</strong> às <strong>%s</strong> ainda não confirmou o consumo.<br>Recomendamos que se possível, entre em contato para verificar as causas.');

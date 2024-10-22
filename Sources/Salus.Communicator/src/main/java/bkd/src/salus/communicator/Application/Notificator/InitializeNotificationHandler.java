@@ -1,10 +1,13 @@
 package bkd.src.salus.communicator.Application.Notificator;
 
+import bkd.src.salus.communicator.Application.Utils.Converter;
+import bkd.src.salus.communicator.Domain.DTO.Medicine.AnswerableNotification;
 import bkd.src.salus.communicator.Domain.DTO.Medicine.MedicineNotificationRequest;
 import bkd.src.salus.communicator.Domain.DTO.Notification.ConsumeMedicineNotification;
 import bkd.src.salus.communicator.Domain.Interface.Application.ILogMedicine;
 import bkd.src.salus.communicator.Domain.Interface.Application.MQTT.IMqttManager;
 import bkd.src.salus.communicator.Domain.Interface.Application.Notification.IInitializeNotificationHandler;
+import bkd.src.salus.communicator.Domain.Interface.Application.RabbitMQ.IRabbitMessageSender;
 import bkd.src.salus.communicator.Domain.Interface.Repository.IRedisStackManager;
 import bkd.src.salus.communicator.Domain.Interface.Repository.ITopicRepository;
 import com.google.gson.Gson;
@@ -22,13 +25,15 @@ public class InitializeNotificationHandler implements IInitializeNotificationHan
     private final ITopicRepository topicRepository;
     private final Gson objectMap;
     private final ILogMedicine logMedicine;
+    private final IRabbitMessageSender rabbitMessageSender;
 
     @Autowired
-    public InitializeNotificationHandler(IRedisStackManager redisStackManager, IMqttManager mqttManager, ITopicRepository topicRepository, ILogMedicine logMedicine) {
+    public InitializeNotificationHandler(IRedisStackManager redisStackManager, IMqttManager mqttManager, ITopicRepository topicRepository, ILogMedicine logMedicine, IRabbitMessageSender rabbitMessageSender) {
         this.redisStackManager = redisStackManager;
         this.mqttManager = mqttManager;
         this.topicRepository = topicRepository;
         this.logMedicine = logMedicine;
+        this.rabbitMessageSender = rabbitMessageSender;
         this.objectMap = new Gson();
     }
 
@@ -71,7 +76,13 @@ public class InitializeNotificationHandler implements IInitializeNotificationHan
     private void SendToUser(String key, String topic, MedicineNotificationRequest notificationRequest){
         SendNotification(topic, notificationRequest);
         redisStackManager.AddObjectToList(key, notificationRequest);
-        //TODO: Inicia a contagem pra comunicar o supervisor
+
+        AnswerableNotification answerableNotification = new AnswerableNotification(notificationRequest.getUserId(), notificationRequest.getMedicineId());
+
+        rabbitMessageSender.SendMessageOnExchangeAsync(
+                objectMap.toJson(answerableNotification),
+                "request-medicine-notification-exchange",
+                Converter.ConvertMinutesToMilly(5));
     }
 
     private void SendNotification(String topic, MedicineNotificationRequest notificationRequest){
