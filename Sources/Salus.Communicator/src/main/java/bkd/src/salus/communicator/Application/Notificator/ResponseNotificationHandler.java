@@ -6,13 +6,13 @@ import bkd.src.salus.communicator.Domain.DTO.Medicine.MedicineNotificationRespon
 import bkd.src.salus.communicator.Domain.DTO.Notification.BaseNotification;
 import bkd.src.salus.communicator.Domain.DTO.Notification.ConsumeMedicineConfirmation;
 import bkd.src.salus.communicator.Domain.DTO.Notification.NextNotification;
+import bkd.src.salus.communicator.Domain.DTO.Queue.QueueItem;
 import bkd.src.salus.communicator.Domain.Interface.Application.ILogMedicine;
 import bkd.src.salus.communicator.Domain.Interface.Application.Notification.IResponseNotificationHandler;
 import bkd.src.salus.communicator.Domain.Interface.Application.RabbitMQ.IRabbitMessageSender;
 import bkd.src.salus.communicator.Domain.Interface.Repository.IRedisStackManager;
 import bkd.src.salus.communicator.Domain.Interface.Repository.ITopicRepository;
 import com.google.gson.Gson;
-import org.graalvm.collections.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -64,12 +64,12 @@ public class ResponseNotificationHandler implements IResponseNotificationHandler
         for (String topic : topics){
 
             String key = topic.contains("drawer") ? notificationResponse.getHardwareId() : String.valueOf(notificationResponse.getUserId());
-            Pair<Integer,MedicineNotificationRequest> itemOnQueue =  FindReference(key, notificationResponse);
+            QueueItem itemOnQueue =  FindReference(key, notificationResponse);
 
             if (itemOnQueue != null){
-                removed.add(itemOnQueue.getRight());
+                removed.add(itemOnQueue.getMedicine());
 
-                if(itemOnQueue.getLeft() == 0 && redisStackManager.KeyExists(key) && topic.contains("drawer")){
+                if(itemOnQueue.getPosition() == 0 && redisStackManager.KeyExists(key) && topic.contains("drawer")){
                     nextNotifications.add(new NextNotification(redisStackManager.CatchFirst(key), topic));
                 }
             }
@@ -93,7 +93,7 @@ public class ResponseNotificationHandler implements IResponseNotificationHandler
         return nextNotifications;
     }
 
-    private Pair<Integer, MedicineNotificationRequest> FindReference(String key, MedicineNotificationResponse notificationResponse){
+    private QueueItem FindReference(String key, MedicineNotificationResponse notificationResponse){
 
         List<String> targetQueue = redisStackManager.GetAllValues(key);
 
@@ -112,7 +112,7 @@ public class ResponseNotificationHandler implements IResponseNotificationHandler
                     redisStackManager.DeleteList(key);
                 }
 
-                return Pair.create(i, request);
+                return new QueueItem(i, request);
             }
         }
 
