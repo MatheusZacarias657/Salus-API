@@ -43,5 +43,8 @@ public class PatientDetail {
     public void Update(UpdatePatientDetailDTO patientDetail){
         this.Height = (patientDetail.getHeight() != 0) ? patientDetail.getHeight() : this.Height;
         this.Weight = (patientDetail.getWeight() != 0) ? patientDetail.getWeight() : this.Weight;
+        this.Smoking = patientDetail.isSmoking();
+        this.Alcohol = patientDetail.isAlcohol();
+        this.Pregnant = patientDetail.isPregnant();
     }
 }

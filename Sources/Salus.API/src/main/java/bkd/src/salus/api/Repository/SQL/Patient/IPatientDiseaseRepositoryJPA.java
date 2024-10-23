@@ -22,4 +22,12 @@ public interface IPatientDiseaseRepositoryJPA extends JpaRepository<PatientDisea
             AND p.Id = :diseaseId
             """)
     PatientDisease findPatientDiseasesByUserIdAndDiseaseId(int userId, int diseaseId);
+
+    @Query("""
+            SELECT p
+            FROM PatientDisease p
+            WHERE p.Patient.User.Id = :userId
+            AND p.Disease = :disease
+            """)
+    PatientDisease findPatientDiseasesByUserIdAndName(int userId, String disease);
 }

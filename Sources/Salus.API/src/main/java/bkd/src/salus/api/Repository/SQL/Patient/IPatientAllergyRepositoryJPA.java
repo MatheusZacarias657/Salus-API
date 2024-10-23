@@ -19,7 +19,15 @@ public interface IPatientAllergyRepositoryJPA extends JpaRepository<PatientAller
             SELECT p
             FROM PatientAllergy p
             WHERE p.Patient.User.Id = :userId
-            AND p.Id = :diseaseId
+            AND p.Id = :allergyId
             """)
-    PatientAllergy findPatientAllergiesByUserIdAndAllergyId(int userId, int diseaseId);
+    PatientAllergy findPatientAllergiesByUserIdAndAllergyId(int userId, int allergyId);
+
+    @Query("""
+            SELECT p
+            FROM PatientAllergy p
+            WHERE p.Patient.User.Id = :userId
+            AND p.Allergy = :allergy
+            """)
+    PatientAllergy findPatientAllergiesByUserIdAndName(int userId, String allergy);
 }

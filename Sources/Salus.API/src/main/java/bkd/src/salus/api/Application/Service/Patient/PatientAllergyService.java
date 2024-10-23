@@ -29,18 +29,24 @@ public class PatientAllergyService implements IPatientComponentService<Detailing
         Patient patientEntity = patientRepository.findPatientByUserId(userId);
         List<PatientAllergy> entities = new ArrayList<>();
 
-        for(RegisterPatientAllergyDTO allergy : registers){
-            entities.add(new PatientAllergy(allergy, patientEntity));
+        for(RegisterPatientAllergyDTO registerAllergy : registers){
+            PatientAllergy allergy = allergyRepository.findPatientAllergiesByUserIdAndName(userId, registerAllergy.getAllergy());
+
+            if(allergy == null){
+                entities.add(new PatientAllergy(registerAllergy, patientEntity));
+            }
         }
 
-        entities = allergyRepository.saveAll(entities);
+        if(!entities.isEmpty()){
+            entities = allergyRepository.saveAll(entities);
+        }
 
-        return (List<DetailingPatientAllergyDTO>) entities.stream().map(DetailingPatientAllergyDTO::new);
+        return entities.stream().map(DetailingPatientAllergyDTO::new).toList();
     }
 
     @Override
     public List<DetailingPatientAllergyDTO> ListComponents(int userId) {
-        return (List<DetailingPatientAllergyDTO>) allergyRepository.findPatientAllergiesByUserId(userId).stream().map(DetailingPatientAllergyDTO::new);
+        return allergyRepository.findPatientAllergiesByUserId(userId).stream().map(DetailingPatientAllergyDTO::new).toList();
     }
 
     @Override

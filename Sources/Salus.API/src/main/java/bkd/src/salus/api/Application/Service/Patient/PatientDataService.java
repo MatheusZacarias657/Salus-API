@@ -5,6 +5,7 @@ import bkd.src.salus.api.Domain.DTO.Patient.Data.RegisterPatientDataDTO;
 import bkd.src.salus.api.Domain.DTO.Patient.Data.UpdatePatientDataDTO;
 import bkd.src.salus.api.Domain.Entity.SQL.Patient.Patient;
 import bkd.src.salus.api.Domain.Entity.SQL.User.UserAccount;
+import bkd.src.salus.api.Domain.Exception.ValidationException;
 import bkd.src.salus.api.Domain.Interface.Application.Patient.IPatientCrudService;
 import bkd.src.salus.api.Repository.SQL.Patient.IPatientRepositoryJPA;
 import bkd.src.salus.api.Repository.SQL.User.IUserRepositoryJPA;
@@ -25,6 +26,12 @@ public class PatientDataService implements IPatientCrudService<PatientModifierRe
 
     @Override
     public PatientModifierResponseDTO RegisterPatientContent(RegisterPatientDataDTO patientRegister, int userId) {
+        Patient testPatient = patientRepository.findPatientByUserId(userId);
+
+        if(testPatient != null){
+            throw new ValidationException("Patient Already exist");
+        }
+
         UserAccount userEntity = userRepositoryJPA.getReferenceById(userId);
         Patient entity = new Patient(patientRegister, userEntity);
         entity = patientRepository.save(entity);

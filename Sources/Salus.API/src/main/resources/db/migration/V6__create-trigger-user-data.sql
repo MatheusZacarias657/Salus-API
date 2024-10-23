@@ -4,7 +4,7 @@ AFTER INSERT
 AS
 BEGIN
 
-    INSERT INTO user_preferences (User_Id, Typography, EnableStatistics)
+    INSERT INTO user_preferences (User_Id, Typography, Enable_Statistics)
     SELECT
         i.Id,
         'Normal',

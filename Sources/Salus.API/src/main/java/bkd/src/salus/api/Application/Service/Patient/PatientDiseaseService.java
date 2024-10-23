@@ -29,18 +29,24 @@ public class PatientDiseaseService implements IPatientComponentService<Detailing
         Patient patientEntity = patientRepository.findPatientByUserId(userId);
         List<PatientDisease> entities = new ArrayList<>();
 
-        for(RegisterPatientDiseaseDTO disease : registers){
-            entities.add(new PatientDisease(disease, patientEntity));
+        for(RegisterPatientDiseaseDTO registerDisease : registers){
+            PatientDisease disease = diseaseRepository.findPatientDiseasesByUserIdAndName(userId, registerDisease.getDisease());
+
+            if(disease == null){
+                entities.add(new PatientDisease(registerDisease, patientEntity));
+            }
         }
 
-        entities = diseaseRepository.saveAll(entities);
+        if(!entities.isEmpty()){
+            entities = diseaseRepository.saveAll(entities);
+        }
 
-        return (List<DetailingPatientDiseaseDTO>) entities.stream().map(DetailingPatientDiseaseDTO::new);
+        return entities.stream().map(DetailingPatientDiseaseDTO::new).toList();
     }
 
     @Override
     public List<DetailingPatientDiseaseDTO> ListComponents(int userId) {
-        return (List<DetailingPatientDiseaseDTO>) diseaseRepository.findPatientDiseasesByUserId(userId).stream().map(DetailingPatientDiseaseDTO::new);
+        return diseaseRepository.findPatientDiseasesByUserId(userId).stream().map(DetailingPatientDiseaseDTO::new).toList();
     }
 
     @Override

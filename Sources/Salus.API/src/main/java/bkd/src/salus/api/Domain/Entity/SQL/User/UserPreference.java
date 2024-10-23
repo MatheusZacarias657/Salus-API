@@ -24,6 +24,8 @@ public class UserPreference {
     private UserAccount User;
 
     private String Typography;
+
+    @Column(name = "Enable_Statistics")
     private boolean EnableStatistics;
 
     public void UpdateData(UserPreferenceDTO userPreference){

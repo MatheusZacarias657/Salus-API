@@ -24,8 +24,4 @@ public class PatientDetailModifierResponseDTO {
         this.Pregnant = patientDetail.isPregnant();
         this.Email = patientDetail.getPatient().getUser().getLogin();
     }
-
-    public void Update(UpdatePatientDetailDTO updatePatientDetailDTO){
-        //TODO: implementar o update
-    }
 }
