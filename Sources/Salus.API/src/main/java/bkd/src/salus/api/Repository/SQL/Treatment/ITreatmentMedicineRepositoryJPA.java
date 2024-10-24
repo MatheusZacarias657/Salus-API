@@ -4,6 +4,7 @@ import bkd.src.salus.api.Domain.Entity.SQL.Treatment.TreatmentMedicine;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public interface ITreatmentMedicineRepositoryJPA extends JpaRepository<TreatmentMedicine, Integer> {
@@ -21,4 +22,12 @@ public interface ITreatmentMedicineRepositoryJPA extends JpaRepository<Treatment
             WHERE t.Medicine.Id = :medicineId
             """)
     TreatmentMedicine findMedicineTreatmentsByMedicineId(int medicineId);
+
+    @Query("""
+            SELECT t
+            FROM TreatmentMedicine t
+            WHERE t.Treatment.User.Id = :userId
+            AND :date BETWEEN t.TreatmentInit AND t.TreatmentEnd
+            """)
+    List<TreatmentMedicine> findMedicineTreatmentsByDate(int userId, LocalDateTime date);
 }

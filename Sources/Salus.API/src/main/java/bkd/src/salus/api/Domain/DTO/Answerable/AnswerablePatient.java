@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 public class AnswerablePatient {
+    private int Id;
     private String Name;
     private String Gender;
     private LocalDateTime Birthdate;
@@ -21,14 +22,18 @@ public class AnswerablePatient {
 
     public AnswerablePatient (UserAccount user, LocalDateTime lastAccess, String profilePicture){
         this.Name = user.getLogin();
+        this.Id = user.getId();
         this.LastAccess = lastAccess;
+        this.ProfilePicture = profilePicture;
     }
 
     public AnswerablePatient (Patient patient, LocalDateTime lastAccess, String profilePicture){
+        this.Id = patient.getUser().getId();
         this.Name = patient.getName();
         this.Gender = patient.getGender();
         this.Birthdate = patient.getBirthdate();
         this.Telephone = patient.getTelephone();
         this.LastAccess = lastAccess;
+        this.ProfilePicture = profilePicture;
     }
 }

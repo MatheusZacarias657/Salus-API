@@ -1,27 +1,37 @@
 package bkd.src.salus.api.Application.Service.Tratment;
 
+import bkd.src.salus.api.Domain.DTO.File.FileDetailingDTO;
+import bkd.src.salus.api.Domain.DTO.Medicine.MedicineCalendarDetailing;
+import bkd.src.salus.api.Domain.DTO.Medicine.MedicineCalendarResponse;
 import bkd.src.salus.api.Domain.DTO.Treatment.DetailingTreatmentMedicineDTO;
 import bkd.src.salus.api.Domain.DTO.Treatment.RegisterMedicineTreatmentDTO;
 import bkd.src.salus.api.Domain.Entity.SQL.Medicine.Medicine;
 import bkd.src.salus.api.Domain.Entity.SQL.Treatment.Treatment;
 import bkd.src.salus.api.Domain.Entity.SQL.Treatment.TreatmentMedicine;
+import bkd.src.salus.api.Domain.Interface.Application.FileManager.IMedicinePictureService;
 import bkd.src.salus.api.Domain.Interface.Application.Treatment.ITreatmentMedicineService;
 import bkd.src.salus.api.Repository.SQL.Medicine.IMedicineRepositoryJPA;
 import bkd.src.salus.api.Repository.SQL.Treatment.ITreatmentMedicineRepositoryJPA;
+import bkd.src.salus.api.Repository.SQL.User.IUserRepositoryJPA;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class TreatmentMedicineService implements ITreatmentMedicineService {
+public class TreatmentMedicineService implements ITreatmentMedicineService, IDayMedicineService {
 
     private final ITreatmentMedicineRepositoryJPA repository;
     private final IMedicineRepositoryJPA medicineRepository;
+    private final IUserRepositoryJPA userRepositoryJPA;
+    private final IMedicinePictureService pictureService;
 
-    public TreatmentMedicineService(ITreatmentMedicineRepositoryJPA repository, IMedicineRepositoryJPA medicineRepository){
+    public TreatmentMedicineService(ITreatmentMedicineRepositoryJPA repository, IMedicineRepositoryJPA medicineRepository, IUserRepositoryJPA userRepositoryJPA, IMedicinePictureService pictureService){
         this.repository = repository;
         this.medicineRepository = medicineRepository;
+        this.userRepositoryJPA = userRepositoryJPA;
+        this.pictureService = pictureService;
     }
 
     @Override
@@ -41,5 +51,19 @@ public class TreatmentMedicineService implements ITreatmentMedicineService {
     @Override
     public List<DetailingTreatmentMedicineDTO> FindByTreatmentId(int treatmentId){
         return repository.findMedicineTreatmentsByTreamentId(treatmentId).stream().map(DetailingTreatmentMedicineDTO::new).toList();
+    }
+
+    @Override
+    public MedicineCalendarResponse FindByDay(int userId, LocalDateTime date){
+        String user = userRepositoryJPA.findById(userId).get().getLogin();
+        List<TreatmentMedicine> treatmentMedicines = repository.findMedicineTreatmentsByDate(userId, date);
+        List<MedicineCalendarDetailing> responseMedicines = new ArrayList<>();
+
+        for(TreatmentMedicine treatmentMedicine : treatmentMedicines){
+            List<String> pictures = pictureService.FindByMedicineId(treatmentMedicine.getMedicine().getId(), userId).stream().map(FileDetailingDTO::getAvailableOn).toList();
+            responseMedicines.add(new MedicineCalendarDetailing(treatmentMedicine, pictures));
+        }
+
+        return new MedicineCalendarResponse(user, responseMedicines);
     }
 }
