@@ -1,6 +1,6 @@
 package bkd.src.salus.api.Domain.Entity.SQL.User;
 
-import bkd.src.salus.api.Domain.DTO.User.UserPreferenceDTO;
+import bkd.src.salus.api.Domain.DTO.User.Preference.UserPreferenceDTO;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
