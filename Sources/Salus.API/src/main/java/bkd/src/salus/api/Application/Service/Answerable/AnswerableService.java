@@ -29,14 +29,16 @@ public class AnswerableService implements IAnswerableService {
     private final IPatientRepositoryJPA patientRepositoryJPA;
     private final IFindProfilePicture findProfilePicture;
     private final ILogAnswerableLastAccess answerableLastAccess;
+    private final IFindProfilePicture profilePictureService;
 
     @Autowired
-    public AnswerableService(IAnswerableOtpRepositoryJPA otpRepository, IUserRepositoryJPA userRepository, IPatientRepositoryJPA patientRepositoryJPA, IFindProfilePicture findProfilePicture, ILogAnswerableLastAccess answerableLastAccess){
+    public AnswerableService(IAnswerableOtpRepositoryJPA otpRepository, IUserRepositoryJPA userRepository, IPatientRepositoryJPA patientRepositoryJPA, IFindProfilePicture findProfilePicture, ILogAnswerableLastAccess answerableLastAccess, IFindProfilePicture profilePictureService){
         this.otpRepository = otpRepository;
         this.userRepository = userRepository;
         this.patientRepositoryJPA = patientRepositoryJPA;
         this.findProfilePicture = findProfilePicture;
         this.answerableLastAccess = answerableLastAccess;
+        this.profilePictureService = profilePictureService;
     }
 
     @Override
@@ -84,11 +86,13 @@ public class AnswerableService implements IAnswerableService {
             Patient patient = patientRepositoryJPA.findPatientByUserId(responsibleUser.getId());
             LocalDateTime lastAccess = answerableLastAccess.CaptureLastAccess(userId, responsibleUser.getId());
 
+            String profilePicture = profilePictureService.FindProfilePicture(responsibleUser.getId());
+
             if(patient != null){
-                patientsReponse.add(new AnswerablePatient(patient, lastAccess));
+                patientsReponse.add(new AnswerablePatient(patient, lastAccess, profilePicture));
             }
             else {
-                patientsReponse.add(new AnswerablePatient(responsibleUser, lastAccess));
+                patientsReponse.add(new AnswerablePatient(responsibleUser, lastAccess, profilePicture));
             }
         }
 

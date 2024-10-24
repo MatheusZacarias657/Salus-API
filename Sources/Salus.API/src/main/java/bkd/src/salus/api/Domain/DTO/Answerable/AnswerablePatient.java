@@ -17,13 +17,14 @@ public class AnswerablePatient {
     private LocalDateTime Birthdate;
     private String Telephone;
     private LocalDateTime LastAccess;
+    private String ProfilePicture;
 
-    public AnswerablePatient (UserAccount user, LocalDateTime lastAccess){
+    public AnswerablePatient (UserAccount user, LocalDateTime lastAccess, String profilePicture){
         this.Name = user.getLogin();
         this.LastAccess = lastAccess;
     }
 
-    public AnswerablePatient (Patient patient, LocalDateTime lastAccess){
+    public AnswerablePatient (Patient patient, LocalDateTime lastAccess, String profilePicture){
         this.Name = patient.getName();
         this.Gender = patient.getGender();
         this.Birthdate = patient.getBirthdate();
