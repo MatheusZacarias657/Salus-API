@@ -51,4 +51,11 @@ public class AnswerableController {
 
         return new ResponseEntity<>(null, HttpStatus.CREATED);
     }
+
+    @GetMapping("/Patients")
+    public ResponseEntity CaptureAllPatients(@RequestHeader("Authorization") String authHeader){
+        int id = checkVisibilite.ExtractIdFromToken(authHeader);
+
+        return new ResponseEntity<>(answerableService.CaptureAllPatients(id), HttpStatus.CREATED);
+    }
 }

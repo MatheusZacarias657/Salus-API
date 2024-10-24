@@ -4,6 +4,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import bkd.src.salus.api.Domain.Entity.SQL.User.UserAccount;
 import org.springframework.data.jpa.repository.Query;
 
+import java.util.List;
+
 public interface IUserRepositoryJPA extends JpaRepository<UserAccount, Integer> {
 
     @Query("""
@@ -19,4 +21,11 @@ public interface IUserRepositoryJPA extends JpaRepository<UserAccount, Integer> 
             WHERE u.Id = :id
             """)
     int getAnswerableIdById(int id);
+
+    @Query("""
+            SELECT u
+            FROM User u
+            WHERE u.Answerable.Id = :id
+            """)
+    List<UserAccount> findPatientsByAnswerableId(int id);
 }
