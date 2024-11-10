@@ -9,8 +9,7 @@ import java.time.LocalTime;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class MedicineResume {
+public class  MedicineResume {
     private String Name;
-    private int Status;
-    private LocalTime Hour;
+    private String Status;
 }

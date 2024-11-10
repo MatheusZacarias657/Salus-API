@@ -2,6 +2,8 @@
 CURRENTDIR=$(realpath $(dirname $0))
 BASEDIR=$(realpath $(dirname $(dirname $0)))
 
+WAIT_FOR_IT="$CURRENTDIR/wait-for-it.sh"
+
 set -e
 echo "Build Applications.."
 
@@ -22,6 +24,11 @@ docker-compose --project-name salus -f $BASEDIR/docker-compose-database.yml up -
 echo ""
 echo "Up external services..."
 docker-compose --project-name salus -f $BASEDIR/docker-compose-service.yml up -d --no-recreate
+
+$WAIT_FOR_IT localhost:1433 --timeout=60 --strict -- echo "Service is up"
+$WAIT_FOR_IT localhost:27017 --timeout=60 --strict -- echo "Service is up"
+$WAIT_FOR_IT localhost:6379 --timeout=60 --strict -- echo "Service is up"
+$WAIT_FOR_IT localhost:15672 --timeout=60 --strict -- echo "Service is up"
 
 echo ""
 echo "Trying to up the System..."

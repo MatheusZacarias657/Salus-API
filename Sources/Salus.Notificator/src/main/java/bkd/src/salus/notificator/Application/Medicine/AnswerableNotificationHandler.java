@@ -8,6 +8,7 @@ import bkd.src.salus.notificator.Domain.Entity.SQL.Patient.Patient;
 import bkd.src.salus.notificator.Domain.Entity.SQL.Treatment.TreatmentMedicine;
 import bkd.src.salus.notificator.Domain.Entity.SQL.User.UserAccount;
 import bkd.src.salus.notificator.Domain.Interface.Application.IAnswerableNotificationHandler;
+import bkd.src.salus.notificator.Domain.Interface.Application.ILogMedicine;
 import bkd.src.salus.notificator.Domain.Interface.Application.IRabbitMessageSender;
 import bkd.src.salus.notificator.Domain.Interface.Repository.IRedisStackManager;
 import bkd.src.salus.notificator.Repository.NoSQL.Mongo.IAnswerableNotificationLogRepositoryMR;
@@ -35,9 +36,10 @@ public class AnswerableNotificationHandler implements IAnswerableNotificationHan
     private final IWhatsTextRepositoryJPA whatsTextRepositoryJPA;
     private final ITreatmentMedicineRepositoryJPA treatmentMedicineRepositoryJPA;
     private final IAnswerableNotificationLogRepositoryMR answerableNotificationLogRepositoryMR;
+    private final ILogMedicine logMedicine;
 
     @Autowired
-    public AnswerableNotificationHandler(IRedisStackManager redisStackManager, IRabbitMessageSender rabbitMessageSender, IUserRepositoryJPA userRepositoryJPA, IPatientRepositoryJPA patientRepositoryJPA, IWhatsTextRepositoryJPA whatsTextRepositoryJPA, ITreatmentMedicineRepositoryJPA treatmentMedicineRepositoryJPA, IAnswerableNotificationLogRepositoryMR answerableNotificationLogRepositoryMR) {
+    public AnswerableNotificationHandler(IRedisStackManager redisStackManager, IRabbitMessageSender rabbitMessageSender, IUserRepositoryJPA userRepositoryJPA, IPatientRepositoryJPA patientRepositoryJPA, IWhatsTextRepositoryJPA whatsTextRepositoryJPA, ITreatmentMedicineRepositoryJPA treatmentMedicineRepositoryJPA, IAnswerableNotificationLogRepositoryMR answerableNotificationLogRepositoryMR, ILogMedicine logMedicine) {
         this.redisStackManager = redisStackManager;
         this.rabbitMessageSender = rabbitMessageSender;
         this.userRepositoryJPA = userRepositoryJPA;
@@ -45,6 +47,7 @@ public class AnswerableNotificationHandler implements IAnswerableNotificationHan
         this.whatsTextRepositoryJPA = whatsTextRepositoryJPA;
         this.treatmentMedicineRepositoryJPA = treatmentMedicineRepositoryJPA;
         this.answerableNotificationLogRepositoryMR = answerableNotificationLogRepositoryMR;
+        this.logMedicine = logMedicine;
         this.objectMap = new Gson();
     }
 
@@ -62,6 +65,7 @@ public class AnswerableNotificationHandler implements IAnswerableNotificationHan
 
                 SendNotification(notification.getUserId(), request);
                 targetQueue.remove(i);
+                LogMedicine(request.getUserId(), request.getMedicineId());
 
                 if(!targetQueue.isEmpty()){
                     redisStackManager.PushAllValues(key, targetQueue);
@@ -72,6 +76,10 @@ public class AnswerableNotificationHandler implements IAnswerableNotificationHan
                 break;
             }
         }
+    }
+
+    private void LogMedicine(int userId, int medicineId){
+        logMedicine.LogConsume(userId, medicineId, "Atrasado");
     }
 
     private void SendNotification(int userId, MedicineNotificationRequest medicineRequest){
@@ -99,6 +107,7 @@ public class AnswerableNotificationHandler implements IAnswerableNotificationHan
 
         RequestWhatsappNotification request = new RequestWhatsappNotification(true, answerable.getTelephone(), fillText);
         String messageToSend = objectMap.toJson(request);
+        System.out.printf("The user %s doesn't consume the medicine %d, now user %s will be notified\n", user.getLogin(), medicineRequest.getMedicineId(), answerable.getUser().getLogin());
         rabbitMessageSender.SendMessageOnExchange(messageToSend, "whatsapp-notification-exchange");
     }
 

@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: salus-api
+  labels:
+    app: salus-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: salus-api
+  template:
+    metadata:
+      labels:
+        app: salus-api
+    spec:
+      containers:
+        - name: salus-api
+          image: salus-api:latest
+          ports:
+            - containerPort: 7777
+          env:
+            - name: SQL_CONN
+              value: "jdbc:sqlserver://db-mssql;databaseName=SalusDB;encrypt=true;trustServerCertificate=true;"
+            - name: SQL_USER
+              value: "sa"
+            - name: SQL_PWD
+              value: "Ba705b8ta4428858eetadb8a"

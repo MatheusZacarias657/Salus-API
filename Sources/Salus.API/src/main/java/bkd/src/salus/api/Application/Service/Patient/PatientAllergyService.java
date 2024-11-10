@@ -4,6 +4,7 @@ import bkd.src.salus.api.Domain.DTO.Patient.Allergy.DetailingPatientAllergyDTO;
 import bkd.src.salus.api.Domain.DTO.Patient.Allergy.RegisterPatientAllergyDTO;
 import bkd.src.salus.api.Domain.Entity.SQL.Patient.Patient;
 import bkd.src.salus.api.Domain.Entity.SQL.Patient.PatientAllergy;
+import bkd.src.salus.api.Domain.Exception.ValidationException;
 import bkd.src.salus.api.Domain.Interface.Application.Patient.IPatientComponentService;
 import bkd.src.salus.api.Repository.SQL.Patient.IPatientAllergyRepositoryJPA;
 import bkd.src.salus.api.Repository.SQL.Patient.IPatientRepositoryJPA;
@@ -27,6 +28,11 @@ public class PatientAllergyService implements IPatientComponentService<Detailing
     @Override
     public List<DetailingPatientAllergyDTO> AddPatienComponent(List<RegisterPatientAllergyDTO> registers, int userId) {
         Patient patientEntity = patientRepository.findPatientByUserId(userId);
+
+        if(patientEntity == null){
+            throw new ValidationException("The patient is null");
+        }
+
         List<PatientAllergy> entities = new ArrayList<>();
 
         for(RegisterPatientAllergyDTO registerAllergy : registers){
@@ -51,7 +57,7 @@ public class PatientAllergyService implements IPatientComponentService<Detailing
 
     @Override
     public void DeleteComponent(int componentId, int userId) {
-        PatientAllergy allergy = allergyRepository.findPatientAllergiesByUserIdAndAllergyId(componentId, userId);
+        PatientAllergy allergy = allergyRepository.findPatientAllergiesByUserIdAndAllergyId(userId, componentId);
         allergyRepository.delete(allergy);
     }
 }

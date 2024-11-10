@@ -51,7 +51,7 @@ public class PatientDiseaseService implements IPatientComponentService<Detailing
 
     @Override
     public void DeleteComponent(int componentId, int userId) {
-        PatientDisease disease = diseaseRepository.findPatientDiseasesByUserIdAndDiseaseId(componentId, userId);
+        PatientDisease disease = diseaseRepository.findPatientDiseasesByUserIdAndDiseaseId(userId, componentId);
         diseaseRepository.delete(disease);
     }
 }

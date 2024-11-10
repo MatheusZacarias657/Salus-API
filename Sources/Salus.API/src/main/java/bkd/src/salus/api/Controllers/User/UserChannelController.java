@@ -26,6 +26,7 @@ public class UserChannelController {
         return new ResponseEntity<>(notificationService.RegisterNotification(userNotificationRequest.getChannelId(), checkVisibility.ExtractIdFromToken(authHeader)), HttpStatus.CREATED);
     }
 
+    //TODO: Deleção correção
     @DeleteMapping("/Channel/{channelId}")
     public ResponseEntity DeleteNotification(@RequestHeader("Authorization") String authHeader, @PathVariable Integer channelId){
         notificationService.DeleteNotification(channelId, checkVisibility.ExtractIdFromToken(authHeader));

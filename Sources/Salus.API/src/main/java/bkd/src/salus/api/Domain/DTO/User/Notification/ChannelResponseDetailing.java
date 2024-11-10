@@ -14,7 +14,7 @@ public class ChannelResponseDetailing {
     private String Name;
 
     public ChannelResponseDetailing(UserNotification notification){
-        this.Id = notification.getId();
+        this.Id = notification.getChannel().getId();
         this.Name = notification.getChannel().getChannel();
     }
 }

@@ -23,6 +23,8 @@ services:
       MONGO_INITDB_ROOT_PASSWORD: "Ba705b8ta4428858eetadb8a" 
     volumes:
       - mongo_data:/data/db 
+    networks:
+      - salus-network
     
   redis:
     image: redis:latest

@@ -23,7 +23,6 @@ public class DrawerController {
 
     @PutMapping("/ChangeOwner")
     public ResponseEntity ChangeOwner(){
-        //TODO: última prioridade
         return new ResponseEntity<>(null, HttpStatus.OK);
     }
 
@@ -46,6 +45,4 @@ public class DrawerController {
         int id = (userId != 0) ? checkVisibilite.CheckAccess(authHeader, userId) : checkVisibilite.ExtractIdFromToken(authHeader);
         return new ResponseEntity<>(drawerService.FindByUserId(id), HttpStatus.OK);
     }
-
-    //TODO: status do gaveteiro
 }

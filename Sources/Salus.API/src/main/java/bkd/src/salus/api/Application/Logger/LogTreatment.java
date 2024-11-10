@@ -1,4 +1,4 @@
 package bkd.src.salus.api.Application.Logger;
 
-public class LogMedicine {
+public class LogTreatment {
 }

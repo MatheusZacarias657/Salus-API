@@ -5,10 +5,33 @@ services:
     build:
       context: Salus.API
     ports:
-      - 8080:7777   
+      - 7777:7777   
     environment:
       - SQL_CONN=jdbc:sqlserver://db-mssql;databaseName=SalusDB;encrypt=true;trustServerCertificate=true;
-  
+      - SQL_USER=sa
+      - SQL_PWD=Ba705b8ta4428858eetadb8a
+
+      - NoSQL_HOST=db-mongo
+      - NoSQL_PORT=27017
+      - NoSQL_DB=SalusDB
+      - NoSQL_USER=salus
+      - NoSQL_PWD=Ba705b8ta4428858eetadb8a
+
+      - BREVO_URL="https://api.brevo.com"
+      - BREVO_KEY="qwertyuiop"
+      - BREVO_EMAIL="salus.bot@gmail.com"
+      - BREVO_RESET=1
+
+      - RABBIT_HOST=rabbitmq
+      - RABBIT_PORT=5672
+      - RABBIT_USER=salus
+      - RABBIT_PWD=Ba705b8ta4428858eetadb8a
+
+      - REDIS_HOST=db-redis
+      - REDIS_PORT=6379
+    networks:
+      - salus-network
+
   # salus-communicator:
   #   image: salus-api
   #   container_name: alus-communicator

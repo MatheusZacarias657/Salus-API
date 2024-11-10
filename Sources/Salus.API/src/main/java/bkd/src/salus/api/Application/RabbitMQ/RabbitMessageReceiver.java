@@ -1,4 +1,4 @@
-package bkd.src.salus.api.Application.Service.RabbitMQ;
+package bkd.src.salus.api.Application.RabbitMQ;
 
 import bkd.src.salus.api.Domain.DTO.Medicine.MedicineDecrementRequest;
 import bkd.src.salus.api.Domain.Interface.Application.Medicine.IMedicineOperator;

@@ -12,7 +12,7 @@ import java.util.List;
 public class DayResume {
     private int Total;
     private int Consumed;
-    private int NotConsumed;
+    private int Delayed;
     private int Normal;
     List<TreatmentResume> Treatments;
 }

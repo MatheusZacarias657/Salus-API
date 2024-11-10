@@ -10,6 +10,8 @@ services:
       RABBITMQ_DEFAULT_PASS: "Ba705b8ta4428858eetadb8a"
     volumes:
       - rabbitmq_data:/var/lib/rabbitmq
+    networks:
+      - salus-network
   
   mqtt:
     image: eclipse-mosquitto
@@ -22,6 +24,8 @@ services:
       - ./MQTT/data:/mosquitto/data:rw
       - ./MQTT/log:/mosquitto/log:rw
     restart: unless-stopped
+    networks:
+      - salus-network
 
 volumes:
   rabbitmq_data:

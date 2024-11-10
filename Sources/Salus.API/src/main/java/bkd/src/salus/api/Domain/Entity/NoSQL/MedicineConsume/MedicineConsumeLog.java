@@ -4,6 +4,7 @@ import bkd.src.salus.api.Domain.Entity.SQL.Medicine.Medicine;
 import bkd.src.salus.api.Domain.Entity.SQL.Patient.Patient;
 import bkd.src.salus.api.Domain.Entity.SQL.Treatment.Treatment;
 import bkd.src.salus.api.Domain.Entity.SQL.Treatment.TreatmentMedicine;
+import bkd.src.salus.api.Domain.Entity.SQL.User.UserAccount;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -39,35 +40,12 @@ public class MedicineConsumeLog {
         this.Action = action;
     }
 
-
-    @Data
-    @AllArgsConstructor
-    @NoArgsConstructor
-    public class MedicineConsume{
-        private String Name;
-        private String Importance;
-        private String Type;
-        private float Dosage;
-
-        public MedicineConsume(Medicine medicine, TreatmentMedicine treatmentMedicine){
-            this.Name = medicine.getName();
-            this.Importance = medicine.getImportance().getName();
-            this.Type = medicine.getType().getName();
-            this.Dosage = treatmentMedicine.getDosage();
-        }
-
-    }
-
-    @Data
-    @AllArgsConstructor
-    @NoArgsConstructor
-    public class TreatmentConsume{
-        private String Name;
-        private String Importance;
-
-        public TreatmentConsume(Treatment treatment){
-            this.Name = treatment.getName();
-            this.Importance = treatment.getImportance().getName();
-        }
+    public MedicineConsumeLog(UserAccount user, TreatmentMedicine treatmentMedicine, String action){
+        this.Username = user.getLogin();
+        this.Name = user.getLogin();
+        this.Medicine = new MedicineConsume(treatmentMedicine.getMedicine(), treatmentMedicine);
+        this.Treatment = new TreatmentConsume(treatmentMedicine.getTreatment());
+        this.LogAt = LocalDateTime.now();
+        this.Action = action;
     }
 }

@@ -1,10 +1,12 @@
 package bkd.src.salus.api.Domain.DTO.Medicine;
 
 import bkd.src.salus.api.Domain.Entity.SQL.Treatment.TreatmentMedicine;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,6 +14,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class MedicineCalendarDetailing {
+
     private String TreatmentName;
     private String MedicineName;
     private String Importance;

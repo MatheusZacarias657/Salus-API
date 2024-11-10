@@ -69,7 +69,7 @@ public class ResponseNotificationHandler implements IResponseNotificationHandler
             if (itemOnQueue != null){
                 removed.add(itemOnQueue.getMedicine());
 
-                if(itemOnQueue.getPosition() == 0 && redisStackManager.KeyExists(key) && topic.contains("drawer")){
+                if(itemOnQueue.getPosition() == 0 && redisStackManager.KeyExists(key) && (topic.contains("drawer") && topic.contains("request"))){
                     nextNotifications.add(new NextNotification(redisStackManager.CatchFirst(key), topic));
                 }
             }
@@ -83,12 +83,16 @@ public class ResponseNotificationHandler implements IResponseNotificationHandler
             ConsumeMedicineConfirmation repeaterConfirmation = new ConsumeMedicineConfirmation("Repeater", repeaterResponse);
 
             for(String topic : topics){
-                nextNotifications.add(new NextNotification(objectMap.toJson(repeaterConfirmation), topic));
+
+                if(!topic.contains("response")){
+                    nextNotifications.add(new NextNotification(objectMap.toJson(repeaterConfirmation), topic));
+                }
             }
 
             MedicineDecrementRequest medicineDecrement = new MedicineDecrementRequest(removedNotification.getUserId(), removedNotification.getMedicineId(), removedNotification.getQuantity());
-            messageSender.SendMessageOnExchange(objectMap.toJson(medicineDecrement), "mqtt-notification-response-exchange");
+            messageSender.SendMessageOnExchange(objectMap.toJson(medicineDecrement), "mqtt-medicine-notification-response-exchange");
         }
+
 
         return nextNotifications;
     }

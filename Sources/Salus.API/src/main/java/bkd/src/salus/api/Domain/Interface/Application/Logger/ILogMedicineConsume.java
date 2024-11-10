@@ -1,5 +1,5 @@
 package bkd.src.salus.api.Domain.Interface.Application.Logger;
 
-public interface ILogMedicine {
+public interface ILogMedicineConsume {
     void LogConsume(int userId, int medicineId);
 }

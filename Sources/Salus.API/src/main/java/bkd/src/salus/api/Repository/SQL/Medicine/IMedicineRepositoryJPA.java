@@ -33,4 +33,11 @@ public interface IMedicineRepositoryJPA extends JpaRepository<Medicine, Integer>
             AND m.Id = :id
             """)
     Medicine findMedicineByUserIdAndId(int id, int userId);
+
+    @Query("""
+            SELECT COUNT (m)
+            FROM Medicine m
+            WHERE m.HardwareId = :hardwareId
+            """)
+    int findDrawerUse(String hardwareId);
 }

@@ -81,7 +81,7 @@ public class InitializeNotificationHandler implements IInitializeNotificationHan
 
         rabbitMessageSender.SendMessageOnExchangeAsync(
                 objectMap.toJson(answerableNotification),
-                "request-medicine-notification-exchange",
+                "notification-medicine-answerable-queue",
                 Converter.ConvertMinutesToMilly(5));
     }
 

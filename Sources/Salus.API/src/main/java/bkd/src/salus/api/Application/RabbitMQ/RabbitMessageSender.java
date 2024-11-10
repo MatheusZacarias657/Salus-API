@@ -1,4 +1,4 @@
-package bkd.src.salus.api.Application.Service.RabbitMQ;
+package bkd.src.salus.api.Application.RabbitMQ;
 
 import bkd.src.salus.api.Domain.Entity.SQL.RabbitMQ.RabbitQueue;
 import bkd.src.salus.api.Domain.Interface.Application.RabbitMQ.IRabbitMessageSender;

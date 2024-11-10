@@ -9,7 +9,7 @@ import bkd.src.salus.api.Domain.Entity.SQL.Medicine.MedicineType;
 import bkd.src.salus.api.Domain.Entity.SQL.User.UserAccount;
 import bkd.src.salus.api.Domain.Exception.ValidationException;
 import bkd.src.salus.api.Domain.Interface.Application.FileManager.IMedicinePictureService;
-import bkd.src.salus.api.Domain.Interface.Application.Logger.ILogMedicine;
+import bkd.src.salus.api.Domain.Interface.Application.Logger.ILogMedicineConsume;
 import bkd.src.salus.api.Domain.Interface.Application.Medicine.*;
 import bkd.src.salus.api.Repository.SQL.Cataloging.IImportanceRepositoryJPA;
 import bkd.src.salus.api.Repository.SQL.Medicine.IMedicineRepositoryJPA;
@@ -29,11 +29,11 @@ public class MedicineService implements IMedicineService, IMedicineOperator {
     private final IMedicineTypeRepositoryJPA typeRepository;
     private final IImportanceRepositoryJPA importanceRepository;
     private final IUserRepositoryJPA userRepository;
-    private final ILogMedicine logMedicine;
+    private final ILogMedicineConsume logMedicine;
     private final IMedicinePictureService pictureService;
 
     @Autowired
-    public MedicineService(IMedicineRepositoryJPA repository, IMedicineTypeRepositoryJPA typeRepository, IImportanceRepositoryJPA importanceRepository, IUserRepositoryJPA userRepository, ILogMedicine logMedicine, IMedicinePictureService pictureService){
+    public MedicineService(IMedicineRepositoryJPA repository, IMedicineTypeRepositoryJPA typeRepository, IImportanceRepositoryJPA importanceRepository, IUserRepositoryJPA userRepository, ILogMedicineConsume logMedicine, IMedicinePictureService pictureService){
         this.repository = repository;
         this.typeRepository = typeRepository;
         this.importanceRepository = importanceRepository;

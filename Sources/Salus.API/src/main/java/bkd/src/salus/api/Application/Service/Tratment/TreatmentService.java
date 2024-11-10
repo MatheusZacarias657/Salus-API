@@ -6,6 +6,7 @@ import bkd.src.salus.api.Domain.Entity.SQL.Cataloging.Importance;
 import bkd.src.salus.api.Domain.Entity.SQL.Treatment.Treatment;
 import bkd.src.salus.api.Domain.Entity.SQL.User.UserAccount;
 import bkd.src.salus.api.Domain.Exception.ValidationException;
+import bkd.src.salus.api.Domain.Interface.Application.RabbitMQ.IRabbitCommunicatorTreatment;
 import bkd.src.salus.api.Domain.Interface.Application.Treatment.ITreatmentMedicineService;
 import bkd.src.salus.api.Domain.Interface.Application.Treatment.ITreatmentService;
 import bkd.src.salus.api.Repository.SQL.Cataloging.IImportanceRepositoryJPA;
@@ -16,7 +17,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.*;
-import java.util.stream.Collector;
 
 @Service
 public class TreatmentService implements ITreatmentService {
@@ -25,13 +25,15 @@ public class TreatmentService implements ITreatmentService {
     private final IUserRepositoryJPA userRepository;
     private final IImportanceRepositoryJPA importanceRepository;
     private final ITreatmentMedicineService treatmentMedicineService;
+    private final IRabbitCommunicatorTreatment rabbitCommunicator;
 
     @Autowired
-    public TreatmentService(ITreatmentRepositoryJPA repository, IUserRepositoryJPA userRepository, IImportanceRepositoryJPA importanceRepository, ITreatmentMedicineService treatmentMedicineService) {
+    public TreatmentService(ITreatmentRepositoryJPA repository, IUserRepositoryJPA userRepository, IImportanceRepositoryJPA importanceRepository, ITreatmentMedicineService treatmentMedicineService, IRabbitCommunicatorTreatment rabbitCommunicator) {
         this.repository = repository;
         this.userRepository = userRepository;
         this.importanceRepository = importanceRepository;
         this.treatmentMedicineService = treatmentMedicineService;
+        this.rabbitCommunicator = rabbitCommunicator;
     }
 
     @Override
@@ -52,6 +54,7 @@ public class TreatmentService implements ITreatmentService {
         repository.save(entity);
         List<DetailingTreatmentMedicineDTO> medicines = treatmentMedicineService.Register(register.getMedicines(), entity);
 
+        rabbitCommunicator.InitializeTreatmentNotification(entity.getId());
         return new CompleteDetailingTreatment(new DetailingTreatmentDTO(entity, GenerateResume(medicines)), medicines);
     }
 
