@@ -12,14 +12,12 @@ import java.util.Map;
 @NoArgsConstructor
 @AllArgsConstructor
 public class EmailBrevoPayload {
-    private EmailContact Sender;
     private List<EmailContact> To;
     private int TemplateId;
     private Map<String, String> Params;
     private List<BrevoAttachment> Attachment;
 
-    public EmailBrevoPayload(EmailContact sender, List<EmailContact> to, int templateId, Map<String, String> parameters) {
-        this.Sender =sender;
+    public EmailBrevoPayload(List<EmailContact> to, int templateId, Map<String, String> parameters) {
         this.To = to;
         this.TemplateId = templateId;
         this.Params = parameters;

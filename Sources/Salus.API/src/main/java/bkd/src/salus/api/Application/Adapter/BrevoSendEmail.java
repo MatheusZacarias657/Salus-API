@@ -18,14 +18,8 @@ public class BrevoSendEmail implements IBrevoSendEmail {
     @Value("${api.brevo.url}")
     private String urlBrevo;
 
-    @Value("${api.brevo.url}")
+    @Value("${api.brevo.key}")
     private String apiToken;
-
-    @Value("${api.brevo.url}")
-    private String email;
-
-    @Value("${api.brevo.url}")
-    private String name;
 
     @Autowired
     public BrevoSendEmail(IHttpFactory httpFactory) {
@@ -41,7 +35,6 @@ public class BrevoSendEmail implements IBrevoSendEmail {
         }};
 
         EmailBrevoPayload body = new EmailBrevoPayload(
-                new EmailContact(email, name),
                 new ArrayList<EmailContact>(List.of(new EmailContact(userEmail, userEmail))),
                 templateId,
                 parameters
@@ -50,7 +43,7 @@ public class BrevoSendEmail implements IBrevoSendEmail {
         //String response = httpFactory.PostRequest(url, body, headers).thenApply(HttpResponse::body).join();
         int statusResponse = httpFactory.PostRequest(url, body, headers).get().statusCode();
 
-        if(statusResponse != 200){
+        if(statusResponse != 201){
             throw new Exception(String.format("The Brevo API return a error: %i", statusResponse));
         }
     }

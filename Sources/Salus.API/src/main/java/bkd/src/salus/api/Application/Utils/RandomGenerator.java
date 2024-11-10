@@ -7,7 +7,6 @@ public class RandomGenerator {
     private static String CapitalChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     private static String SmallChars = "abcdefghijklmnopqrstuvwxyz";
     private static String Numbers = "0123456789";
-    private static String Symbols = "!@#$%^&*_=+-/.?<>)";
 
     public static String Otp()
     {
@@ -27,14 +26,14 @@ public class RandomGenerator {
     {
         int size = 12;
         Random random = new Random();
-        char[] password = new char[size];
-        String values = CapitalChars + SmallChars + Numbers + Symbols;
+        char[] randomPassword = new char[size];
+        String values = CapitalChars + SmallChars + Numbers;
 
         for (int i = 0; i < size; i++)
         {
-            password[i] = values.charAt(random.nextInt(values.length()));
+            randomPassword[i] = values.charAt(random.nextInt(values.length()));
         }
 
-        return Arrays.toString(password);
+        return String.valueOf(randomPassword);
     }
 }

@@ -12,6 +12,7 @@ import bkd.src.salus.api.Domain.Interface.Application.Auth.ITokenGenerate;
 import bkd.src.salus.api.Repository.SQL.Patient.IPatientRepositoryJPA;
 import bkd.src.salus.api.Repository.SQL.User.IUserRepositoryJPA;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -31,6 +32,9 @@ public class OAuthService implements IOAuthService {
     private final IUserRepositoryJPA userRepository;
     private final PasswordEncoder passwordEncoder;
     private final IPatientRepositoryJPA patientRepository;
+
+    @Value("${api.brevo.reset-templete}")
+    private int resetTemplate;
 
     @Autowired
     public OAuthService(AuthenticationManager manager, ITokenGenerate tokenSevice, IBrevoSendEmail brevoSendEmail, IUserRepositoryJPA userRepository, PasswordEncoder passwordEncoder, IPatientRepositoryJPA patientRepositoryJPA){
@@ -65,9 +69,10 @@ public class OAuthService implements IOAuthService {
 
         Map<String, String> emailParameters = new HashMap<>() {{
             put("password", newPassword);
+            put("user", user.getLogin());
         }};
 
-        brevoSendEmail.SendEmail(entity.getLogin(), emailParameters, 1);
+        brevoSendEmail.SendEmail(entity.getLogin(), emailParameters, resetTemplate);
 
         return true;
     }

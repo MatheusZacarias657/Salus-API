@@ -18,9 +18,8 @@ services:
       - NoSQL_PWD=Ba705b8ta4428858eetadb8a
 
       - BREVO_URL="https://api.brevo.com"
-      - BREVO_KEY="qwertyuiop"
-      - BREVO_EMAIL="salus.bot@gmail.com"
-      - BREVO_RESET=1
+      - BREVO_KEY="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"
+      - BREVO_RESET=2
 
       - RABBIT_HOST=rabbitmq
       - RABBIT_PORT=5672
