@@ -1,4 +1,4 @@
-package bkd.src.salus.api.Repository.NoSQL.AnswerableLastAccess;
+package bkd.src.salus.api.Repository.NoSQL.Mongo.AnswerableLastAccess;
 
 import bkd.src.salus.api.Domain.Entity.NoSQL.AnswerableAccess.AnswerableLastAccessLog;
 import org.springframework.data.domain.Sort;

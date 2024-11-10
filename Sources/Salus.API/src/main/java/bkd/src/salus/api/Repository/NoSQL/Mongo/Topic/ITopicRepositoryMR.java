@@ -1,4 +1,4 @@
-package bkd.src.salus.api.Repository.NoSQL.Topic;
+package bkd.src.salus.api.Repository.NoSQL.Mongo.Topic;
 
 import bkd.src.salus.api.Domain.Entity.NoSQL.Topic.MqttTopic;
 import org.springframework.data.mongodb.repository.MongoRepository;

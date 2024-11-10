@@ -9,6 +9,7 @@ import bkd.src.salus.api.Domain.Entity.SQL.Medicine.Medicine;
 import bkd.src.salus.api.Domain.Entity.SQL.Treatment.Treatment;
 import bkd.src.salus.api.Domain.Entity.SQL.Treatment.TreatmentMedicine;
 import bkd.src.salus.api.Domain.Interface.Application.FileManager.IMedicinePictureService;
+import bkd.src.salus.api.Domain.Interface.Application.Logger.ILogTreatmentRegister;
 import bkd.src.salus.api.Domain.Interface.Application.Treatment.ITreatmentMedicineService;
 import bkd.src.salus.api.Repository.SQL.Medicine.IMedicineRepositoryJPA;
 import bkd.src.salus.api.Repository.SQL.Treatment.ITreatmentMedicineRepositoryJPA;
@@ -26,24 +27,30 @@ public class TreatmentMedicineService implements ITreatmentMedicineService, IDay
     private final IMedicineRepositoryJPA medicineRepository;
     private final IUserRepositoryJPA userRepositoryJPA;
     private final IMedicinePictureService pictureService;
+    private final ILogTreatmentRegister logTreatmentRegister;
 
-    public TreatmentMedicineService(ITreatmentMedicineRepositoryJPA repository, IMedicineRepositoryJPA medicineRepository, IUserRepositoryJPA userRepositoryJPA, IMedicinePictureService pictureService){
+    public TreatmentMedicineService(ITreatmentMedicineRepositoryJPA repository, IMedicineRepositoryJPA medicineRepository, IUserRepositoryJPA userRepositoryJPA, IMedicinePictureService pictureService, ILogTreatmentRegister logTreatmentRegister){
         this.repository = repository;
         this.medicineRepository = medicineRepository;
         this.userRepositoryJPA = userRepositoryJPA;
         this.pictureService = pictureService;
+        this.logTreatmentRegister = logTreatmentRegister;
     }
 
     @Override
     public List<DetailingTreatmentMedicineDTO> Register(List<RegisterMedicineTreatmentDTO> registers, Treatment treatment){
         List<DetailingTreatmentMedicineDTO> results = new ArrayList<>();
+        List<TreatmentMedicine> entities = new ArrayList<>();
 
         for(RegisterMedicineTreatmentDTO register : registers){
             Medicine medicine = medicineRepository.getReferenceById(register.getMedicineId());
             TreatmentMedicine entity = new TreatmentMedicine(register, medicine, treatment);
-            repository.save(entity);
+            entities.add(entity);
             results.add(new DetailingTreatmentMedicineDTO(entity));
         }
+
+        repository.saveAll(entities);
+        logTreatmentRegister.LogRegister(treatment.getUser(), treatment, entities);
 
         return results;
     }

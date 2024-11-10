@@ -5,6 +5,7 @@ import bkd.src.salus.api.Domain.DTO.Patient.Detail.RegisterPatientDetailDTO;
 import bkd.src.salus.api.Domain.DTO.Patient.Detail.UpdatePatientDetailDTO;
 import bkd.src.salus.api.Domain.Entity.SQL.Patient.Patient;
 import bkd.src.salus.api.Domain.Entity.SQL.Patient.PatientDetail;
+import bkd.src.salus.api.Domain.Exception.ValidationException;
 import bkd.src.salus.api.Repository.SQL.Patient.IPatientDetailRepositoryJPA;
 import bkd.src.salus.api.Repository.SQL.Patient.IPatientRepositoryJPA;
 import bkd.src.salus.api.Domain.Interface.Application.Patient.IPatientCrudService;
@@ -25,6 +26,12 @@ public class PatientDetailService implements IPatientCrudService<PatientDetailMo
 
     @Override
     public PatientDetailModifierResponseDTO RegisterPatientContent(RegisterPatientDetailDTO patientRegister, int userId) {
+        PatientDetail testPatient = patientDetailRepository.findPatientDetailByUserId(userId);
+
+        if(testPatient != null){
+            throw new ValidationException( "This patient already register the detailing, please update if want to change data");
+        }
+
         Patient patientEntity = patientRepository.findPatientByUserId(userId);
         PatientDetail entity = new PatientDetail(patientRegister, patientEntity);
         entity = patientDetailRepository.save(entity);

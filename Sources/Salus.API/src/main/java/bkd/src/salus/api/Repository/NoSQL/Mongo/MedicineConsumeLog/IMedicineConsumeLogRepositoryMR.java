@@ -1,4 +1,4 @@
-package bkd.src.salus.api.Repository.NoSQL.MedicineLog;
+package bkd.src.salus.api.Repository.NoSQL.Mongo.MedicineConsumeLog;
 
 import bkd.src.salus.api.Domain.Entity.NoSQL.MedicineConsume.MedicineConsumeLog;
 import org.springframework.data.mongodb.repository.MongoRepository;

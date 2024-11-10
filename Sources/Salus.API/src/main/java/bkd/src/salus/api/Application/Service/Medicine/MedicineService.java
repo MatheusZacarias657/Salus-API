@@ -9,6 +9,7 @@ import bkd.src.salus.api.Domain.Entity.SQL.Medicine.MedicineType;
 import bkd.src.salus.api.Domain.Entity.SQL.User.UserAccount;
 import bkd.src.salus.api.Domain.Exception.ValidationException;
 import bkd.src.salus.api.Domain.Interface.Application.FileManager.IMedicinePictureService;
+import bkd.src.salus.api.Domain.Interface.Application.Logger.ILogBuyingMedicine;
 import bkd.src.salus.api.Domain.Interface.Application.Logger.ILogMedicineConsume;
 import bkd.src.salus.api.Domain.Interface.Application.Medicine.*;
 import bkd.src.salus.api.Repository.SQL.Cataloging.IImportanceRepositoryJPA;
@@ -31,15 +32,17 @@ public class MedicineService implements IMedicineService, IMedicineOperator {
     private final IUserRepositoryJPA userRepository;
     private final ILogMedicineConsume logMedicine;
     private final IMedicinePictureService pictureService;
+    private final ILogBuyingMedicine logBuyingMedicine;
 
     @Autowired
-    public MedicineService(IMedicineRepositoryJPA repository, IMedicineTypeRepositoryJPA typeRepository, IImportanceRepositoryJPA importanceRepository, IUserRepositoryJPA userRepository, ILogMedicineConsume logMedicine, IMedicinePictureService pictureService){
+    public MedicineService(IMedicineRepositoryJPA repository, IMedicineTypeRepositoryJPA typeRepository, IImportanceRepositoryJPA importanceRepository, IUserRepositoryJPA userRepository, ILogMedicineConsume logMedicine, IMedicinePictureService pictureService, ILogBuyingMedicine logBuyingMedicine){
         this.repository = repository;
         this.typeRepository = typeRepository;
         this.importanceRepository = importanceRepository;
         this.userRepository = userRepository;
         this.logMedicine = logMedicine;
         this.pictureService = pictureService;
+        this.logBuyingMedicine = logBuyingMedicine;
     }
 
     @Override
@@ -59,6 +62,8 @@ public class MedicineService implements IMedicineService, IMedicineOperator {
 
         Medicine entity = new Medicine(register, user, type, importance);
         repository.save(entity);
+
+        logBuyingMedicine.LogBuying(user, entity);
 
         return new DetailingMedicineDTO(entity);
     }

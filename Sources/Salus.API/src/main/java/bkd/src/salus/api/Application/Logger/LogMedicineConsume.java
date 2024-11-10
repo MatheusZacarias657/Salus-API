@@ -5,7 +5,7 @@ import bkd.src.salus.api.Domain.Entity.SQL.Patient.Patient;
 import bkd.src.salus.api.Domain.Entity.SQL.Treatment.TreatmentMedicine;
 import bkd.src.salus.api.Domain.Entity.SQL.User.UserAccount;
 import bkd.src.salus.api.Domain.Interface.Application.Logger.ILogMedicineConsume;
-import bkd.src.salus.api.Repository.NoSQL.MedicineLog.IMedicineConsumeLogRepositoryMR;
+import bkd.src.salus.api.Repository.NoSQL.Mongo.MedicineConsumeLog.IMedicineConsumeLogRepositoryMR;
 import bkd.src.salus.api.Repository.SQL.Patient.IPatientRepositoryJPA;
 import bkd.src.salus.api.Repository.SQL.Treatment.ITreatmentMedicineRepositoryJPA;
 import bkd.src.salus.api.Repository.SQL.User.IUserRepositoryJPA;

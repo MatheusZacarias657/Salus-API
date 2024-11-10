@@ -5,6 +5,7 @@ import bkd.src.salus.api.Domain.DTO.Patient.Address.RegisterPatientAddressDTO;
 import bkd.src.salus.api.Domain.DTO.Patient.Address.UpdatePatientAddressDTO;
 import bkd.src.salus.api.Domain.Entity.SQL.Patient.Patient;
 import bkd.src.salus.api.Domain.Entity.SQL.Patient.PatientAddress;
+import bkd.src.salus.api.Domain.Exception.ValidationException;
 import bkd.src.salus.api.Domain.Interface.Application.Patient.IPatientCrudService;
 import bkd.src.salus.api.Repository.SQL.Patient.IPatientAddressRepositoryJPA;
 import bkd.src.salus.api.Repository.SQL.Patient.IPatientRepositoryJPA;
@@ -25,6 +26,12 @@ public class PatientAddressService implements IPatientCrudService<PatientAddress
 
     @Override
     public PatientAddressModifierResponseDTO RegisterPatientContent(RegisterPatientAddressDTO patientRegister, int userId) {
+        PatientAddress testEntity = patientAddressRepositoryJPA.findPatientAddressByUserId(userId);
+
+        if(testEntity != null){
+            throw new ValidationException( "This patient already register the address, please update if want to change data");
+        }
+
         Patient patientEntity = patientRepositoryJPA.findPatientByUserId(userId);
         PatientAddress entity = new PatientAddress(patientRegister, patientEntity);
         entity = patientAddressRepositoryJPA.save(entity);

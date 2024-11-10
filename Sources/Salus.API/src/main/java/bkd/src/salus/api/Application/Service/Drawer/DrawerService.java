@@ -11,7 +11,7 @@ import bkd.src.salus.api.Domain.Exception.ValidationException;
 import bkd.src.salus.api.Domain.Interface.Application.Drawer.IDrawerResumeService;
 import bkd.src.salus.api.Domain.Interface.Application.Drawer.IDrawerService;
 import bkd.src.salus.api.Domain.Interface.Application.RabbitMQ.IRabbitCommunicator;
-import bkd.src.salus.api.Repository.NoSQL.Topic.ITopicRepositoryMR;
+import bkd.src.salus.api.Repository.NoSQL.Mongo.Topic.ITopicRepositoryMR;
 import bkd.src.salus.api.Repository.SQL.Drawer.IDrawerGroupRepositoryJPA;
 import bkd.src.salus.api.Repository.SQL.Drawer.IDrawerRepositoryJPA;
 import bkd.src.salus.api.Repository.SQL.Medicine.IMedicineRepositoryJPA;

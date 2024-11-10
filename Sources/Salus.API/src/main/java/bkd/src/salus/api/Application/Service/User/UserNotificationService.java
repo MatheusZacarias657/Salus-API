@@ -5,6 +5,7 @@ import bkd.src.salus.api.Domain.DTO.User.Notification.UserChannelResponse;
 import bkd.src.salus.api.Domain.Entity.SQL.Channel.NotificationChannel;
 import bkd.src.salus.api.Domain.Entity.SQL.User.UserAccount;
 import bkd.src.salus.api.Domain.Entity.SQL.User.UserNotification;
+import bkd.src.salus.api.Domain.Exception.ValidationException;
 import bkd.src.salus.api.Domain.Interface.Application.User.IUserNotificationService;
 import bkd.src.salus.api.Repository.SQL.Channel.IChannelRepositoryJPA;
 import bkd.src.salus.api.Repository.SQL.User.IUserNotificationRepositoryJPA;
@@ -30,6 +31,12 @@ public class UserNotificationService implements IUserNotificationService {
 
     @Override
     public UserChannelResponse RegisterNotification(int channelId, int userId){
+        UserNotification testEntity = repository.getUserNotificationIdByUserIdAndChannelId(userId, channelId);
+
+        if(testEntity != null){
+            throw new ValidationException( "This user already has this channel, please update if want to change data");
+        }
+
         UserAccount user = userRepositoryJPA.findById(userId).get();
         NotificationChannel channel = channelRepositoryJPA.findById(channelId).get();
         UserNotification entity = new UserNotification(user, channel);

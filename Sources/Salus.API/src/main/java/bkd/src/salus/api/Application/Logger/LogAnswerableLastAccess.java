@@ -4,7 +4,7 @@ import bkd.src.salus.api.Domain.Entity.NoSQL.AnswerableAccess.AnswerableLastAcce
 import bkd.src.salus.api.Domain.Entity.NoSQL.AnswerableAccess.LastAccessUserDetailing;
 import bkd.src.salus.api.Domain.Entity.SQL.Patient.Patient;
 import bkd.src.salus.api.Domain.Interface.Application.LogAnswerableLastAccess.ILogAnswerableLastAccess;
-import bkd.src.salus.api.Repository.NoSQL.AnswerableLastAccess.IAnswerableLastAccessLogRepositoryMR;
+import bkd.src.salus.api.Repository.NoSQL.Mongo.AnswerableLastAccess.IAnswerableLastAccessLogRepositoryMR;
 import bkd.src.salus.api.Repository.SQL.Patient.IPatientRepositoryJPA;
 import bkd.src.salus.api.Repository.SQL.User.IUserRepositoryJPA;
 import org.springframework.beans.factory.annotation.Autowired;
