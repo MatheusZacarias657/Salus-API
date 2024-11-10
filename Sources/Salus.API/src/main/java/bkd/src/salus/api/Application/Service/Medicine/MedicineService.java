@@ -10,7 +10,6 @@ import bkd.src.salus.api.Domain.Entity.SQL.User.UserAccount;
 import bkd.src.salus.api.Domain.Exception.ValidationException;
 import bkd.src.salus.api.Domain.Interface.Application.FileManager.IMedicinePictureService;
 import bkd.src.salus.api.Domain.Interface.Application.Logger.ILogBuyingMedicine;
-import bkd.src.salus.api.Domain.Interface.Application.Logger.ILogMedicineConsume;
 import bkd.src.salus.api.Domain.Interface.Application.Medicine.*;
 import bkd.src.salus.api.Repository.SQL.Cataloging.IImportanceRepositoryJPA;
 import bkd.src.salus.api.Repository.SQL.Medicine.IMedicineRepositoryJPA;
@@ -30,17 +29,15 @@ public class MedicineService implements IMedicineService, IMedicineOperator {
     private final IMedicineTypeRepositoryJPA typeRepository;
     private final IImportanceRepositoryJPA importanceRepository;
     private final IUserRepositoryJPA userRepository;
-    private final ILogMedicineConsume logMedicine;
     private final IMedicinePictureService pictureService;
     private final ILogBuyingMedicine logBuyingMedicine;
 
     @Autowired
-    public MedicineService(IMedicineRepositoryJPA repository, IMedicineTypeRepositoryJPA typeRepository, IImportanceRepositoryJPA importanceRepository, IUserRepositoryJPA userRepository, ILogMedicineConsume logMedicine, IMedicinePictureService pictureService, ILogBuyingMedicine logBuyingMedicine){
+    public MedicineService(IMedicineRepositoryJPA repository, IMedicineTypeRepositoryJPA typeRepository, IImportanceRepositoryJPA importanceRepository, IUserRepositoryJPA userRepository, IMedicinePictureService pictureService, ILogBuyingMedicine logBuyingMedicine){
         this.repository = repository;
         this.typeRepository = typeRepository;
         this.importanceRepository = importanceRepository;
         this.userRepository = userRepository;
-        this.logMedicine = logMedicine;
         this.pictureService = pictureService;
         this.logBuyingMedicine = logBuyingMedicine;
     }
@@ -110,6 +107,5 @@ public class MedicineService implements IMedicineService, IMedicineOperator {
         Medicine entity = repository.findMedicineByUserIdAndId(medicineId, userId);
         entity.Decrement(quantity);
         repository.save(entity);
-        logMedicine.LogConsume(userId, medicineId);
     }
 }

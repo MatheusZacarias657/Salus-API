@@ -59,7 +59,7 @@ public class ResponseNotificationHandler implements IResponseNotificationHandler
         List<MedicineNotificationRequest> removed = new ArrayList<>();
         MedicineNotificationResponse notificationResponse = confirmation.getParams();
         List<String> topics = topicRepository.findTopicsByUserIdAndHardwareId(notificationResponse.getUserId(),notificationResponse.getHardwareId());
-        logMedicine.LogConsume(confirmation.getParams().getUserId(), confirmation.getParams().getMedicineId(), "Consumido");
+        logMedicine.LogConsume(confirmation.getParams().getUserId(), confirmation.getParams().getMedicineId(), confirmation.getParams().getTreatmentId(), "Consumido");
 
         for (String topic : topics){
 

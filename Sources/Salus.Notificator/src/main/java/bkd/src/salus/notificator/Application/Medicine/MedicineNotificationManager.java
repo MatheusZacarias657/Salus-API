@@ -107,7 +107,7 @@ public class MedicineNotificationManager implements IMedicineNotificationManager
         }
 
         System.out.printf("The medicine %d is Ok to send\n", medicine.getId());
-        logMedicine.LogConsume(medicine.getUser().getId(), medicine.getId(), "Agendado");
+        logMedicine.LogConsume(medicine.getUser().getId(), medicine.getId(), treatmentMedicine.getTreatment().getId(), "Agendado");
 
         return true;
     }
@@ -125,7 +125,8 @@ public class MedicineNotificationManager implements IMedicineNotificationManager
                 name,
                 treatmentMedicine.getMedicine().getId(),
                 treatmentMedicine.getDosage(),
-                type
+                type,
+                treatment.getId()
         );
     }
 

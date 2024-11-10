@@ -20,8 +20,9 @@ public interface ITreatmentMedicineRepositoryJPA extends JpaRepository<Treatment
             SELECT t
             FROM TreatmentMedicine t
             WHERE t.Medicine.Id = :medicineId
+            AND t.Treatment.Id = :treatmentId
             """)
-    TreatmentMedicine findMedicineTreatmentsByMedicineId(int medicineId);
+    TreatmentMedicine findMedicineTreatmentByMedicineIdAndTreatmentId(int medicineId, int treatmentId);
 
     @Query("""
             SELECT t

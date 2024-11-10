@@ -65,7 +65,7 @@ public class AnswerableNotificationHandler implements IAnswerableNotificationHan
 
                 SendNotification(notification.getUserId(), request);
                 targetQueue.remove(i);
-                LogMedicine(request.getUserId(), request.getMedicineId());
+                LogMedicine(request.getUserId(), request.getMedicineId(), request.getTreatmentId());
 
                 if(!targetQueue.isEmpty()){
                     redisStackManager.PushAllValues(key, targetQueue);
@@ -78,8 +78,8 @@ public class AnswerableNotificationHandler implements IAnswerableNotificationHan
         }
     }
 
-    private void LogMedicine(int userId, int medicineId){
-        logMedicine.LogConsume(userId, medicineId, "Atrasado");
+    private void LogMedicine(int userId, int medicineId, int treatmentId){
+        logMedicine.LogConsume(userId, medicineId, treatmentId, "Atrasado");
     }
 
     private void SendNotification(int userId, MedicineNotificationRequest medicineRequest){
@@ -99,7 +99,7 @@ public class AnswerableNotificationHandler implements IAnswerableNotificationHan
         }
 
         String text = whatsTextRepositoryJPA.findBySubject("NotificationAnswerable").getText();
-        TreatmentMedicine medicine = treatmentMedicineRepositoryJPA.findMedicineTreatmentsByMedicineId(medicineRequest.getMedicineId());
+        TreatmentMedicine medicine = treatmentMedicineRepositoryJPA.findMedicineTreatmentByMedicineIdAndTreatmentId(medicineRequest.getMedicineId(), medicineRequest.getTreatmentId());
         String medicineHour = LocalTime.now().minusMinutes(5).format(DateTimeFormatter.ofPattern("HH:mm"));
 
         String fillText = String.format(text, medicineRequest.getUserName(), medicine.getMedicine().getName(), medicineHour);

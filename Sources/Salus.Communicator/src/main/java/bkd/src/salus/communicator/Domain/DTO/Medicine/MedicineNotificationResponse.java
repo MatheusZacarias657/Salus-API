@@ -11,4 +11,5 @@ public class MedicineNotificationResponse {
     private String HardwareId;
     private int UserId;
     private int MedicineId;
+    private int TreatmentId;
 }

@@ -1,6 +1,5 @@
 package bkd.src.salus.communicator.Domain.DTO.Notification;
 
-import bkd.src.salus.communicator.Domain.DTO.Medicine.MedicineNotificationRequest;
 import bkd.src.salus.communicator.Domain.DTO.Medicine.MedicineNotificationResponse;
 import lombok.NoArgsConstructor;
 

@@ -15,4 +15,5 @@ public class MedicineNotificationRequest {
     private int MedicineId;
     private float Quantity;
     private int Type; //Comprido 1 Gotas 0
+    private int TreatmentId;
 }

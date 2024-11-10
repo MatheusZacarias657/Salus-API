@@ -10,10 +10,10 @@ import lombok.NoArgsConstructor;
 public class MedicineNotificationRequest {
     private String HardwareId;
     private int UserId;
-    private int MedicineId;
-
-    private String UserName;
     private int DrawerNumber;
+    private String UserName;
+    private int MedicineId;
     private float Quantity;
-    private int Type;
+    private int Type; //Comprido 1 Gotas 0
+    private int TreatmentId;
 }

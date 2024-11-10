@@ -29,19 +29,11 @@ public class LogMedicine implements ILogMedicine {
     }
 
     @Override
-    public void LogConsume(int userId, int medicineId, String action){
-        TreatmentMedicine treatmentMedicine = treatmentMedicineRepositoryJPA.findMedicineTreatmentsByMedicineId(medicineId);
+    public void LogConsume(int userId, int medicineId, int treatmentId, String action){
+        UserAccount user = userRepositoryJPA.getReferenceById(userId);
         Patient patient = patientRepositoryJPA.findPatientByUserId(userId);
-        MedicineConsumeLog consumeLog;
-
-        if(patient == null){
-            UserAccount user = userRepositoryJPA.findById(userId).get();
-            consumeLog = new MedicineConsumeLog(user, treatmentMedicine, action);
-        }
-        else {
-            consumeLog = new MedicineConsumeLog(patient, treatmentMedicine, action);
-        }
-
+        TreatmentMedicine treatmentMedicine = treatmentMedicineRepositoryJPA.findMedicineTreatmentByMedicineIdAndTreatmentId(medicineId, treatmentId);
+        MedicineConsumeLog consumeLog = (patient == null) ? new MedicineConsumeLog(user, treatmentMedicine, action) : new MedicineConsumeLog(patient, treatmentMedicine, action);
         medicineConsumeLogRepositoryMR.save(consumeLog);
     }
 }
