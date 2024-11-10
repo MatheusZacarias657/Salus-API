@@ -79,7 +79,7 @@ public class ResponseNotificationHandler implements IResponseNotificationHandler
         topics.remove(topicResponse);
 
         for(MedicineNotificationRequest removedNotification : uniqueRemoved){
-            MedicineNotificationResponse repeaterResponse = new MedicineNotificationResponse(removedNotification.getHardwareId(), removedNotification.getUserId(), removedNotification.getMedicineId());
+            MedicineNotificationResponse repeaterResponse = new MedicineNotificationResponse(removedNotification.getHardwareId(), removedNotification.getUserId(), removedNotification.getMedicineId(), removedNotification.getTreatmentId());
             ConsumeMedicineConfirmation repeaterConfirmation = new ConsumeMedicineConfirmation("Repeater", repeaterResponse);
 
             for(String topic : topics){
@@ -92,7 +92,6 @@ public class ResponseNotificationHandler implements IResponseNotificationHandler
             MedicineDecrementRequest medicineDecrement = new MedicineDecrementRequest(removedNotification.getUserId(), removedNotification.getMedicineId(), removedNotification.getQuantity());
             messageSender.SendMessageOnExchange(objectMap.toJson(medicineDecrement), "mqtt-medicine-notification-response-exchange");
         }
-
 
         return nextNotifications;
     }
