@@ -1,10 +1,13 @@
 ﻿using Domain.DTO.Message;
+using Domain.DTO.Vonage;
 using Domain.Entity.Redis;
 using Domain.Enum;
 using Domain.Interface.Application;
 using Domain.Interface.Repository;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using System.Net;
 using Vonage;
 using Vonage.Messages;
 using Vonage.Messages.WhatsApp;
@@ -17,12 +20,14 @@ namespace Whatsapp.VonageAPI.Services.Utils
         private readonly IConfiguration _configuration;
         private readonly ILogger<SendMessage> _logger;
         private readonly IMessageManager _messageManager;
+        private readonly IHttpFactoryRequests _httpRequests;
 
-        public SendMessage(IConfiguration configuration, ILogger<SendMessage> logger, IMessageManager messageManager)
+        public SendMessage(IHttpFactoryRequests httpRequests, IConfiguration configuration, ILogger<SendMessage> logger, IMessageManager messageManager)
         {
             _configuration = configuration;
             _logger = logger;
             _messageManager = messageManager;
+            _httpRequests = httpRequests;
         }
 
         public void SendMessageToUser(List<ConstructMessage> messages, string userNumber)
@@ -53,22 +58,22 @@ namespace Whatsapp.VonageAPI.Services.Utils
                 throw;
             }
         }
-
-        public async Task SendSingleMessage(QueueMessage message)
+        
+        private async Task SendProdMessage(QueueMessage message)
         {
             try
             {
                 if (message == null)
                     return;
 
-                string sophieNumber = _configuration.GetValue<string>("Settings:Vonage:SophieNumber");
+                string systemNumber = _configuration.GetValue<string>("Settings:Vonage:SystemNumber");
                 string appId = _configuration.GetValue<string>("Settings:Vonage:AppId");
                 string privateKey = _configuration.GetValue<string>("Settings:Vonage:PrivateKey");
 
                 Credentials credentials = Credentials.FromAppIdAndPrivateKey(appId, privateKey);
                 VonageClient vonageClient = new VonageClient(credentials);
 
-                var request = GenerateRequest(message.Message, message.UserNumber, sophieNumber);
+                var request = GenerateRequest(message.Message, message.UserNumber, systemNumber);
                 _logger.LogDebug("O payload da Vonage para {@current} é {@request}", message, request);
                 MessagesResponse response = await vonageClient.MessagesClient.SendAsync(request);
                 _logger.LogDebug("O response da Vonage para {@request} é {@response}", request, response);
@@ -96,6 +101,50 @@ namespace Whatsapp.VonageAPI.Services.Utils
                 }
 
                 return;
+            }
+        }
+
+        private async Task SendSandboxMessage(QueueMessage message)
+        {
+            string systemNumber = _configuration.GetValue<string>("Settings:Vonage:SystemNumber");
+
+            VonageSandbox payload = new VonageSandbox()
+            {
+                from = systemNumber,
+                to = message.UserNumber,
+                message_type = "text",
+                text = message.Message.text,
+                channel = "whatsapp"
+            };
+
+            Uri url = _httpRequests.BuildUri(_configuration.GetValue<string>("Settings:Vonage:SandBox:Url"), "/v1/messages");
+
+            string authentication = Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes($"{_configuration.GetValue<string>("Settings:Vonage:SandBox:User")}:{_configuration.GetValue<string>("Settings:Vonage:SandBox:Password")}"));
+            Dictionary<string, string> header = new Dictionary<string, string>() { 
+                { "Authorization", $"Basic {authentication}" },
+                 { "Accept", "application/json" }
+            };
+
+            HttpResponseMessage response = _httpRequests.DefaultPostRequest(url, payload, header).Result;
+
+            string a = _httpRequests.ProcessResponse<string>(response);
+            if (response.StatusCode != HttpStatusCode.Accepted)
+            {
+                Console.WriteLine("Error");
+            }
+        }
+
+        public async Task SendSingleMessage(QueueMessage message)
+        {
+            string isSandbox = _configuration.GetValue<string>("Settings:Vonage:IsSandBox");
+
+            if (Convert.ToBoolean(isSandbox))
+            {
+                SendSandboxMessage(message);
+            }
+            else
+            {
+                SendProdMessage(message);
             }
         }
 

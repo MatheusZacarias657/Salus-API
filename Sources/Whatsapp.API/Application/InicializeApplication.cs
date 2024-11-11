@@ -1,4 +1,5 @@
-﻿using Application.ManageMessage;
+﻿using Application.HttpRequest;
+using Application.ManageMessage;
 using Application.RabbitMQ;
 using Domain.Interface.Application;
 using Microsoft.Extensions.Configuration;
@@ -21,6 +22,9 @@ namespace Application
 
             //Add Rabbit
             services.AddTransient<IMessageReceiver, MessageReceiver>();
+
+            // Add Factory
+            services.AddSingleton<IHttpFactoryRequests, HttpFactoryRequests>();
 
             return services;
         }

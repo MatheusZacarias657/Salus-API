@@ -19,14 +19,6 @@ public interface ITreatmentMedicineRepositoryJPA extends JpaRepository<Treatment
     @Query("""
             SELECT t
             FROM TreatmentMedicine t
-            WHERE t.Medicine.Id = :medicineId
-            AND t.Treatment.Id = :treatmentId
-            """)
-    TreatmentMedicine findMedicineTreatmentByMedicineIdAndTreatmentId(int medicineId, int treatmentId);
-
-    @Query("""
-            SELECT t
-            FROM TreatmentMedicine t
             WHERE t.Treatment.User.Id = :userId
             AND :date BETWEEN t.TreatmentInit AND t.TreatmentEnd
             """)

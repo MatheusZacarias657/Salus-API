@@ -115,7 +115,8 @@ namespace Whatsapp.VonageAPI.Services.Utils
                     {
                         newList.Add(new ConstructMessage
                         {
-                            text = textAggregate
+                            text = textAggregate,
+                            messageType = RequestMessageType.Text
                         });
 
                         textAggregate = "";
@@ -129,7 +130,8 @@ namespace Whatsapp.VonageAPI.Services.Utils
                     {
                         newList.Add(new ConstructMessage
                         {
-                            text = textAggregate
+                            text = textAggregate,
+                            messageType = message.messageType
                         });
 
                         textAggregate = "";
@@ -147,7 +149,9 @@ namespace Whatsapp.VonageAPI.Services.Utils
             {
                 newList.Add(new ConstructMessage
                 {
-                    text = textAggregate
+                    text = textAggregate,
+                    messageType = RequestMessageType.Text
+
                 });
             }
 
