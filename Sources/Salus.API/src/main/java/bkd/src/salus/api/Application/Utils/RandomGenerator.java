@@ -24,7 +24,7 @@ public class RandomGenerator {
 
     public static String Password()
     {
-        int size = 12;
+        int size = 6;
         Random random = new Random();
         char[] randomPassword = new char[size];
         String values = CapitalChars + SmallChars + Numbers;
