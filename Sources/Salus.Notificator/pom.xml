@@ -8,10 +8,10 @@
 		<version>3.3.1</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>bkd.src.salus</groupId>
-	<artifactId>notificator</artifactId>
+	<groupId>bkd.src</groupId>
+	<artifactId>salus.notificator</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>notificator</name>
+	<name>Salus.Notificator</name>
 	<description>Notificator to Salus Ecosystem</description>
 	<url/>
 	<licenses>

@@ -5,7 +5,7 @@ CREATE TABLE treatment_medicine
     Medicine_Id INT NOT NULL,
     Dosage INT NOT NULL,
     Frequency FLOAT NOT NULL,
-    Treatment_End DATETIME NOT NULL,
+    Treatment_End DATETIME NULL,
     Treatment_Init DATETIME NOT NULL,
     Finished BIT NOT NULL,
 

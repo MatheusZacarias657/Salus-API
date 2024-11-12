@@ -8,10 +8,10 @@
 		<version>3.3.1</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>bkd.src.salus</groupId>
-	<artifactId>communicator</artifactId>
+	<groupId>bkd.src</groupId>
+	<artifactId>salus.communicator</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>communicator</name>
+	<name>Salus.Communicator</name>
 	<description>Communicator to Salus Ecosistem</description>
 	<url/>
 	<licenses>

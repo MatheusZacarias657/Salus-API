@@ -8,10 +8,15 @@ set -e
 echo "Build Applications.."
 
 if [ -z "$1" ]; then
-    docker build -t salus-api -f $BASEDIR/Sources/Dockerfile-API .
+    docker build -t salus-api -f $BASEDIR/Sources/Dockerfile-api .
+    docker build -t salus-communicator -f $BASEDIR/Sources/Dockerfile-communicator .
+    docker build -t salus-notificator -f $BASEDIR/Sources/Dockerfile-notificator .
     docker build -t rabbitmq-custom -f $BASEDIR/Dockerfile-RabbitMQ .
 elif [ "$1" = "no-build" ]; then
     echo "No Build Requested"
+else
+     echo "Specific Build Requested"
+     docker build -t salus-$1 -f $BASEDIR/Sources/Dockerfile-$1 .
 fi
 
 echo ""
@@ -29,6 +34,7 @@ $WAIT_FOR_IT localhost:1433 --timeout=60 --strict -- echo "Service is up"
 $WAIT_FOR_IT localhost:27017 --timeout=60 --strict -- echo "Service is up"
 $WAIT_FOR_IT localhost:6379 --timeout=60 --strict -- echo "Service is up"
 $WAIT_FOR_IT localhost:15672 --timeout=60 --strict -- echo "Service is up"
+$WAIT_FOR_IT localhost:5672 --timeout=60 --strict -- echo "Service is up"
 
 echo ""
 echo "Trying to up the System..."

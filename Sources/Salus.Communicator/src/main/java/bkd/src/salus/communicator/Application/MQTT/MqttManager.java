@@ -5,6 +5,7 @@ import bkd.src.salus.communicator.Domain.Interface.Application.MQTT.IMqttManager
 import bkd.src.salus.communicator.Domain.Interface.Application.Notification.IResponseNotificationHandler;
 import bkd.src.salus.communicator.Domain.Interface.Repository.IRedisStackManager;
 import bkd.src.salus.communicator.Domain.Interface.Repository.ITopicRepository;
+import jakarta.annotation.PostConstruct;
 import org.eclipse.paho.client.mqttv3.*;
 import org.eclipse.paho.client.mqttv3.persist.MqttDefaultFilePersistence;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +21,7 @@ import java.util.UUID;
 @EnableScheduling
 public class MqttManager implements IMqttManager {
 
-    @Value("${comm.mqtt.broker}")
+    @Value("${api.mqtt.broker}")
     private String mqttBroker;
 
     private static MqttAsyncClient mqttClient;
@@ -33,8 +34,11 @@ public class MqttManager implements IMqttManager {
         this.topicRepositoryMR = topicRepositoryMR;
         this.redisStackManager = redisStackManager;
         this.notificationHandler = notificationHandler;
-        mqttBroker = "tcp://localhost:1883";
         redisStackManager.DeleteList("current_topics");
+    }
+
+    @PostConstruct
+    public void init() throws MqttException {
         InitializeMQTT();
     }
 
@@ -42,6 +46,7 @@ public class MqttManager implements IMqttManager {
         UUID uuid = UUID.randomUUID();
         String tempDir = System.getProperty("java.io.tmpdir");
         MqttDefaultFilePersistence persistence = new MqttDefaultFilePersistence(tempDir);
+        System.out.println("Broker: " + mqttBroker);
         mqttClient = new MqttAsyncClient(mqttBroker, uuid.toString(), persistence);
         MqttConnectOptions mqttOptions = new MqttConnectOptions();
         mqttOptions.setCleanSession(true);

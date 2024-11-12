@@ -52,10 +52,14 @@ public class MedicineNotificationManager implements IMedicineNotificationManager
             if(CheckNotificationToSend(treatmentMedicine, treatment)){
                 MedicineRequestNotification requestNotification = new MedicineRequestNotification(treatmentMedicine, treatment);
 
+                Duration duration = Duration.between(LocalDateTime.now(), treatmentMedicine.getTreatmentInit());
+                int initialNotification = (int) duration.toMillis();
+                int schedulingTime = (initialNotification < 0) ? Converter.ConvertHoursToMilly(treatmentMedicine.getFrequency()) : initialNotification;
+
                 rabbitMessageSender.SendMessageOnExchangeAsync(
                         objectMap.toJson(requestNotification),
                         "request-medicine-notification-exchange",
-                        Converter.ConvertHoursToMilly(treatmentMedicine.getFrequency()));
+                        schedulingTime);
             }
         }
     }

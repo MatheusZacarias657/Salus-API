@@ -31,36 +31,63 @@ services:
     networks:
       - salus-network
 
-  # salus-communicator:
-  #   image: salus-api
-  #   container_name: alus-communicator
-  #   build:
-  #     context: Salus.Communicator
-  #   ports:
-  #     - 8081:7778   
-  #   environment:
-  #     - SQL_CONN=jdbc:sqlserver://db-mssql;databaseName=SalusDB;encrypt=true;trustServerCertificate=true;
+  salus-communicator:
+    image: salus-communicator
+    container_name: salus-communicator
+    build:
+      context: Salus.Communicator
+    ports:
+      - 7778:7778   
+    environment:
+      - MQTT_BROKER=tcp://mqtt-mosquitto:1883
 
-  # salus-notificator:
-  #   image: salus-api
-  #   container_name: salus-notificator
-  #   build:
-  #     context: Salus.API
-  #   ports:
-  #     - 8082:7779   
-  #   environment:
-  #     - SQL_CONN=jdbc:sqlserver://db-mssql;databaseName=SalusDB;encrypt=true;trustServerCertificate=true;
+      - SQL_CONN=jdbc:sqlserver://db-mssql;databaseName=SalusDB;encrypt=true;trustServerCertificate=true;
+      - SQL_USER=sa
+      - SQL_PWD=Ba705b8ta4428858eetadb8a
 
-  # salus-report:
-  #   image: salus-api
-  #   container_name: salus-report
-  #   build:
-  #     context: Salus.API
-  #   ports:
-  #     - 8083:7771   
-  #   environment:
-  #     - SQL_CONN=jdbc:sqlserver://db-mssql;databaseName=SalusDB;encrypt=true;trustServerCertificate=true;
+      - NoSQL_HOST=db-mongo
+      - NoSQL_PORT=27017
+      - NoSQL_DB=SalusDB
+      - NoSQL_USER=salus
+      - NoSQL_PWD=Ba705b8ta4428858eetadb8a 
 
+      - RABBIT_HOST=rabbitmq
+      - RABBIT_PORT=5672
+      - RABBIT_USER=salus
+      - RABBIT_PWD=Ba705b8ta4428858eetadb8a
+
+      - REDIS_HOST=db-redis
+      - REDIS_PORT=6379
+    networks:
+      - salus-network
+
+  salus-notificator:
+    image: salus-notificator
+    container_name: salus-notificator
+    build:
+      context: Salus.Notificator
+    ports:
+      - 7779:7779   
+    environment:
+      - SQL_CONN=jdbc:sqlserver://db-mssql;databaseName=SalusDB;encrypt=true;trustServerCertificate=true;
+      - SQL_USER=sa
+      - SQL_PWD=Ba705b8ta4428858eetadb8a
+
+      - NoSQL_HOST=db-mongo
+      - NoSQL_PORT=27017
+      - NoSQL_DB=SalusDB
+      - NoSQL_USER=salus
+      - NoSQL_PWD=Ba705b8ta4428858eetadb8a 
+
+      - RABBIT_HOST=rabbitmq
+      - RABBIT_PORT=5672
+      - RABBIT_USER=salus
+      - RABBIT_PWD=Ba705b8ta4428858eetadb8a
+
+      - REDIS_HOST=db-redis
+      - REDIS_PORT=6379
+    networks:
+      - salus-network
 volumes:
   mssql-data:
 

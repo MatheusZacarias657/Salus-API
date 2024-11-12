@@ -17,7 +17,6 @@ import bkd.src.salus.notificator.Repository.SQL.IWhatsTextRepositoryJPA;
 import bkd.src.salus.notificator.Repository.SQL.Patient.IPatientRepositoryJPA;
 import bkd.src.salus.notificator.Repository.SQL.Treatment.ITreatmentMedicineRepositoryJPA;
 import com.google.gson.Gson;
-import org.graalvm.collections.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
