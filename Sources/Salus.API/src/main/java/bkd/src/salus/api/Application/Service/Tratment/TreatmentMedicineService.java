@@ -15,6 +15,7 @@ import bkd.src.salus.api.Repository.SQL.Medicine.IMedicineRepositoryJPA;
 import bkd.src.salus.api.Repository.SQL.Treatment.ITreatmentMedicineRepositoryJPA;
 import bkd.src.salus.api.Repository.SQL.User.IUserRepositoryJPA;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -38,12 +39,13 @@ public class TreatmentMedicineService implements ITreatmentMedicineService, IDay
     }
 
     @Override
+    @Transactional
     public List<DetailingTreatmentMedicineDTO> Register(List<RegisterMedicineTreatmentDTO> registers, Treatment treatment){
         List<DetailingTreatmentMedicineDTO> results = new ArrayList<>();
         List<TreatmentMedicine> entities = new ArrayList<>();
 
         for(RegisterMedicineTreatmentDTO register : registers){
-            Medicine medicine = medicineRepository.getReferenceById(register.getMedicineId());
+            Medicine medicine = medicineRepository.findById(register.getMedicineId()).get();
             TreatmentMedicine entity = new TreatmentMedicine(register, medicine, treatment);
             entities.add(entity);
             results.add(new DetailingTreatmentMedicineDTO(entity));

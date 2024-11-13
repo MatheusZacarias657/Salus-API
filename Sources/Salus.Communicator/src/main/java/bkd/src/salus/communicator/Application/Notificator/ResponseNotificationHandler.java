@@ -44,6 +44,9 @@ public class ResponseNotificationHandler implements IResponseNotificationHandler
             case "ConsumeConfirmation":
                 return ProcessConsume(objectMap.fromJson(notification, ConsumeMedicineConfirmation.class), topicResponse);
 
+            case "ConsumeFailed":
+                //TODO: desempilhar e enviar pro gaveteiro novamente
+                break;
             case "GenericAction":
                 break;
 
@@ -76,15 +79,20 @@ public class ResponseNotificationHandler implements IResponseNotificationHandler
         }
 
         Set<MedicineNotificationRequest> uniqueRemoved = new HashSet<>(removed);
-        topics.remove(topicResponse);
+
+        if(topicResponse.contains("drawer")){
+            topics.removeIf(s -> s.contains("drawer"));
+        }
+        else if (topicResponse.contains("user")){
+            topics.removeIf(s -> s.contains("user"));
+        }
 
         for(MedicineNotificationRequest removedNotification : uniqueRemoved){
             MedicineNotificationResponse repeaterResponse = new MedicineNotificationResponse(removedNotification.getHardwareId(), removedNotification.getUserId(), removedNotification.getMedicineId(), removedNotification.getTreatmentId());
             ConsumeMedicineConfirmation repeaterConfirmation = new ConsumeMedicineConfirmation("Repeater", repeaterResponse);
 
             for(String topic : topics){
-
-                if(!topic.contains("response")){
+                if(!topic.contains("response") && !topic.equals(topicResponse)){
                     nextNotifications.add(new NextNotification(objectMap.toJson(repeaterConfirmation), topic));
                 }
             }

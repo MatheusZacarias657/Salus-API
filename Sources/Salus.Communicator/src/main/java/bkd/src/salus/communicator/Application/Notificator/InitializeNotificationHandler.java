@@ -79,10 +79,11 @@ public class InitializeNotificationHandler implements IInitializeNotificationHan
 
         AnswerableNotification answerableNotification = new AnswerableNotification(notificationRequest.getUserId(), notificationRequest.getMedicineId());
 
+        //TODO: correção disso
         rabbitMessageSender.SendMessageOnExchangeAsync(
                 objectMap.toJson(answerableNotification),
-                "notification-medicine-answerable-queue",
-                Converter.ConvertMinutesToMilly(5));
+                "notification-medicine-answerable-exchange",
+                Converter.ConvertMinutesToMilly(10));
     }
 
     private void SendNotification(String topic, MedicineNotificationRequest notificationRequest){

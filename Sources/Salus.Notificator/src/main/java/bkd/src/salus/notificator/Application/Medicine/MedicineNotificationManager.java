@@ -20,6 +20,8 @@ import org.springframework.stereotype.Service;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 @Service
@@ -55,6 +57,14 @@ public class MedicineNotificationManager implements IMedicineNotificationManager
                 Duration duration = Duration.between(LocalDateTime.now(), treatmentMedicine.getTreatmentInit());
                 int initialNotification = (int) duration.toMillis();
                 int schedulingTime = (initialNotification < 0) ? Converter.ConvertHoursToMilly(treatmentMedicine.getFrequency()) : initialNotification;
+
+                LocalDateTime now = LocalDateTime.now();
+                LocalDateTime updatedTime = now.plus(schedulingTime, ChronoUnit.MILLIS);
+
+                // Format the result to "DD/MM/YYYY HH:mm"
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+                String formattedDate = updatedTime.format(formatter);
+                System.out.println("Next execution is on: " + formattedDate);
 
                 rabbitMessageSender.SendMessageOnExchangeAsync(
                         objectMap.toJson(requestNotification),
@@ -141,6 +151,14 @@ public class MedicineNotificationManager implements IMedicineNotificationManager
         System.out.printf("Scheduling nex consume of Medicine %d\n", treatmentMedicine.getMedicine().getId());
         if(CheckNotificationToSend(treatmentMedicine, treatment)){
             MedicineRequestNotification requestNotification = new MedicineRequestNotification(treatmentMedicine, treatment);
+
+            LocalDateTime now = LocalDateTime.now();
+            LocalDateTime updatedTime = now.plus(Converter.ConvertHoursToMilly(treatmentMedicine.getFrequency()), ChronoUnit.MILLIS);
+
+            // Format the result to "DD/MM/YYYY HH:mm"
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+            String formattedDate = updatedTime.format(formatter);
+            System.out.println("Next execution is on: " + formattedDate);
 
             rabbitMessageSender.SendMessageOnExchangeAsync(
                     objectMap.toJson(requestNotification),

@@ -14,6 +14,7 @@ import bkd.src.salus.api.Repository.SQL.Treatment.ITreatmentRepositoryJPA;
 import bkd.src.salus.api.Repository.SQL.User.IUserRepositoryJPA;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.*;
@@ -37,8 +38,10 @@ public class TreatmentService implements ITreatmentService {
     }
 
     @Override
+    @Transactional
     public CompleteDetailingTreatment Create(CompleteRegisterTreatment register, int userId){
 
+        //TODO: validar os medicamentos antes de registrar
         if (repository.findTreatmentByName(register.getTreatment().getName(), userId) != null){
             throw new ValidationException( "This treatment already exists");
         }

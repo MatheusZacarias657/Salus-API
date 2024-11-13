@@ -43,7 +43,6 @@ public class UserService implements IUserService, IAuthUser {
         this.findProfilePicture = findProfilePicture;
     }
 
-    @Transactional
     public TokenResponse CreateUser(UserGenericDTO user){
         UserAccount entity = new UserAccount(user);
         entity.setPassword(passwordEncoder.encode(user.getPassword()));

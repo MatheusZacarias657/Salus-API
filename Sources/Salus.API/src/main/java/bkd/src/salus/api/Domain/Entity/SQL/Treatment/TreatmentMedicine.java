@@ -46,7 +46,7 @@ public class TreatmentMedicine {
         this.Medicine = medicine;
         this.Dosage = register.getDosage();
         this.Frequency = register.getFrequency();
-        this.TreatmentEnd = (register.getTreatmentEnd() == null) ? LocalDateTime.MAX : register.getTreatmentEnd();
+        this.TreatmentEnd = register.getTreatmentEnd();
         this.TreatmentInit = register.getTreatmentInit();
         this.Finished = false;
     }
