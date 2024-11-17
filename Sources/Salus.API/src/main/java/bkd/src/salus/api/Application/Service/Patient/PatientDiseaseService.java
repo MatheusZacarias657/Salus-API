@@ -1,5 +1,6 @@
 package bkd.src.salus.api.Application.Service.Patient;
 
+import bkd.src.salus.api.Domain.DTO.Patient.Allergy.RegisterPatientAllergyDTO;
 import bkd.src.salus.api.Domain.DTO.Patient.Disease.DetailingPatientDiseaseDTO;
 import bkd.src.salus.api.Domain.DTO.Patient.Disease.RegisterPatientDiseaseDTO;
 import bkd.src.salus.api.Domain.Entity.SQL.Patient.Patient;
@@ -11,7 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class PatientDiseaseService implements IPatientComponentService<DetailingPatientDiseaseDTO,RegisterPatientDiseaseDTO> {
@@ -29,8 +32,11 @@ public class PatientDiseaseService implements IPatientComponentService<Detailing
         Patient patientEntity = patientRepository.findPatientByUserId(userId);
         List<PatientDisease> entities = new ArrayList<>();
 
-        for(RegisterPatientDiseaseDTO registerDisease : registers){
-            PatientDisease disease = diseaseRepository.findPatientDiseasesByUserIdAndName(userId, registerDisease.getDisease());
+        List<String> allDiseases = registers.stream().map(RegisterPatientDiseaseDTO::getDisease).toList();
+        Set<String> uniqueNames = new HashSet<>(allDiseases);
+
+        for(String registerDisease : uniqueNames){
+            PatientDisease disease = diseaseRepository.findPatientDiseasesByUserIdAndName(userId, registerDisease);
 
             if(disease == null){
                 entities.add(new PatientDisease(registerDisease, patientEntity));

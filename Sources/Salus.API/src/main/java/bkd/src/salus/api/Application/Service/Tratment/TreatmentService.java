@@ -90,14 +90,20 @@ public class TreatmentService implements ITreatmentService {
     }
 
     private ResumeDetailingTreatment GenerateResume(List<DetailingTreatmentMedicineDTO> medicines){
+
+        if(medicines.isEmpty()){
+            return new ResumeDetailingTreatment();
+        }
+
         ResumeDetailingTreatment resume = new ResumeDetailingTreatment();
 
         List<String> medicinesNames = medicines.stream().map(DetailingTreatmentMedicineDTO::getMedicine).toList();
         Set<String> uniqueNames = new HashSet<>(medicinesNames);
         resume.setMedicineQuantity(uniqueNames.size());
 
-        List<LocalDateTime> medicinesEnds = medicines.stream().map(DetailingTreatmentMedicineDTO::getTreatmentEnd).toList();
-        resume.setLastEndDate(Collections.max(medicinesEnds));
+        List<LocalDateTime> medicinesEnds = new ArrayList<>(medicines.stream().map(DetailingTreatmentMedicineDTO::getTreatmentEnd).toList());
+        medicinesEnds.removeIf(Objects::isNull);
+        resume.setLastEndDate((medicinesEnds.isEmpty()) ? null : Collections.max(medicinesEnds));
 
         List<LocalDateTime> medicinesInits = medicines.stream().map(DetailingTreatmentMedicineDTO::getTreatmentInit).toList();
         resume.setFirstInitDate(Collections.min(medicinesInits));

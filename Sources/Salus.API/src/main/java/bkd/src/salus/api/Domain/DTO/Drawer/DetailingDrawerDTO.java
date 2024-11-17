@@ -16,12 +16,14 @@ public class DetailingDrawerDTO {
     private String HardwareId;
     private String Name;
     private String User;
+    private int NumberOfDrawers;
     private List<String> Topics;
 
     public DetailingDrawerDTO(Drawer drawer, UserAccount user, List<String> topics){
         this.Name = drawer.getName();
         this.HardwareId = drawer.getHardwareId();
         this.User = user.getLogin();
+        this.NumberOfDrawers = drawer.getNumberOfDrawers();
         this.Topics = new ArrayList<>(topics);
     }
 }

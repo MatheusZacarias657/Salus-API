@@ -26,8 +26,8 @@ public class PatientAllergy {
 
     private String Allergy;
 
-    public PatientAllergy(RegisterPatientAllergyDTO patientDetail, Patient patient){
+    public PatientAllergy(String allergy, Patient patient){
         this.Patient = patient;
-        this.Allergy = patientDetail.getAllergy();
+        this.Allergy = allergy;
     }
 }

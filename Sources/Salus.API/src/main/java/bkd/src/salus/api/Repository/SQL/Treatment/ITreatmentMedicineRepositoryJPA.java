@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 public interface ITreatmentMedicineRepositoryJPA extends JpaRepository<TreatmentMedicine, Integer> {
 
@@ -22,5 +23,5 @@ public interface ITreatmentMedicineRepositoryJPA extends JpaRepository<Treatment
             WHERE t.Treatment.User.Id = :userId
             AND :date BETWEEN t.TreatmentInit AND t.TreatmentEnd
             """)
-    List<TreatmentMedicine> findMedicineTreatmentsByDate(int userId, LocalDateTime date);
+    Optional<List<TreatmentMedicine>> findMedicineTreatmentsByDate(int userId, LocalDateTime date);
 }

@@ -1,4 +1,4 @@
-package bkd.src.salus.api.Application.Service.Tratment;
+package bkd.src.salus.api.Domain.Interface.Application.Treatment;
 
 import bkd.src.salus.api.Domain.DTO.Medicine.MedicineCalendarResponse;
 

@@ -26,8 +26,8 @@ public class PatientDisease {
 
     private String Disease;
 
-    public PatientDisease(RegisterPatientDiseaseDTO patientDetail, Patient patient){
+    public PatientDisease(String disease, Patient patient){
         this.Patient = patient;
-        this.Disease = patientDetail.getDisease();
+        this.Disease = disease;
     }
 }

@@ -8,6 +8,7 @@ import bkd.src.salus.api.Domain.DTO.Treatment.RegisterMedicineTreatmentDTO;
 import bkd.src.salus.api.Domain.Entity.SQL.Medicine.Medicine;
 import bkd.src.salus.api.Domain.Entity.SQL.Treatment.Treatment;
 import bkd.src.salus.api.Domain.Entity.SQL.Treatment.TreatmentMedicine;
+import bkd.src.salus.api.Domain.Interface.Application.Treatment.IDayMedicineService;
 import bkd.src.salus.api.Domain.Interface.Application.FileManager.IMedicinePictureService;
 import bkd.src.salus.api.Domain.Interface.Application.Logger.ILogTreatmentRegister;
 import bkd.src.salus.api.Domain.Interface.Application.Treatment.ITreatmentMedicineService;
@@ -65,7 +66,7 @@ public class TreatmentMedicineService implements ITreatmentMedicineService, IDay
     @Override
     public MedicineCalendarResponse FindByDay(int userId, LocalDateTime date){
         String user = userRepositoryJPA.findById(userId).get().getLogin();
-        List<TreatmentMedicine> treatmentMedicines = repository.findMedicineTreatmentsByDate(userId, date);
+        List<TreatmentMedicine> treatmentMedicines = repository.findMedicineTreatmentsByDate(userId, date).orElse(new ArrayList<>());
         List<MedicineCalendarDetailing> responseMedicines = new ArrayList<>();
 
         for(TreatmentMedicine treatmentMedicine : treatmentMedicines){

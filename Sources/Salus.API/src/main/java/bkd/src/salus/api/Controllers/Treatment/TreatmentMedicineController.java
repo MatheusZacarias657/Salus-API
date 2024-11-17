@@ -1,14 +1,9 @@
 package bkd.src.salus.api.Controllers.Treatment;
 
-import bkd.src.salus.api.Application.Service.Tratment.IDayMedicineService;
+import bkd.src.salus.api.Domain.Interface.Application.Treatment.IDayMedicineService;
 import bkd.src.salus.api.Domain.DTO.Medicine.MedicineCalendarDetailing;
 import bkd.src.salus.api.Domain.DTO.Medicine.MedicineCalendarResponse;
-import bkd.src.salus.api.Domain.DTO.Treatment.CompleteDetailingTreatment;
-import bkd.src.salus.api.Domain.DTO.Treatment.CompleteRegisterTreatment;
-import bkd.src.salus.api.Domain.DTO.Treatment.DetailingTreatmentDTO;
-import bkd.src.salus.api.Domain.DTO.Treatment.DetailingTreatmentMedicineDTO;
 import bkd.src.salus.api.Domain.Interface.Application.Auth.ICheckVisibilite;
-import bkd.src.salus.api.Domain.Interface.Application.Treatment.ITreatmentService;
 import bkd.src.salus.api.Domain.Interface.Application.Utils.IFilterList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

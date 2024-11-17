@@ -12,7 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class PatientAllergyService implements IPatientComponentService<DetailingPatientAllergyDTO, RegisterPatientAllergyDTO> {
@@ -35,8 +37,11 @@ public class PatientAllergyService implements IPatientComponentService<Detailing
 
         List<PatientAllergy> entities = new ArrayList<>();
 
-        for(RegisterPatientAllergyDTO registerAllergy : registers){
-            PatientAllergy allergy = allergyRepository.findPatientAllergiesByUserIdAndName(userId, registerAllergy.getAllergy());
+        List<String> allAllergies = registers.stream().map(RegisterPatientAllergyDTO::getAllergy).toList();
+        Set<String> uniqueNames = new HashSet<>(allAllergies);
+
+        for(String registerAllergy : uniqueNames){
+            PatientAllergy allergy = allergyRepository.findPatientAllergiesByUserIdAndName(userId, registerAllergy);
 
             if(allergy == null){
                 entities.add(new PatientAllergy(registerAllergy, patientEntity));

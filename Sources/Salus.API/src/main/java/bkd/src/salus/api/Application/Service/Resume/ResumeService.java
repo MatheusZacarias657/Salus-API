@@ -1,6 +1,6 @@
 package bkd.src.salus.api.Application.Service.Resume;
 
-import bkd.src.salus.api.Application.Service.Tratment.IDayMedicineService;
+import bkd.src.salus.api.Domain.Interface.Application.Treatment.IDayMedicineService;
 import bkd.src.salus.api.Domain.DTO.Medicine.MedicineCalendarDetailing;
 import bkd.src.salus.api.Domain.DTO.Resume.DayResume;
 import bkd.src.salus.api.Domain.DTO.Resume.HasPendency;
