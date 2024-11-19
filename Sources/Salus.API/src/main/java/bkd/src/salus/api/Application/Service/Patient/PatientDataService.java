@@ -52,6 +52,6 @@ public class PatientDataService implements IPatientCrudService<PatientModifierRe
     public PatientModifierResponseDTO GetPatientContent(int userId) {
         Patient entity = patientRepository.findPatientByUserId(userId);
 
-        return new PatientModifierResponseDTO(entity);
+        return (entity != null) ? new PatientModifierResponseDTO(entity) : null;
     }
 }

@@ -5,6 +5,7 @@ import bkd.src.salus.communicator.Domain.DTO.Medicine.MedicineNotificationReques
 import bkd.src.salus.communicator.Domain.DTO.Medicine.MedicineNotificationResponse;
 import bkd.src.salus.communicator.Domain.DTO.Notification.BaseNotification;
 import bkd.src.salus.communicator.Domain.DTO.Notification.ConsumeMedicineConfirmation;
+import bkd.src.salus.communicator.Domain.DTO.Notification.ConsumeMedicineNotification;
 import bkd.src.salus.communicator.Domain.DTO.Notification.NextNotification;
 import bkd.src.salus.communicator.Domain.DTO.Queue.QueueItem;
 import bkd.src.salus.communicator.Domain.Interface.Application.ILogMedicine;
@@ -45,8 +46,8 @@ public class ResponseNotificationHandler implements IResponseNotificationHandler
                 return ProcessConsume(objectMap.fromJson(notification, ConsumeMedicineConfirmation.class), topicResponse);
 
             case "ConsumeFailed":
-                //TODO: desempilhar e enviar pro gaveteiro novamente
-                break;
+                return ProcessFailed(objectMap.fromJson(notification, ConsumeMedicineConfirmation.class), topicResponse);
+
             case "GenericAction":
                 break;
 
@@ -57,12 +58,38 @@ public class ResponseNotificationHandler implements IResponseNotificationHandler
         return new ArrayList<>();
     }
 
+    private List<NextNotification> ProcessFailed(ConsumeMedicineConfirmation confirmation, String topicResponse){
+        List<NextNotification> nextNotifications = new ArrayList<>();
+        MedicineNotificationResponse notificationResponse = confirmation.getParams();
+        List<String> topics = topicRepository.findTopicsByUserIdAndHardwareId(notificationResponse.getUserId(),notificationResponse.getHardwareId());
+        logMedicine.LogConsume(confirmation.getParams().getUserId(), confirmation.getParams().getMedicineId(), confirmation.getParams().getTreatmentId(), "Falhou");
+
+        for (String topic : topics){
+
+            if(topic.contains("drawer")){
+                String key = notificationResponse.getHardwareId();
+                QueueItem itemOnQueue =  FindReference(key, notificationResponse);
+
+                if (itemOnQueue != null){
+                    if(itemOnQueue.getPosition() == 0 && redisStackManager.KeyExists(key) && (topic.contains("drawer") && topic.contains("request"))){
+                        redisStackManager.CatchFirst(key);
+                        ConsumeMedicineNotification notification = new ConsumeMedicineNotification("RequestConsume", itemOnQueue.getMedicine());
+                        nextNotifications.add(new NextNotification(objectMap.toJson(notification), topic));
+                    }
+                }
+            }
+        }
+
+        return nextNotifications;
+    }
+
     private List<NextNotification> ProcessConsume(ConsumeMedicineConfirmation confirmation, String topicResponse){
         List<NextNotification> nextNotifications = new ArrayList<>();
         List<MedicineNotificationRequest> removed = new ArrayList<>();
         MedicineNotificationResponse notificationResponse = confirmation.getParams();
         List<String> topics = topicRepository.findTopicsByUserIdAndHardwareId(notificationResponse.getUserId(),notificationResponse.getHardwareId());
         logMedicine.LogConsume(confirmation.getParams().getUserId(), confirmation.getParams().getMedicineId(), confirmation.getParams().getTreatmentId(), "Consumido");
+        boolean hasFailed = false;
 
         for (String topic : topics){
 
@@ -73,8 +100,12 @@ public class ResponseNotificationHandler implements IResponseNotificationHandler
                 removed.add(itemOnQueue.getMedicine());
 
                 if(itemOnQueue.getPosition() == 0 && redisStackManager.KeyExists(key) && (topic.contains("drawer") && topic.contains("request"))){
-                    nextNotifications.add(new NextNotification(redisStackManager.CatchFirst(key), topic));
+                    ConsumeMedicineNotification notification = new ConsumeMedicineNotification("RequestConsume", itemOnQueue.getMedicine());
+                    nextNotifications.add(new NextNotification(objectMap.toJson(notification), topic));
                 }
+            }
+            else{
+                hasFailed = true;
             }
         }
 
@@ -92,7 +123,7 @@ public class ResponseNotificationHandler implements IResponseNotificationHandler
             ConsumeMedicineConfirmation repeaterConfirmation = new ConsumeMedicineConfirmation("Repeater", repeaterResponse);
 
             for(String topic : topics){
-                if(!topic.contains("response") && !topic.equals(topicResponse)){
+                if(!topic.contains("response") && !topic.equals(topicResponse) && !hasFailed){
                     nextNotifications.add(new NextNotification(objectMap.toJson(repeaterConfirmation), topic));
                 }
             }

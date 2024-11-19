@@ -51,7 +51,7 @@ public class DrawerService implements IDrawerService, IDrawerResumeService {
         Drawer drawerEntity = new Drawer(register);
         drawerRepository.save(drawerEntity);
 
-        UserAccount user = userRepository.getReferenceById(userId);
+        UserAccount user = userRepository.findById(userId).get();
         DrawerGroup drawerGroup = new DrawerGroup(drawerEntity, user);
         drawerGroup.AddUser(user);
         drawerGroupRepository.save(drawerGroup);

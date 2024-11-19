@@ -88,6 +88,22 @@ services:
       - REDIS_PORT=6379
     networks:
       - salus-network
+
+  salus-whatsapp:
+    image: salus-whatsapp
+    container_name: salus-whatsapp
+    build:
+      context: Whatsapp.API
+    ports:
+      - 7780:7780   
+    environment:
+      - Settings__Connections__RedisUrl=db-redis:6379
+
+      - Settings__RabbitMQ__Host=rabbitmq
+      - Settings__RabbitMQ__User=salus
+      - Settings__RabbitMQ__Password=Ba705b8ta4428858eetadb8a
+    networks:
+      - salus-network
 volumes:
   mssql-data:
 

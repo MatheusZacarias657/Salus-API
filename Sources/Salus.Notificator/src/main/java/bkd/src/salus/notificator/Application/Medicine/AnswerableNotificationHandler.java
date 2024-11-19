@@ -101,10 +101,10 @@ public class AnswerableNotificationHandler implements IAnswerableNotificationHan
         TreatmentMedicine medicine = treatmentMedicineRepositoryJPA.findMedicineTreatmentByMedicineIdAndTreatmentId(medicineRequest.getMedicineId(), medicineRequest.getTreatmentId());
         String medicineHour = LocalTime.now().minusMinutes(5).format(DateTimeFormatter.ofPattern("HH:mm"));
 
-        String fillText = String.format(text, medicineRequest.getUserName(), medicine.getMedicine().getName(), medicineHour);
+        String fillText = String.format(text, answerable.getName(), medicineRequest.getUserName(), medicine.getMedicine().getName(), medicineHour);
         LogNotification(medicine, answerable, user, fillText);
 
-        RequestWhatsappNotification request = new RequestWhatsappNotification(true, answerable.getTelephone(), fillText);
+        RequestWhatsappNotification request = new RequestWhatsappNotification(false, answerable.getTelephone(), fillText);
         String messageToSend = objectMap.toJson(request);
         System.out.printf("The user %s doesn't consume the medicine %d, now user %s will be notified\n", user.getLogin(), medicineRequest.getMedicineId(), answerable.getUser().getLogin());
         rabbitMessageSender.SendMessageOnExchange(messageToSend, "whatsapp-notification-exchange");

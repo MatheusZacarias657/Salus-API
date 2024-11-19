@@ -12,6 +12,7 @@ if [ -z "$1" ]; then
     docker build -t salus-communicator -f $BASEDIR/Sources/Dockerfile-communicator .
     docker build -t salus-notificator -f $BASEDIR/Sources/Dockerfile-notificator .
     docker build -t rabbitmq-custom -f $BASEDIR/Dockerfile-RabbitMQ .
+    docker build -t salus-whatsapp -f $BASEDIR/Dockerfile-whatsapp .
 elif [ "$1" = "no-build" ]; then
     echo "No Build Requested"
 else

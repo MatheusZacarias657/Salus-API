@@ -1,0 +1,24 @@
+FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS base
+WORKDIR /app
+EXPOSE 80
+EXPOSE 443
+
+FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
+WORKDIR /src
+
+COPY ["Sources/Whatsapp.API/", "Whatsapp.API/"]
+# COPY ["Sources/Whatsapp.API/Domain/", "Domain/"]
+# COPY ["Sources/Whatsapp.API/Repository/", "Repository/"]
+# COPY ["Sources/Whatsapp.API/Application/", "Application/"]
+RUN dotnet restore "Whatsapp.API/Whatsapp.VonageAPI.sln"
+COPY . .
+WORKDIR "/src/Whatsapp.API"
+RUN dotnet build "Whatsapp.VonageAPI.sln" -c Release -o /app/build
+
+FROM build AS publish
+RUN dotnet publish "Whatsapp.VonageAPI.sln" -c Release -o /app/publish
+
+FROM base AS final
+WORKDIR /app
+COPY --from=publish /app/publish .
+ENTRYPOINT ["dotnet", "Whatsapp.VonageAPI.dll"]

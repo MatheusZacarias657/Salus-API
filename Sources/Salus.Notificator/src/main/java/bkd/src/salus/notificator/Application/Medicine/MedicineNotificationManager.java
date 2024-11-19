@@ -63,8 +63,8 @@ public class MedicineNotificationManager implements IMedicineNotificationManager
 
                 // Format the result to "DD/MM/YYYY HH:mm"
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
-                String formattedDate = updatedTime.format(formatter);
-                System.out.println("Next execution is on: " + formattedDate);
+                System.out.println("Current date: " + now.format(formatter));
+                System.out.println("Next execution is on: " + updatedTime.format(formatter));
 
                 rabbitMessageSender.SendMessageOnExchangeAsync(
                         objectMap.toJson(requestNotification),
@@ -157,8 +157,8 @@ public class MedicineNotificationManager implements IMedicineNotificationManager
 
             // Format the result to "DD/MM/YYYY HH:mm"
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
-            String formattedDate = updatedTime.format(formatter);
-            System.out.println("Next execution is on: " + formattedDate);
+            System.out.println("Current date: " + now.format(formatter));
+            System.out.println("Next execution is on: " + updatedTime.format(formatter));
 
             rabbitMessageSender.SendMessageOnExchangeAsync(
                     objectMap.toJson(requestNotification),

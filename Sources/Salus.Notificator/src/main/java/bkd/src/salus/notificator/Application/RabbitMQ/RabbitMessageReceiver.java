@@ -59,7 +59,7 @@ public class RabbitMessageReceiver {
 
     @RabbitListener(queues = { "notification-medicine-answerable-queue" })
     public void receiveAnswerableNotification(@Payload Message message, Channel channel) throws IOException {
-        System.out.println("receive on treatment queue");
+        System.out.println("receive on answerable queue");
         String obj = new String(message.getBody());
         AnswerableNotification answerableNotification = objectMap.fromJson(obj, AnswerableNotification.class);
         answerableNotificationHandler.CheckAndSend(answerableNotification);
